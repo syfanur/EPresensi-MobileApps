@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">E_PresensiAdhiBeton</string>
+    <string name="txtBtnDatang">DATANG</string>
+    <string name="txtBtnPulang">PULANG</string>
 </resources>
