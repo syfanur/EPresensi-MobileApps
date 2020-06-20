@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.e_presensiadhibeton">
+    package="com.example.adhibeton">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -20,6 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+<<<<<<< HEAD
         <activity
             android:name=".PiechartAbsen"
             android:label="Kehadiran">
@@ -28,10 +29,29 @@
         <activity
             android:name=".ScannedBarcodeActivity"
             android:label="Absen">
+=======
+        <activity android:name=".EditData"
+            android:windowSoftInputMode="adjustResize|stateHidden" ></activity>
+        <activity android:name=".EditPassword" />
+        <activity android:name=".IzinSelesai" />
+        <activity android:name=".IzinProses" />
+        <activity android:name=".Perizinan" />
+        <activity android:name=".DetailKehadiran" />
+        <activity android:name=".TabLokasi" />
+        <activity android:name=".TabFoto" />
+        <activity android:name=".TabAbsen" />
+        <activity android:name=".detailizin" />
+        <activity android:name=".buatizin" />
+        <activity android:name=".Profil" />
+        <activity android:name=".no_meeting" />
+        <activity android:name=".Login" />
+        <activity android:name=".MainActivity">
+>>>>>>> syfa
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
     </application>

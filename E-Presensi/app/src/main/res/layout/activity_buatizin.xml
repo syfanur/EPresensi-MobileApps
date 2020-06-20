@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".buatizin"
+    android:orientation="vertical"
+    android:background="@drawable/buatizin">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/ic_arrow_back_black_24dp"
+            android:layout_marginStart="20dp"
+            />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="18dp"
+            android:text="Buat Permohonan Izin"
+            android:textColor="@color/white"
+            android:textSize="20dp"
+            android:textStyle="normal"
+            />
+
+    </LinearLayout>
+
+
+        <Spinner
+            android:layout_width="310dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/listItem"
+            android:layout_marginTop="65dp"
+            android:layout_marginLeft="8dp"
+            android:textSize="17dp"
+            android:entries="@array/jenis_izin"
+            android:padding="15dp">
+        </Spinner>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_dateresult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="32dp"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:text="Tanggal Mulai"
+            />
+
+        <Button
+            android:id="@+id/bt_datepicker"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/ic_date_range_black_24dp"
+            android:layout_marginStart="158dp"
+            />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_dateresult2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="42dp"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:text="Tanggal Akhir"
+            />
+
+        <Button
+            android:id="@+id/bt_datepicker2"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/ic_date_range_black_24dp"
+            android:layout_marginStart="160dp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/editText3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_marginTop="42dp"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            android:text="Upload Bukti Izin"
+            />
+
+
+        <Button
+            android:id="@+id/buttonbukti"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/ic_file_upload_black_24dp"
+            android:layout_marginStart="139dp"
+            />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/keterangan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="48dp"
+        android:background="@null"
+        android:textSize="14dp"
+        android:hint="Keterangan"
+        android:textColor="@color/black"
+        />
+
+    <Button
+        android:id="@+id/buttonsubmit"
+        android:layout_width="236dp"
+        android:layout_height="47dp"
+        android:text="SUBMIT"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:layout_marginStart="62dp"
+        android:layout_marginTop="142dp"
+        android:textStyle="bold"
+        android:background="@drawable/button_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+</LinearLayout>
