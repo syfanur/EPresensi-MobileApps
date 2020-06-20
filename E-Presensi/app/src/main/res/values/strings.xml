@@ -17,4 +17,11 @@
 
     <string name="izin_label1">Proses</string>
     <string name="izin_label2">Selesai</string>
+
+    <string-array name="jenis_izin">
+        <item>Sakit</item>
+        <item>Dinas Luar Kota</item>
+        <item>Urusan Keluarga</item>
+        <item>Menikah</item>
+    </string-array>
 </resources>

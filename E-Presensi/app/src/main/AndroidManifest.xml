@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".EditData"
-            android:windowSoftInputMode="adjustResize|stateHidden" > ></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" ></activity>
         <activity android:name=".EditPassword" />
         <activity android:name=".IzinSelesai" />
         <activity android:name=".IzinProses" />
