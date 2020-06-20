@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "649200670938",
+    "firebase_url": "https://adhibeton-epresensi.firebaseio.com",
+    "project_id": "adhibeton-epresensi",
+    "storage_bucket": "adhibeton-epresensi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649200670938:android:04a732ef5d3e0e0b542de3",
+        "android_client_info": {
+          "package_name": "com.example.adhibeton"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649200670938-5pitt5nn4e8j3kb88dkf4gj5n3p6etcp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxhfYIEZjOnYi7U_vYsKFHlFIEpuBmQlU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649200670938-5pitt5nn4e8j3kb88dkf4gj5n3p6etcp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649200670938:android:82b68196c03369ee542de3",
+        "android_client_info": {
+          "package_name": "com.example.e_presensiadhibeton"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "649200670938-5ifnoeglmevnnkl4vmp8j50qpgeicmvr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.e_presensiadhibeton",
+            "certificate_hash": "6fabe860fa71da3649ff81e160939e468ddc5b72"
+          }
+        },
+        {
+          "client_id": "649200670938-5pitt5nn4e8j3kb88dkf4gj5n3p6etcp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxhfYIEZjOnYi7U_vYsKFHlFIEpuBmQlU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "649200670938-5pitt5nn4e8j3kb88dkf4gj5n3p6etcp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
