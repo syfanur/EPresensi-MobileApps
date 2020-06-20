@@ -13,7 +13,7 @@
         android:layout_marginTop="20dp"
         android:text="RABU, 3 JUNI 2020"
         android:textColor="@color/merah"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         />
 
@@ -38,7 +38,7 @@
             android:layout_marginTop="10dp"
             android:text="Absen Datang"
             android:textColor="@color/black"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:textStyle="bold"
             />
 
@@ -69,7 +69,7 @@
             android:layout_marginTop="10dp"
             android:text="Absen Pulang"
             android:textColor="@color/black"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:textStyle="bold"
             />
 

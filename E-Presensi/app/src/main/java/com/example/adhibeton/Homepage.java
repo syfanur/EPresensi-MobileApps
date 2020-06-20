@@ -1,4 +1,4 @@
-package com.example.e_presensiadhibeton;
+package com.example.adhibeton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.example.adhibeton.HalamanAbsen;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.IndicatorView.draw.controller.DrawController;
 import com.smarteist.autoimageslider.SliderAnimations;
@@ -119,7 +120,7 @@ public class Homepage extends AppCompatActivity {
     }
 
     public void MoveToAbsen(View view) {
-        Intent i = new Intent(Homepage.this,HalamanAbsen.class);
+        Intent i = new Intent(Homepage.this, HalamanAbsen.class);
         startActivity(i);
     }
 

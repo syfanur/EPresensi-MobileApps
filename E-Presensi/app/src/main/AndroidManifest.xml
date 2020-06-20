@@ -34,10 +34,16 @@
 
         <activity
             android:name=".ScannedBarcodeActivity"
-            android:label="Absen"/>
+            android:label="Absen">
 
-        <activity android:name=".EditData"
-            android:windowSoftInputMode="adjustResize|stateHidden" ></activity>
+        </activity>
+
+        <activity
+            android:name=".EditData"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+
+        </activity>
+
         <activity android:name=".EditPassword" />
         <activity android:name=".IzinSelesai" />
         <activity android:name=".IzinProses" />
@@ -51,16 +57,16 @@
         <activity android:name=".Profil" />
         <activity android:name=".no_meeting" />
         <activity android:name=".Login" />
-
         <activity android:name=".HalamanKehadiran" />
         <activity android:name=".HalamanSelfie" />
         <activity android:name=".HalamanAbsen" />
+        <activity android:name=".MainActivity"/>
+
         <activity android:name=".Homepage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
             </intent-filter>
         </activity>
 
@@ -68,15 +74,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
 
-        <activity android:name=".MainActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
     </application>
 
 </manifest>

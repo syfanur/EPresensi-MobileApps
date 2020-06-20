@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="Ambil gambar wajah anda dengan jelas"
                 android:textSize="16sp"
-                android:layout_marginLeft="24dp"/>
+                android:layout_marginStart="24dp"/>
 
         </LinearLayout>
         <LinearLayout
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:text="Pastikan lokasi anda di lokasi kerja"
                 android:textSize="16sp"
-                android:layout_marginLeft="24dp"/>
+                android:layout_marginStart="24dp"/>
 
         </LinearLayout>
         <LinearLayout
@@ -95,7 +95,7 @@
                 android:text="Gunakan mobile flash di lokasi yang gelap"
                 android:textSize="16sp"
                 android:layout_toRightOf="@+id/flash"
-                android:layout_marginLeft="24dp"/>
+                android:layout_marginStart="24dp"/>
 
         </LinearLayout>
         <RelativeLayout

@@ -81,7 +81,7 @@
                 android:background="@drawable/clock"
                 android:layout_toRightOf="@+id/datang"
                 android:layout_marginTop="72dp"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginStart="8dp"/>
             <TextView
                 android:id="@+id/absen_datang"
                 android:layout_width="wrap_content"
@@ -89,7 +89,7 @@
                 android:textSize="14sp"
                 android:text="00:00"
                 android:textColor="#000"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="72dp"
                 android:layout_toRightOf="@+id/jam_1"/>
 
@@ -102,7 +102,7 @@
                 android:text="Pulang :"
                 android:layout_toRightOf="@+id/absen_datang"
                 android:layout_marginTop="72dp"
-                android:layout_marginLeft="42dp"/>
+                android:layout_marginStart="42dp"/>
             <ImageView
                 android:id="@+id/jam_2"
                 android:layout_width="24dp"
@@ -110,7 +110,7 @@
                 android:background="@drawable/clock"
                 android:layout_toRightOf="@+id/pulang"
                 android:layout_marginTop="72dp"
-                android:layout_marginLeft="8dp"/>
+                android:layout_marginStart="8dp"/>
             <TextView
                 android:id="@+id/absen_pulang"
                 android:layout_width="wrap_content"
@@ -118,7 +118,7 @@
                 android:textSize="14sp"
                 android:text="00:00"
                 android:textColor="#000"
-                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="72dp"
                 android:layout_toRightOf="@+id/jam_2"/>
 

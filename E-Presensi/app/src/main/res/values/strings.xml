@@ -30,5 +30,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
->>>>>>> homepage
+    <string name="txtDiajukan">Diajukan</string>
+    <string name="txtTgl">2020-06-04</string>
+    <string name="txtJenisIzin">Izin Dinas Luar Kota</string>
+    <string name="txtSuratIzin">SuratIzin</string>
+    >>>>>>> homepage
 </resources>
