@@ -2,6 +2,7 @@ package com.example.adhibeton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -47,5 +48,10 @@ public class Login extends AppCompatActivity {
         });
 
 
+    }
+
+    public void MoveToHomepage(View view) {
+        Intent i = new Intent(Login.this,Homepage.class);
+        startActivity(i);
     }
 }

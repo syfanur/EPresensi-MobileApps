@@ -235,6 +235,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:onClick="MoveToIzin"
             android:orientation="vertical">
 
             <ImageView
@@ -255,13 +256,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:onClick="MoveToMeeting"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginBottom="8dp"
-                android:src="@drawable/meeting"/>
+                android:src="@drawable/rapat"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

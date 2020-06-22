@@ -21,14 +21,9 @@ public class EditData extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-<<<<<<< HEAD:E-Presensi/app/src/main/java/com/example/adhibeton/EditData.java
         setContentView(R.layout.activity_edit_data);
-=======
-        setContentView(R.layout.activity_main);
 
 
-
->>>>>>> homepage:E-Presensi/app/src/main/java/com/example/e_presensiadhibeton/MainActivity.java
     }
 
 

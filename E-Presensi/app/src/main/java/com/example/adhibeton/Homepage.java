@@ -128,5 +128,15 @@ public class Homepage extends AppCompatActivity {
         Intent i = new Intent(Homepage.this,HalamanKehadiran.class);
         startActivity(i);
     }
+
+    public void MoveToIzin(View view) {
+        Intent i = new Intent(Homepage.this,Perizinan.class);
+        startActivity(i);
+    }
+
+    public void MoveToMeeting(View view) {
+        Intent i = new Intent(Homepage.this,no_meeting.class);
+        startActivity(i);
+    }
 }
 

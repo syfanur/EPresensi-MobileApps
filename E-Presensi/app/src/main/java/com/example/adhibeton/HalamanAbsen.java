@@ -237,5 +237,10 @@ public class HalamanAbsen extends FragmentActivity implements OnMapReadyCallback
         Intent i = new Intent(HalamanAbsen.this,HalamanSelfie.class);
         startActivity(i);
     }
+
+    public void MoveToEmbedQr(View view) {
+        Intent i = new Intent(HalamanAbsen.this,ScannedBarcodeActivity.class);
+        startActivity(i);
+    }
 }
 
