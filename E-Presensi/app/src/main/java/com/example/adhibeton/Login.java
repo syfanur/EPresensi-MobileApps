@@ -51,7 +51,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void MoveToHomepage(View view) {
-        Intent i = new Intent(Login.this,Homepage.class);
+        Intent i = new Intent(Login.this,HomeScreen.class);
         startActivity(i);
     }
 }
