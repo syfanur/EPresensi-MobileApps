@@ -138,8 +138,7 @@ public class Homepage extends AppCompatActivity {
         Intent i = new Intent(Homepage.this,no_meeting.class);
         startActivity(i);
     }
-<<<<<<< HEAD
-=======
+
 
     public void MoveToProfil(View view) {
         Intent i = new Intent(Homepage.this,Profil.class);
@@ -150,6 +149,6 @@ public class Homepage extends AppCompatActivity {
         Intent z = new Intent(Homepage.this,DetailKehadiran.class);
         startActivity(z);
     }
->>>>>>> syfa
+
 }
 

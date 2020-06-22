@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class AbsenFragment extends Fragment implements OnMapReadyCallback,  Goog
     LocationManager locationManager;
     android.location.LocationListener locationListener;
     TextView address;
+    Button mSelfie, mEmbed;
 
     public AbsenFragment() {
         // Required empty public constructor
@@ -67,6 +69,22 @@ public class AbsenFragment extends Fragment implements OnMapReadyCallback,  Goog
         View v=  inflater.inflate(R.layout.fragment_absen, container, false);
         address=v.findViewById(R.id.address);
 
+        mSelfie=v.findViewById(R.id.btn_selfie);
+        mSelfie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent home = new Intent(getActivity(), HalamanSelfie.class);
+                startActivity(home);
+            }
+        });
+        mEmbed=v.findViewById(R.id.btn_embed);
+        mEmbed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent home = new Intent(getActivity(), ScannedBarcodeActivity.class);
+                startActivity(home);
+            }
+        });
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             checkUserLocationPermission();

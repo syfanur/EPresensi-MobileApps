@@ -53,12 +53,10 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.github.denzcoskun:ImageSlideshow:0.0.6'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
-<<<<<<< HEAD
 
-=======
     implementation 'com.firebaseui:firebase-ui-database:4.0.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
->>>>>>> syfa
+
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.mikhaellopez:circularimageview:4.2.0'
     implementation 'cyd.awesome.android:awesome-material:1.0'

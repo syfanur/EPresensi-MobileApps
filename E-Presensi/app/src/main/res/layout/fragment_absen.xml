@@ -41,6 +41,7 @@
             android:gravity="center"
             android:orientation="vertical">
             <Button
+                android:id="@+id/btn_selfie"
                 android:layout_width="150dp"
                 android:onClick="MoveToSelfie"
                 android:layout_height="42dp"
@@ -58,6 +59,7 @@
             android:gravity="center"
             android:orientation="vertical">
             <Button
+                android:id="@+id/btn_embed"
                 android:layout_width="150dp"
                 android:layout_height="42dp"
                 android:onClick="MoveToEmbedQr"

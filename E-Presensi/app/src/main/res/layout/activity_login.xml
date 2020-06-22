@@ -44,11 +44,7 @@
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="96dp"
-<<<<<<< HEAD
-        android:layout_marginTop="44dp"
-=======
         android:layout_marginTop="47dp"
->>>>>>> syfa
         android:background="@null"
         android:maxLines="1"
         android:hint="NPP" />
@@ -57,7 +53,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-<<<<<<< HEAD
     <EditText
         android:id="@+id/password"
         android:layout_width="200dp"
@@ -69,19 +64,6 @@
         android:hint="Password"
         android:maxLines="1"
         />
-=======
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="96dp"
-            android:layout_marginTop="65dp"
-            android:background="@null"
-            android:inputType="textPassword"
-            android:hint="Password"
-            android:maxLines="1"
-            />
->>>>>>> syfa
 
         <cyd.awesome.material.AwesomeText
             android:id="@+id/ImgShowPassword"
@@ -104,14 +86,9 @@
         android:text="LOGIN"
         android:onClick="MoveToHomepage"
         android:layout_marginTop="45dp"
-<<<<<<< HEAD
         android:layout_gravity="center"
-        android:textColor="@color/white"
-        android:onClick="MoveToHomepage"
-=======
         android:layout_marginStart="62dp"
         android:textColor="@color/white"
->>>>>>> syfa
         android:textSize="16sp"
         android:textStyle="bold"
         android:background="@drawable/button_background"

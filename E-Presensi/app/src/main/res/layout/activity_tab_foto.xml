@@ -30,7 +30,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="15dp"
         android:orientation="vertical">
-<<<<<<< HEAD
+
 
         <TextView
             android:id="@+id/textView10"
@@ -47,31 +47,18 @@
             android:layout_width="150dp"
             android:layout_height="100dp"
             android:src="@drawable/surat"
-            android:layout_marginTop="15dp"
-   >
+            android:layout_marginTop="15dp">
 
         </ImageView>
-=======
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Absen Datang"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    />
+
 
                 <ImageView
                     android:layout_width="150dp"
                     android:layout_height="100dp"
                     android:src="@drawable/undraw_taking_selfie"
-                    android:layout_marginTop="5dp"
-           >
+                    android:layout_marginTop="5dp">
 
                 </ImageView>
->>>>>>> syfa
 
 
     </LinearLayout>
@@ -84,18 +71,7 @@
         android:layout_marginTop="10dp"
         android:orientation="vertical">
 
-<<<<<<< HEAD
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Absen Pulang"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            />
-=======
+
 
                 <TextView
                     android:id="@+id/textView11"
@@ -107,8 +83,6 @@
                     android:textSize="16sp"
                     android:textStyle="bold"
                     />
->>>>>>> syfa
-
 
                 <ImageView
                     android:layout_width="150dp"

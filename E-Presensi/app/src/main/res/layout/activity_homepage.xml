@@ -68,12 +68,8 @@
             android:layout_marginEnd="16dp"
             android:layout_marginTop="140dp"
             android:background="@drawable/shadow"
-<<<<<<< HEAD
-            android:elevation="10dp">
-=======
             android:elevation="10dp"
             android:onClick="MoveToDetailKehadiran">
->>>>>>> syfa
 
         <TextView
             android:layout_width="wrap_content"
@@ -311,10 +307,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-<<<<<<< HEAD
-=======
             android:onClick="MoveToProfil"
->>>>>>> syfa
             android:orientation="vertical">
 
             <ImageView
@@ -325,11 +318,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-<<<<<<< HEAD
                 android:text="Gaji"
-=======
-                android:text="Profil"
->>>>>>> syfa
                 android:textSize="14sp"
                 android:textColor="#000"/>
 
