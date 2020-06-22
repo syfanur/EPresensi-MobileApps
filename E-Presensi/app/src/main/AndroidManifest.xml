@@ -66,12 +66,25 @@
         <activity android:name=".detailizin" />
         <activity android:name=".buatizin" />
         <activity android:name=".Profil" >
+<<<<<<< HEAD
+=======
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity android:name=".no_meeting" />
+        <activity android:name=".Login">
+
+>>>>>>> syfa
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
         <activity android:name=".no_meeting" />
         <activity android:name=".Login">
 
@@ -81,6 +94,8 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
+=======
+>>>>>>> syfa
         <activity android:name=".HalamanKehadiran" />
         <activity android:name=".HalamanSelfie" />
         <activity android:name=".HalamanAbsen" />

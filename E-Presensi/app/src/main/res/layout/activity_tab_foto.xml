@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="33dp"
         android:text="RABU, 3 JUNI 2020"
         android:textColor="@color/merah"
         android:textSize="16sp"
@@ -21,15 +21,16 @@
         android:layout_width="match_parent"
         android:visibility="visible"
         android:layout_height="1dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:background="@color/gray"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
         android:orientation="vertical">
+<<<<<<< HEAD
 
         <TextView
             android:id="@+id/textView10"
@@ -50,6 +51,27 @@
    >
 
         </ImageView>
+=======
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Absen Datang"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    />
+
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/undraw_taking_selfie"
+                    android:layout_marginTop="5dp"
+           >
+
+                </ImageView>
+>>>>>>> syfa
 
 
     </LinearLayout>
@@ -58,10 +80,11 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical">
 
+<<<<<<< HEAD
         <TextView
             android:id="@+id/textView11"
             android:layout_width="wrap_content"
@@ -72,17 +95,34 @@
             android:textSize="16sp"
             android:textStyle="bold"
             />
+=======
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Absen Pulang"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    />
+>>>>>>> syfa
 
 
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="100dp"
-            android:src="@drawable/surat"
-            android:layout_marginTop="15dp">
+                <ImageView
+                    android:layout_width="150dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/undraw_taking_selfie"
+                    android:layout_marginTop="5dp">
 
-        </ImageView>
+                </ImageView>
+
 
     </LinearLayout>
 
 
+
 </LinearLayout>
+
+

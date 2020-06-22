@@ -155,6 +155,7 @@
         android:layout_width="236dp"
         android:layout_height="47dp"
         android:text="LOGOUT"
+        android:onClick="logout"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:layout_marginStart="62dp"

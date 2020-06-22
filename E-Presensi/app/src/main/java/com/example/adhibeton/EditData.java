@@ -2,6 +2,10 @@ package com.example.adhibeton;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+<<<<<<< HEAD
+=======
+import android.content.Intent;
+>>>>>>> syfa
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,5 +30,13 @@ public class EditData extends AppCompatActivity {
 
     }
 
+<<<<<<< HEAD
+=======
+    public void back(View view) {
+        Intent i = new Intent(EditData.this,Profil.class);
+        startActivity(i);
+    }
+
+>>>>>>> syfa
 
 }
