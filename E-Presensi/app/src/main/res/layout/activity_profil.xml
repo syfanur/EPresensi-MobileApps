@@ -24,7 +24,7 @@
         android:text="Syfa Nur Lathifah"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
       />
 
@@ -36,7 +36,7 @@
         android:textAlignment="center"
         android:text="Intern"
         android:textColor="@color/black"
-        android:textSize="17dp"
+        android:textSize="17sp"
         android:textStyle="normal"
          />
 
@@ -62,7 +62,7 @@
         android:layout_marginTop="60dp"
         android:text="Edit Data"
         android:textColor="@color/black"
-        android:textSize="17dp"
+        android:textSize="17sp"
         android:textStyle="normal"
         />
 
@@ -99,7 +99,7 @@
         android:layout_marginTop="32dp"
         android:text="Edit Password"
         android:textColor="@color/black"
-        android:textSize="17dp"
+        android:textSize="17sp"
         android:textStyle="normal"
         />
 
@@ -136,7 +136,7 @@
         android:layout_marginTop="32dp"
         android:text="Download CV"
         android:textColor="@color/black"
-        android:textSize="17dp"
+        android:textSize="17sp"
         android:textStyle="normal"
         />
 
@@ -155,8 +155,9 @@
         android:layout_width="236dp"
         android:layout_height="47dp"
         android:text="LOGOUT"
+        android:onClick="logout"
         android:textColor="@color/white"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:layout_marginStart="62dp"
         android:layout_marginTop="80dp"
         android:textStyle="bold"

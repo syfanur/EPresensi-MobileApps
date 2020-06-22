@@ -8,8 +8,7 @@
         android:layout_height="403dp"
         android:scaleType="fitXY"
         android:src="@drawable/maps"
-        android:layout_marginTop="15dp"
-        >
+        android:layout_marginTop="15dp">
 
     </ImageView>
 

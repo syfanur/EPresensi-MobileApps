@@ -13,7 +13,7 @@
         android:layout_marginTop="33dp"
         android:text="RABU, 3 JUNI 2020"
         android:textColor="@color/merah"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         />
 
@@ -40,7 +40,7 @@
         android:layout_marginTop="10dp"
         android:text="Absen Datang"
         android:textColor="@color/black"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         />
 
@@ -52,7 +52,7 @@
         android:layout_marginTop="8dp"
         android:text="09:00 AM"
         android:textColor="@color/black"
-        android:textSize="16dp"
+        android:textSize="16sp"
 
         />
 
@@ -61,10 +61,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="19dp"
         android:text="Terlambat"
         android:textColor="@color/black"
-        android:textSize="12dp"
+        android:textSize="12sp"
 
         />
 
@@ -87,7 +87,7 @@
             android:layout_marginTop="10dp"
             android:text="Absen Pulang"
             android:textColor="@color/black"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:textStyle="bold"
             />
 
@@ -99,7 +99,7 @@
             android:layout_marginTop="8dp"
             android:text="19:00 PM"
             android:textColor="@color/black"
-            android:textSize="16dp"
+            android:textSize="16sp"
 
             />
 
@@ -108,10 +108,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="35dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="17dp"
             android:text="Overtime"
             android:textColor="@color/black"
-            android:textSize="12dp"
+            android:textSize="12sp"
 
             />
 

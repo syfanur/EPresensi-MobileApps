@@ -23,4 +23,9 @@ public class Profil extends AppCompatActivity {
         Intent b = new Intent(Profil.this, EditData.class);
         startActivity(b);
     }
+
+    public void logout(View view) {
+        Intent z = new Intent(Profil.this, Login.class);
+        startActivity(z);
+    }
 }

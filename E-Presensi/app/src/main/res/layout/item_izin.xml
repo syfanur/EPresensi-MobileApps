@@ -16,7 +16,8 @@
             android:layout_width="44dp"
             android:layout_height="57dp"
             android:src="@drawable/surat"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY"
+            android:contentDescription="@string/txtSuratIzin" />
         
         <LinearLayout
             android:layout_width="wrap_content"
@@ -29,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/black"
-                android:text="Izin Dinas Luar Kota"/>
+                android:text="@string/txtJenisIzin"/>
 
             <TextView
                 android:id="@+id/tanggal"
@@ -37,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/gray"
-                android:text="2020-06-04"/>
+                android:text="@string/txtTgl"/>
 
             <TextView
                 android:id="@+id/status"
@@ -45,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/gray"
-                android:text="Diajukan"/>
+                android:text="@string/txtDiajukan"/>
         </LinearLayout>
         
         

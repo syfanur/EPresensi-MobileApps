@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -47,5 +49,10 @@ public class DetailKehadiran extends AppCompatActivity {
                     public void onTabReselected(TabLayout.Tab tab) {
                     }
                 });
+    }
+
+    public void back(View view) {
+        Intent i = new Intent(DetailKehadiran.this,Homepage.class);
+        startActivity(i);
     }
 }

@@ -19,6 +19,7 @@
             android:layout_marginTop="25dp"
             android:background="@drawable/ic_arrow_back_black_24dp"
             android:layout_marginStart="20dp"
+            android:onClick="back"
             />
 
         <TextView

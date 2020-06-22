@@ -41,7 +41,7 @@ public class buatizin extends AppCompatActivity {
     private TextView tvDateResult,tvDateResult2 ;
     private Button btDatePicker, btDatePicker2;
 
-    private String Jenis, TanggalMulai, TanggalAkhir, saveCurrentDate, ket, saveCurrentTime;
+    private String jns, tm, ta, saveCurrentDate, ket, saveCurrentTime;
     private Button Submit, Bukti;
     private EditText Keterangan;
     private TextView tanggalmulai, tanggalakhir;
@@ -131,7 +131,13 @@ public class buatizin extends AppCompatActivity {
 
     private void ValidateProductData()
     {
-       ket = Keterangan.getText().toString();
+        ket = Keterangan.getText().toString();
+        jns = jenis.getSelectedItem().toString();
+        tm = tanggalmulai.toString();
+        ta = tanggalakhir.toString();
+
+
+
 
 
         if (ImageUri == null)
@@ -220,10 +226,13 @@ public class buatizin extends AppCompatActivity {
     {
         HashMap<String, Object> productMap = new HashMap<>();
         productMap.put("pid", productRandomKey);
-        productMap.put("date", saveCurrentDate);
-        productMap.put("time", saveCurrentTime);
+        productMap.put("jenis", jns);
+        productMap.put("tanggalmulai", tm);
+        productMap.put("tanggalakhir", ta);
+        productMap.put("hari", saveCurrentDate);
+        productMap.put("jam", saveCurrentTime);
         productMap.put("keterangan", ket);
-        productMap.put("image", downloadImageUrl);
+        productMap.put("buktiizin", downloadImageUrl);
 
         ProductsRef.child(productRandomKey).updateChildren(productMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -292,5 +301,10 @@ public class buatizin extends AppCompatActivity {
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
         datePickerDialog.show();
+    }
+
+    public void back(View view) {
+        Intent i = new Intent(buatizin.this,Perizinan.class);
+        startActivity(i);
     }
 }
