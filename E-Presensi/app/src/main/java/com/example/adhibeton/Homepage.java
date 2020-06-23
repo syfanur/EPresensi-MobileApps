@@ -148,5 +148,10 @@ public class Homepage extends AppCompatActivity {
         Intent z = new Intent(Homepage.this,DetailKehadiran.class);
         startActivity(z);
     }
+
+    public void MoveToTeguran(View view) {
+        Intent s = new Intent(Homepage.this,Teguran.class);
+        startActivity(s);
+    }
 }
 

@@ -20,6 +20,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/ic_arrow_back_black_24dp"
             android:layout_marginStart="20dp"
+            android:onClick="back"
             />
 
         <TextView
@@ -37,12 +38,11 @@
     </LinearLayout>
 
     <com.mikhaellopez.circularimageview.CircularImageView
-        android:layout_width="105dp"
+        android:layout_width="90dp"
         android:layout_height="105dp"
-        android:layout_marginTop="40dp"
         android:layout_marginStart="120dp"
-        android:src="@drawable/avatar"
-        />
+        android:layout_marginTop="40dp"
+        android:src="@drawable/avatar" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -94,7 +94,7 @@
 
 
         <TextView
-            android:id="@+id/jenis"
+            android:id="@+id/jenisizin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
@@ -215,26 +215,37 @@
             android:layout_marginTop="20dp"
             android:textColor="@color/black"
             android:textSize="16dp"
-            android:text="Bukti Izin"
+            android:text="Bukti Izin           :"
             />
 
+        <Button
+            android:id="@+id/btnsave"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="11dp"
+            android:layout_marginLeft="4dp"
+            android:background="@drawable/ic_download"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
 
 
         <TextView
             android:id="@+id/download"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="42dp"
+            android:layout_marginLeft="4dp"
             android:layout_marginTop="20dp"
             android:textColor="@color/black"
             android:textSize="16dp"
-            android:text=": Download PDF"
+            android:text="Download Images"
             />
 
 
     </LinearLayout>
     
     <ImageView
+        android:id="@+id/buktiizin"
         android:layout_width="200dp"
         android:layout_height="132dp"
         android:src="@drawable/surat"

@@ -84,7 +84,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_login"
         android:layout_width="236dp"
         android:layout_height="47dp"
         android:text="LOGIN"

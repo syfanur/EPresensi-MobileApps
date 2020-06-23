@@ -44,7 +44,6 @@ public class buatizin extends AppCompatActivity {
     private String jns, tm, ta, saveCurrentDate, ket, saveCurrentTime;
     private Button Submit, Bukti;
     private EditText Keterangan;
-    private TextView tanggalmulai, tanggalakhir;
     private Spinner jenis;
     private static final int GalleryPick = 1;
     private Uri ImageUri;
@@ -86,8 +85,6 @@ public class buatizin extends AppCompatActivity {
         Bukti = (Button) findViewById(R.id.buttonbukti);
         Keterangan = (EditText) findViewById(R.id.keterangan);
         jenis = (Spinner) findViewById(R.id.listItem);
-        tanggalmulai = (TextView)  findViewById(R.id.tv_dateresult);
-        tanggalakhir = (TextView)  findViewById(R.id.tv_dateresult2);
         loadingBar = new ProgressDialog(this);
 
 
@@ -108,155 +105,6 @@ public class buatizin extends AppCompatActivity {
             }
         });
     }
-
-    private void OpenGallery()
-    {
-        Intent galleryIntent = new Intent();
-        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-        galleryIntent.setType("image/*");
-        startActivityForResult(galleryIntent, GalleryPick);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode==GalleryPick  &&  resultCode==RESULT_OK  &&  data!=null)
-        {
-            ImageUri = data.getData();
-        }
-    }
-
-
-    private void ValidateProductData()
-    {
-        ket = Keterangan.getText().toString();
-        jns = jenis.getSelectedItem().toString();
-        tm = tanggalmulai.toString();
-        ta = tanggalakhir.toString();
-
-
-
-
-
-        if (ImageUri == null)
-        {
-            Toast.makeText(this, "Product image is mandatory...", Toast.LENGTH_SHORT).show();
-        }
-        else if (TextUtils.isEmpty(ket))
-        {
-            Toast.makeText(this, "Please write product description...", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-            StoreProductInformation();
-        }
-    }
-
-    private void StoreProductInformation()
-    {
-        loadingBar.setTitle("Add New Product");
-        loadingBar.setMessage("Dear Admin, please wait while we are adding the new product.");
-        loadingBar.setCanceledOnTouchOutside(false);
-        loadingBar.show();
-
-        Calendar calendar = Calendar.getInstance();
-
-        SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
-        saveCurrentDate = currentDate.format(calendar.getTime());
-
-        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
-        saveCurrentTime = currentTime.format(calendar.getTime());
-
-        productRandomKey = saveCurrentDate + saveCurrentTime;
-
-
-        final StorageReference filePath = ProductImagesRef.child(ImageUri.getLastPathSegment() + productRandomKey + ".jpg");
-
-        final UploadTask uploadTask = filePath.putFile(ImageUri);
-
-
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e)
-            {
-                String message = e.toString();
-                Toast.makeText(buatizin.this, "Error: " + message, Toast.LENGTH_SHORT).show();
-                loadingBar.dismiss();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
-            {
-                Toast.makeText(buatizin.this, "Product Image uploaded Successfully...", Toast.LENGTH_SHORT).show();
-
-                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                    @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception
-                    {
-                        if (!task.isSuccessful())
-                        {
-                            throw task.getException();
-                        }
-
-                        downloadImageUrl = filePath.getDownloadUrl().toString();
-                        return filePath.getDownloadUrl();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task)
-                    {
-                        if (task.isSuccessful())
-                        {
-                            downloadImageUrl = task.getResult().toString();
-
-                            Toast.makeText(buatizin.this, "got the Product image Url Successfully...", Toast.LENGTH_SHORT).show();
-
-                            SaveProductInfoToDatabase();
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-
-    private void SaveProductInfoToDatabase()
-    {
-        HashMap<String, Object> productMap = new HashMap<>();
-        productMap.put("pid", productRandomKey);
-        productMap.put("jenis", jns);
-        productMap.put("tanggalmulai", tm);
-        productMap.put("tanggalakhir", ta);
-        productMap.put("hari", saveCurrentDate);
-        productMap.put("jam", saveCurrentTime);
-        productMap.put("keterangan", ket);
-        productMap.put("buktiizin", downloadImageUrl);
-
-        ProductsRef.child(productRandomKey).updateChildren(productMap)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task)
-                    {
-                        if (task.isSuccessful())
-                        {
-                            Intent intent = new Intent(buatizin.this, Perizinan.class);
-                            startActivity(intent);
-
-                            loadingBar.dismiss();
-                            Toast.makeText(buatizin.this, "Product is added successfully..", Toast.LENGTH_SHORT).show();
-                        }
-                        else
-                        {
-                            loadingBar.dismiss();
-                            String message = task.getException().toString();
-                            Toast.makeText(buatizin.this, "Error: " + message, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
 
     private void showDateDialog(){
 
@@ -302,6 +150,157 @@ public class buatizin extends AppCompatActivity {
 
         datePickerDialog.show();
     }
+
+
+    private void OpenGallery()
+    {
+        Intent galleryIntent = new Intent();
+        galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+        galleryIntent.setType("image/*");
+        startActivityForResult(galleryIntent, GalleryPick);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode==GalleryPick  &&  resultCode==RESULT_OK  &&  data!=null)
+        {
+            ImageUri = data.getData();
+        }
+    }
+
+
+    private void ValidateProductData()
+    {
+        ket = Keterangan.getText().toString();
+        jns = jenis.getSelectedItem().toString();
+        tm = tvDateResult.getText().toString();
+        ta = tvDateResult2.getText().toString();
+
+
+
+
+
+        if (ImageUri == null)
+        {
+            Toast.makeText(this, "Product image is mandatory...", Toast.LENGTH_SHORT).show();
+        }
+        else if (TextUtils.isEmpty(ket))
+        {
+            Toast.makeText(this, "Please write product description...", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            StoreProductInformation();
+        }
+    }
+
+    private void StoreProductInformation()
+    {
+        loadingBar.setTitle("Mengajukan Perizinan Baru");
+        loadingBar.setMessage("Mohon Tunggu Sebentar");
+        loadingBar.setCanceledOnTouchOutside(false);
+        loadingBar.show();
+
+        Calendar calendar = Calendar.getInstance();
+
+        SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd, yyyy");
+        saveCurrentDate = currentDate.format(calendar.getTime());
+
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+        saveCurrentTime = currentTime.format(calendar.getTime());
+
+        productRandomKey = saveCurrentDate + saveCurrentTime;
+
+
+        final StorageReference filePath = ProductImagesRef.child(ImageUri.getLastPathSegment() + productRandomKey + ".jpg");
+
+        final UploadTask uploadTask = filePath.putFile(ImageUri);
+
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e)
+            {
+                String message = e.toString();
+                Toast.makeText(buatizin.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                loadingBar.dismiss();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot)
+            {
+                Toast.makeText(buatizin.this, "Izin diajukan...", Toast.LENGTH_SHORT).show();
+
+                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception
+                    {
+                        if (!task.isSuccessful())
+                        {
+                            throw task.getException();
+                        }
+
+                        downloadImageUrl = filePath.getDownloadUrl().toString();
+                        return filePath.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            downloadImageUrl = task.getResult().toString();
+
+                            Toast.makeText(buatizin.this, "Perizinan Berhasil Diajukan", Toast.LENGTH_SHORT).show();
+
+                            SaveProductInfoToDatabase();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+
+    private void SaveProductInfoToDatabase()
+    {
+        HashMap<String, Object> productMap = new HashMap<>();
+        productMap.put("Id", productRandomKey);
+        productMap.put("Jenis", jns);
+        productMap.put("Start", tm);
+        productMap.put("End", ta);
+        productMap.put("Hari", saveCurrentDate);
+        productMap.put("Jam", saveCurrentTime);
+        productMap.put("Keterangan", ket);
+        productMap.put("Bukti", downloadImageUrl);
+
+        ProductsRef.child(productRandomKey).updateChildren(productMap)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            Intent intent = new Intent(buatizin.this, Perizinan.class);
+                            startActivity(intent);
+
+                            loadingBar.dismiss();
+                            Toast.makeText(buatizin.this, "Perizinan Berhasil Diajukan.", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            loadingBar.dismiss();
+                            String message = task.getException().toString();
+                            Toast.makeText(buatizin.this, "Error: " + message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+
 
     public void back(View view) {
         Intent i = new Intent(buatizin.this,Perizinan.class);
