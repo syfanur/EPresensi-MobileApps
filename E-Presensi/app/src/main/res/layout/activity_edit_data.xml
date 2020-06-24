@@ -54,42 +54,86 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="35dp"
+                android:text="Pendidikan"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="normal"
+                />
     <EditText
         android:id="@+id/pendidikan"
         android:layout_width="296dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/background"
         android:hint="Pendidikan"
         android:padding="16dp"
         android:maxLines="1"
         />
+            <TextView
+                android:id="@+id/text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:text="Alamat"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="normal"
+                />
 
     <EditText
         android:id="@+id/alamat"
         android:layout_width="296dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/background"
         android:padding="16dp"
         android:hint="Alamat"
         android:maxLines="1"
         />
 
+            <TextView
+                android:id="@+id/text3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:text="Golongan Darah"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="normal"
+                />
+
     <EditText
         android:id="@+id/goldarah"
         android:layout_width="296dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:padding="16dp"
         android:background="@drawable/background"
         android:hint="Golongan Darah"
         android:maxLines="1"
         />
-
+            <TextView
+                android:id="@+id/text4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:text="Agama"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="normal"
+                />
 
     <EditText
         android:id="@+id/agama"
@@ -97,10 +141,21 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
         android:padding="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/background"
         android:hint="Agama"
         />
+            <TextView
+                android:id="@+id/text5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:text="No NPWP"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="normal"
+                />
 
             <EditText
                 android:id="@+id/nonpwp"
@@ -108,9 +163,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
                 android:padding="16dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/background"
                 android:hint="No NPWP"
+                />
+
+            <TextView
+                android:id="@+id/text6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:text="Ukuran Baju"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="normal"
                 />
 
             <EditText
@@ -119,9 +186,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
                 android:padding="16dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/background"
                 android:hint="Ukuran Baju"
+                />
+
+            <TextView
+                android:id="@+id/text8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:text="Ukuran Celana"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="normal"
                 />
 
             <EditText
@@ -130,9 +209,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
                 android:padding="16dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/background"
                 android:hint="Ukuran Celana"
+                />
+
+            <TextView
+                android:id="@+id/text9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:text="Ukuran Sepatu"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="normal"
                 />
 
             <EditText
@@ -141,9 +232,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
                 android:padding="16dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/background"
                 android:hint="Ukuran Sepatu"
+                />
+
+            <TextView
+                android:id="@+id/text10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:text="No HP"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="normal"
                 />
 
             <EditText
@@ -152,9 +255,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
                 android:padding="16dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/background"
                 android:hint="No HP"
+                />
+
+            <TextView
+                android:id="@+id/text11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="8dp"
+                android:text="No HP Keluarga Terdekat"
+                android:textColor="@color/black"
+                android:textSize="14dp"
+                android:textStyle="normal"
                 />
 
             <EditText
@@ -163,7 +278,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="32dp"
                 android:padding="16dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/background"
                 android:hint="No HP Keluarga Terdekat"
                 />
@@ -171,18 +286,17 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/submit"
         android:layout_width="236dp"
         android:layout_height="47dp"
         android:text="SUBMIT"
         android:textColor="@color/white"
         android:textSize="16dp"
         android:maxLines="1"
-        android:layout_marginStart="62dp"
-        android:layout_marginTop="30dp"
+    android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
         android:textStyle="bold"
         android:background="@drawable/button_background"
-        app:layout_constraintBottom_toBottomOf="parent"
         />
 
 

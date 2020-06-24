@@ -2,15 +2,16 @@ package com.example.adhibeton;
 
 public class Karyawan {
     private String alamat, goldar, nama, no_hp, no_hpkeluarga, npp, npwp, pendidikan, posisi, password,
-            ukuran_baju, ukuran_celana, ukuran_sepatu, profil;
+            ukuran_baju, ukuran_celana, ukuran_sepatu, profil, agama;
 
     public Karyawan() {
 
     }
 
-    public Karyawan(String alamat, String goldar, String nama, String no_hp, String no_hpkeluarga,
-                    String npp, String npwp, String pendidikan, String posisi, String password,
-                    String ukuran_baju, String ukuran_celana, String ukuran_sepatu, String profil) {
+    public Karyawan(String alamat, String goldar, String nama, String no_hp,
+                    String no_hpkeluarga, String npp, String npwp, String pendidikan, String posisi,
+                    String password, String ukuran_baju, String ukuran_celana, String ukuran_sepatu,
+                    String profil, String agama) {
         this.alamat = alamat;
         this.goldar = goldar;
         this.nama = nama;
@@ -25,6 +26,7 @@ public class Karyawan {
         this.ukuran_celana = ukuran_celana;
         this.ukuran_sepatu = ukuran_sepatu;
         this.profil = profil;
+        this.agama = agama;
     }
 
     public String getAlamat() {
@@ -137,5 +139,13 @@ public class Karyawan {
 
     public void setProfil(String profil) {
         this.profil = profil;
+    }
+
+    public String getAgama() {
+        return agama;
+    }
+
+    public void setAgama(String agama) {
+        this.agama = agama;
     }
 }

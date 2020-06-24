@@ -105,21 +105,20 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:id="@+id/listBulan"
-                android:layout_marginLeft="25dp"
-                android:entries="@array/bulan"
-                android:padding="15dp">
+                android:layout_marginLeft="20dp"
+                android:entries="@array/bulan">
             </Spinner>
 
             <Spinner
-                android:layout_width="100dp"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:id="@+id/listTahun"
-                android:layout_marginLeft="96dp"
+                android:layout_marginLeft="55dp"
                 android:entries="@array/tahun"
-                android:padding="15dp">
+                >
             </Spinner>
 
 

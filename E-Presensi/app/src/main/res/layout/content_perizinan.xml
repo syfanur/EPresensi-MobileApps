@@ -22,7 +22,6 @@
             android:layout_marginTop="18dp"
             android:background="@drawable/ic_arrow_back_black_24dp"
             android:layout_marginStart="20dp"
-            android:onClick="back"
             />
 
         <TextView
@@ -42,10 +41,9 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
         app:tabTextColor="@color/black"
         android:layout_below="@id/judul"
         android:minHeight="?attr/actionBarSize"
@@ -54,8 +52,8 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="4dp"
         android:layout_below="@id/tab_layout"/>
 
 </RelativeLayout>
