@@ -194,7 +194,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-            android:onClick="MoveToTeguran"
         android:orientation="vertical">
 
         <ImageView

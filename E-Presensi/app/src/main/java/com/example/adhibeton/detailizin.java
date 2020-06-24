@@ -16,11 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -48,6 +50,13 @@ public class detailizin extends AppCompatActivity {
         makhir = findViewById(R.id.makhir);
         mbukti = findViewById(R.id.buktiizin);
         mketerangan = findViewById(R.id.keterangan);
+
+
+        TextView nama = findViewById(R.id.nama);
+        CircularImageView profil = findViewById(R.id.profil);
+
+        nama.setText(": "+Prevalent.currentOnlineUser.getNama());
+        Picasso.get().load(Prevalent.currentOnlineUser.getProfil()).into(profil);
         getDetailIzin(id);
 
         ActivityCompat.requestPermissions(detailizin.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
@@ -98,7 +107,8 @@ public class detailizin extends AppCompatActivity {
     private void getDetailIzin(String id) {
         DatabaseReference izinRef = FirebaseDatabase.getInstance().getReference().child("Perizinan");
 
-        izinRef.child(id).addValueEventListener(new ValueEventListener() {
+        izinRef.child("Karyawan").child(Prevalent.currentOnlineUser.getNpp())
+                .child("Izin").child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {

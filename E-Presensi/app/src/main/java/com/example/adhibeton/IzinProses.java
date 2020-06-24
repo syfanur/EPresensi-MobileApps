@@ -51,7 +51,10 @@ public class IzinProses extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
-        options = new FirebaseRecyclerOptions.Builder<Izin>().setQuery(DataRef, Izin.class).build();
+        options = new FirebaseRecyclerOptions.Builder<Izin>()
+                .setQuery(DataRef.child("Karyawan")
+                        .child(Prevalent.currentOnlineUser.getNpp()).child("Izin"), Izin.class).build();
+
         adapter = new FirebaseRecyclerAdapter<Izin, IzinViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull IzinViewHolder holder, final int position, @NonNull final Izin model) {

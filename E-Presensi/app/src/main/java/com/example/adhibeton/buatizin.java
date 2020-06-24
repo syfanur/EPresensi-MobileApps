@@ -101,10 +101,11 @@ public class buatizin extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                ValidateProductData();
+                ValidateData();
             }
         });
     }
+
 
     private void showDateDialog(){
 
@@ -172,16 +173,12 @@ public class buatizin extends AppCompatActivity {
     }
 
 
-    private void ValidateProductData()
+    private void ValidateData()
     {
         ket = Keterangan.getText().toString();
         jns = jenis.getSelectedItem().toString();
         tm = tvDateResult.getText().toString();
         ta = tvDateResult2.getText().toString();
-
-
-
-
 
         if (ImageUri == null)
         {
@@ -193,11 +190,11 @@ public class buatizin extends AppCompatActivity {
         }
         else
         {
-            StoreProductInformation();
+            TambahIzin();
         }
     }
 
-    private void StoreProductInformation()
+    private void TambahIzin()
     {
         loadingBar.setTitle("Mengajukan Perizinan Baru");
         loadingBar.setMessage("Mohon Tunggu Sebentar");
@@ -277,7 +274,9 @@ public class buatizin extends AppCompatActivity {
         productMap.put("Keterangan", ket);
         productMap.put("Bukti", downloadImageUrl);
 
-        ProductsRef.child(productRandomKey).updateChildren(productMap)
+
+        ProductsRef.child("Karyawan").child(Prevalent.currentOnlineUser.getNpp()).child("Izin")
+    .child(productRandomKey).updateChildren(productMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task)

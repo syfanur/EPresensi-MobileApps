@@ -83,22 +83,29 @@
 
     </LinearLayout>
 
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/remember_me_chkb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remember me"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:gravity="center_vertical"
+        android:textSize="18sp"
+        android:layout_marginLeft="17dp"
+        ></androidx.appcompat.widget.AppCompatCheckBox>
     <Button
         android:id="@+id/btn_login"
         android:layout_width="236dp"
         android:layout_height="47dp"
         android:text="LOGIN"
-        android:onClick="MoveToHomepage"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="62dp"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         android:background="@drawable/button_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText3"
-        app:layout_constraintVertical_bias="0.26" />
+         />
 </LinearLayout>

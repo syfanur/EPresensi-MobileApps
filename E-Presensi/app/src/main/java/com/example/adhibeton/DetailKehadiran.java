@@ -7,8 +7,11 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.material.tabs.TabLayout;
+import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
 
 public class DetailKehadiran extends AppCompatActivity {
 
@@ -49,6 +52,14 @@ public class DetailKehadiran extends AppCompatActivity {
                     public void onTabReselected(TabLayout.Tab tab) {
                     }
                 });
+
+        TextView nama = findViewById(R.id.nama);
+        TextView posisi = findViewById(R.id.posisi);
+        CircularImageView profil = findViewById(R.id.profil);
+
+        nama.setText(Prevalent.currentOnlineUser.getNama());
+        posisi.setText(Prevalent.currentOnlineUser.getPosisi());
+        Picasso.get().load(Prevalent.currentOnlineUser.getProfil()).into(profil);
     }
 
     public void back(View view) {

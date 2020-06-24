@@ -15,7 +15,7 @@ public class Teguran extends AppCompatActivity {
     }
 
     public void back(View view) {
-        Intent i = new Intent(Teguran.this,Homepage.class);
+        Intent i = new Intent(Teguran.this,HomeScreen.class);
         startActivity(i);
     }
 }

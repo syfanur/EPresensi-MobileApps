@@ -3,12 +3,15 @@ package com.example.adhibeton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,103 +22,169 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import cyd.awesome.material.AwesomeText;
 import cyd.awesome.material.FontCharacterMaps;
+import io.paperdb.Paper;
+
+import static com.example.adhibeton.Prevalent.UserNppKey;
 
 public class Login extends AppCompatActivity {
 
-    EditText npp, password;
+    private EditText InputNpp, InputPassword;
+    private Button LoginButton;
+    private ProgressDialog loadingBar;
+    private CheckBox chkBoxRememberMe;
+    private String parentDbName = "Karyawan";
     AwesomeText ImgShowHidePassword;
-    private FirebaseAuth auth;
-    private Button btnLogin ;
-
-
-
     boolean pwd_status = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        auth = FirebaseAuth.getInstance();
+        LoginButton = (Button) findViewById(R.id.btn_login);
+        InputPassword = (EditText) findViewById(R.id.password);
+        InputNpp = (EditText) findViewById(R.id.npp);
+        loadingBar = new ProgressDialog(this);
 
-        if (auth.getCurrentUser() != null) {
-            startActivity(new Intent(Login.this, Homepage.class));
-            finish();
-        }
+        chkBoxRememberMe = (CheckBox) findViewById(R.id.remember_me_chkb);
+        Paper.init(this);
 
-        npp = (EditText) findViewById(R.id.npp);
-        password = (EditText) findViewById(R.id.password);
-        btnLogin = (Button) findViewById(R.id.btn_login);
+        SharedPreferences sharedPreferences = getSharedPreferences(parentDbName, MODE_PRIVATE);
+        String npp = sharedPreferences.getString("UserNpp", "");
+        String pass = sharedPreferences.getString("UserPassword", "");
 
-        ImgShowHidePassword = (AwesomeText)findViewById(R.id.ImgShowPassword);
+        InputNpp.setText(npp);
+        InputPassword.setText(pass);
+
+        LoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoginUser();
+            }
+        });
+
+
+        ImgShowHidePassword = (AwesomeText) findViewById(R.id.ImgShowPassword);
 
         ImgShowHidePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (pwd_status) {
-                    password.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    InputPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                     pwd_status = false;
                     ImgShowHidePassword.setMaterialDesignIcon(FontCharacterMaps.MaterialDesign.MD_VISIBILITY);
-                    password.setSelection(password.length());
+                    InputPassword.setSelection(InputPassword.length());
                 } else {
-                    password.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
+                    InputPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_CLASS_TEXT);
                     pwd_status = true;
                     ImgShowHidePassword.setMaterialDesignIcon(FontCharacterMaps.MaterialDesign.MD_VISIBILITY_OFF);
-                    password.setSelection(password.length());
+                    InputPassword.setSelection(InputPassword.length());
                 }
             }
         });
+    }
+
+        private void LoginUser()
+        {
+            String npp = InputNpp.getText().toString();
+            String password = InputPassword.getText().toString();
+
+            if (TextUtils.isEmpty(npp))
+            {
+                Toast.makeText(this, "Please write your npp...", Toast.LENGTH_SHORT).show();
+            }
+            else if (TextUtils.isEmpty(password))
+            {
+                Toast.makeText(this, "Please write your password...", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                loadingBar.setTitle("Login Account");
+                loadingBar.setMessage("Please wait, while we are checking the credentials.");
+                loadingBar.setCanceledOnTouchOutside(false);
+                loadingBar.show();
 
 
-        auth = FirebaseAuth.getInstance();
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = npp.getText().toString();
-                final String pass = password.getText().toString();
-
-                if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(getApplicationContext(), "Masukkan Email", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                if (TextUtils.isEmpty(pass)) {
-                    Toast.makeText(getApplicationContext(), "Masukkan password!", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                AllowAccessToAccount(npp, password);
+            }
+        }
 
 
-                //authenticate user
-                auth.signInWithEmailAndPassword(email, pass)
-                        .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
 
-                                if (!task.isSuccessful()) {
-                                    // there was an error
-                                    if (pass.length() < 6) {
-                                        password.setError(getString(R.string.minimum_password));
-                                    } else {
-                                        Toast.makeText(Login.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
-                                    }
-                                } else {
-                                    Toast.makeText(Login.this, "Login Berhasil", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(Login.this, Homepage.class);
+        private void AllowAccessToAccount(final String npp, final String password)
+        {
+            if(chkBoxRememberMe.isChecked())
+            {
+                Paper.book().write(UserNppKey, npp);
+                Paper.book().write(Prevalent.UserPasswordKey, password);
+
+                StoredDataUsingSharedPref(npp, password);
+            }
+
+            InputNpp.setText(npp);
+            InputPassword.setText(password);
+
+
+            final DatabaseReference RootRef;
+            RootRef = FirebaseDatabase.getInstance().getReference();
+
+
+            RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                {
+                    if (dataSnapshot.child(parentDbName).child(npp).exists())
+                    {
+                        Karyawan usersData = dataSnapshot.child(parentDbName).child(npp).getValue(Karyawan.class);
+
+                        if (usersData.getNpp().equals(npp))
+                        {
+                            if (usersData.getPassword().equals(password))
+                            {
+                                if (parentDbName.equals("Karyawan"))
+                                {
+                                    Toast.makeText(Login.this, "Login Success", Toast.LENGTH_SHORT).show();
+                                    loadingBar.dismiss();
+
+                                    Intent intent = new Intent(Login.this, HomeScreen.class);
+                                    Prevalent.currentOnlineUser = usersData;
                                     startActivity(intent);
-                                    finish();
                                 }
                             }
-                        });
-            }
-        });
-    }
+                            else
+                            {
+                                loadingBar.dismiss();
+                                Toast.makeText(Login.this, "Password is incorrect.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(Login.this, "Account with this " + npp + " number do not exists.", Toast.LENGTH_SHORT).show();
+                        loadingBar.dismiss();
+                    }
+                }
 
-    public void MoveToHomepage(View view) {
-        Intent i = new Intent(Login.this,Homepage.class);
-        startActivity(i);
-    }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        private void StoredDataUsingSharedPref(String npp, String password) {
+            SharedPreferences.Editor editor = getSharedPreferences(parentDbName,MODE_PRIVATE).edit();
+            editor.putString("UserNpp",npp);
+            editor.putString("UserPassword",password);
+            editor.apply();
+        }
+
+
 }
