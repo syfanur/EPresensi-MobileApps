@@ -1,5 +1,23 @@
 package com.example.e_presensiadhibeton;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.util.SparseArray;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import android.view.MenuItem;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -8,18 +26,7 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.util.SparseArray;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
-
 import java.io.IOException;
-import java.util.Objects;
 
 public class ScannedBarcodeActivity extends AppCompatActivity {
 
@@ -28,13 +35,31 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     SurfaceView surfaceView;
     Button btnDatang, btnPulang;
     String intentData = "";
+    String jam = "";
+    String tgl = "";
+
+    @SuppressLint("SimpleDateFormat")
+    DateFormat jf = new SimpleDateFormat("h:mm a");
+    @SuppressLint("SimpleDateFormat")
+    DateFormat tf = new SimpleDateFormat("EEE, d MMM yyyy");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanned_barcode);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initViews();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) // Press Back Icon
+        {
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void initViews() {
@@ -46,8 +71,14 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (intentData.length() > 0) {
-//                        startActivity(new Intent(ScannedBarcodeActivity.this, EmailActivity.class).putExtra("email_address", intentData));
-                    Toast.makeText(getApplicationContext(), "Button datang", Toast.LENGTH_SHORT).show();
+//                    startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
+//                            .putExtra("keterangan", intentData)
+//                            .putExtra("waktu", jam)
+//                            .putExtra("tanggal", tgl)
+//                            .putExtra("status", "Datang"));
+                    finish();
+                } else {
+                    Toast.makeText(ScannedBarcodeActivity.this, "Barcode tidak terdeteksi", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -56,8 +87,14 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (intentData.length() > 0) {
-//                        startActivity(new Intent(ScannedBarcodeActivity.this, EmailActivity.class).putExtra("email_address", intentData));
-                    Toast.makeText(getApplicationContext(), "Button pulang", Toast.LENGTH_SHORT).show();
+//                    startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
+//                            .putExtra("keterangan", intentData)
+//                            .putExtra("waktu", jam)
+//                            .putExtra("tanggal", tgl)
+//                            .putExtra("status", "Pulang"));
+                    finish();
+                } else {
+                    Toast.makeText(ScannedBarcodeActivity.this, "Barcode tidak terdeteksi", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -105,15 +142,21 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
             @Override
             public void release() {
-                Toast.makeText(getApplicationContext(), "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScannedBarcodeActivity.this, "To prevent memory leaks barcode scanner has been stopped", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0) {
-                    intentData = barcodes.valueAt(0).displayValue;
-                    Toast.makeText(getApplicationContext(), "Barcode scanned!", Toast.LENGTH_SHORT).show();
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            intentData = barcodes.valueAt(0).displayValue;
+                            jam = jf.format(Calendar.getInstance().getTime());
+                            tgl = tf.format(Calendar.getInstance().getTime());
+                            Toast.makeText(ScannedBarcodeActivity.this, "Barcode scanned!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });
