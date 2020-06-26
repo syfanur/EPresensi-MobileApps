@@ -5,23 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import com.rey.material.widget.CheckBox;
+
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+import android.widget.Toast;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +26,6 @@ import cyd.awesome.material.AwesomeText;
 import cyd.awesome.material.FontCharacterMaps;
 import io.paperdb.Paper;
 
-import static com.example.adhibeton.Prevalent.UserNppKey;
 
 public class Login extends AppCompatActivity {
 
@@ -43,6 +36,8 @@ public class Login extends AppCompatActivity {
     private String parentDbName = "Karyawan";
     AwesomeText ImgShowHidePassword;
     boolean pwd_status = true;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,19 +51,13 @@ public class Login extends AppCompatActivity {
         chkBoxRememberMe = (CheckBox) findViewById(R.id.remember_me_chkb);
         Paper.init(this);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(parentDbName, MODE_PRIVATE);
-        String npp = sharedPreferences.getString("UserNpp", "");
-        String pass = sharedPreferences.getString("UserPassword", "");
-
-        InputNpp.setText(npp);
-        InputPassword.setText(pass);
-
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LoginUser();
             }
         });
+
 
 
         ImgShowHidePassword = (AwesomeText) findViewById(R.id.ImgShowPassword);
@@ -87,6 +76,68 @@ public class Login extends AppCompatActivity {
                     ImgShowHidePassword.setMaterialDesignIcon(FontCharacterMaps.MaterialDesign.MD_VISIBILITY_OFF);
                     InputPassword.setSelection(InputPassword.length());
                 }
+            }
+        });
+
+
+        String UserNppKey = Paper.book().read(Prevalent.UserNppKey);
+        String UserPasswordKey = Paper.book().read(Prevalent.UserPasswordKey);
+
+        if (UserNppKey != "" && UserPasswordKey != "")
+        {
+            if (!TextUtils.isEmpty(UserNppKey)  &&  !TextUtils.isEmpty(UserPasswordKey))
+            {
+                AllowAccess(UserNppKey, UserPasswordKey);
+
+                loadingBar.setTitle("Already Logged in");
+                loadingBar.setMessage("Please wait.....");
+                loadingBar.setCanceledOnTouchOutside(false);
+                loadingBar.show();
+            }
+        }
+
+    }
+
+    private void AllowAccess(final String npp, final String password)
+    {
+        final DatabaseReference RootRef;
+        RootRef = FirebaseDatabase.getInstance().getReference();
+        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.child(parentDbName).child(npp).exists())
+                {
+                    Karyawan usersData = dataSnapshot.child(parentDbName).child(npp).getValue(Karyawan.class);
+
+                    if (usersData.getNpp().equals(npp))
+                    {
+                        if (usersData.getPassword().equals(password))
+                        {
+                            if (parentDbName.equals("Karyawan"))
+                            {
+                                Intent intent = new Intent(Login.this, HomeScreen.class);
+                                Prevalent.currentOnlineUser = usersData;
+                                startActivity(intent);
+                            }
+                        }
+                        else
+                        {
+                            loadingBar.dismiss();
+                            Toast.makeText(Login.this, "Password is incorrect.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+                else
+                {
+                    Toast.makeText(Login.this, "Account with this " + npp + " number do not exists.", Toast.LENGTH_SHORT).show();
+                    loadingBar.dismiss();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
@@ -118,23 +169,15 @@ public class Login extends AppCompatActivity {
 
 
 
-        private void AllowAccessToAccount(final String npp, final String password)
-        {
-            if(chkBoxRememberMe.isChecked())
+        private void AllowAccessToAccount(final String npp, final String password) {
+            if (chkBoxRememberMe.isChecked())
             {
-                Paper.book().write(UserNppKey, npp);
+                Paper.book().write(Prevalent.UserNppKey, npp);
                 Paper.book().write(Prevalent.UserPasswordKey, password);
-
-                StoredDataUsingSharedPref(npp, password);
             }
-
-            InputNpp.setText(npp);
-            InputPassword.setText(password);
-
 
             final DatabaseReference RootRef;
             RootRef = FirebaseDatabase.getInstance().getReference();
-
 
             RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -146,7 +189,7 @@ public class Login extends AppCompatActivity {
 
                         if (usersData.getNpp().equals(npp))
                         {
-                            if (usersData.getPassword().equals(password))
+                             if (usersData.getPassword().equals(password))
                             {
                                 if (parentDbName.equals("Karyawan"))
                                 {
@@ -177,13 +220,6 @@ public class Login extends AppCompatActivity {
 
                 }
             });
-        }
-
-        private void StoredDataUsingSharedPref(String npp, String password) {
-            SharedPreferences.Editor editor = getSharedPreferences(parentDbName,MODE_PRIVATE).edit();
-            editor.putString("UserNpp",npp);
-            editor.putString("UserPassword",password);
-            editor.apply();
         }
 
 

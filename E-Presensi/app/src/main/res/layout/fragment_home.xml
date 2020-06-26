@@ -36,7 +36,7 @@
                 />
             <TextView
                 android:id="@+id/name_user"
-                android:layout_width="wrap_content"
+                android:layout_width="210dp"
                 android:layout_height="wrap_content"
                 android:text="Andhi kurniawan"
                 android:textSize="16sp"
@@ -54,6 +54,14 @@
                 android:layout_toRightOf="@+id/user"
                 android:layout_marginLeft="100dp"
                 android:layout_marginTop="64dp"/>
+
+            <ImageButton
+                android:id="@+id/reminder"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="40dp"
+                android:layout_toRightOf="@+id/name_user"
+                android:background="@drawable/bell" />
 
 
             <LinearLayout

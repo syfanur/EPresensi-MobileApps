@@ -38,7 +38,7 @@ public class buatizin extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
-    private TextView tvDateResult,tvDateResult2 ;
+    private TextView tvDateResult,tvDateResult2, uploadbukti ;
     private Button btDatePicker, btDatePicker2;
 
     private String jns, tm, ta, saveCurrentDate, ket, saveCurrentTime;
@@ -85,6 +85,7 @@ public class buatizin extends AppCompatActivity {
         Bukti = (Button) findViewById(R.id.buttonbukti);
         Keterangan = (EditText) findViewById(R.id.keterangan);
         jenis = (Spinner) findViewById(R.id.listItem);
+        uploadbukti = (TextView) findViewById(R.id.uploadbukti);
         loadingBar = new ProgressDialog(this);
 
 
@@ -169,6 +170,7 @@ public class buatizin extends AppCompatActivity {
         if (requestCode==GalleryPick  &&  resultCode==RESULT_OK  &&  data!=null)
         {
             ImageUri = data.getData();
+            uploadbukti.setText("image/Perizinan/*/...");
         }
     }
 

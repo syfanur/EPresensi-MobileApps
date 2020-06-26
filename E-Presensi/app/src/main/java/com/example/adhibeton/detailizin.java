@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 public class detailizin extends AppCompatActivity {
 
@@ -37,6 +38,7 @@ public class detailizin extends AppCompatActivity {
     private String id = "";
     ImageView imageView;
     Button save;
+    OutputStream outputStream;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,53 +57,45 @@ public class detailizin extends AppCompatActivity {
         TextView nama = findViewById(R.id.nama);
         CircularImageView profil = findViewById(R.id.profil);
 
-        nama.setText(": "+Prevalent.currentOnlineUser.getNama());
+        nama.setText(": " + Prevalent.currentOnlineUser.getNama());
         Picasso.get().load(Prevalent.currentOnlineUser.getProfil()).into(profil);
         getDetailIzin(id);
 
         ActivityCompat.requestPermissions(detailizin.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         imageView = (ImageView) findViewById(R.id.buktiizin);
         save = (Button) findViewById(R.id.btnsave);
-        ActivityCompat.requestPermissions(detailizin.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                Bitmap bitmap = drawable.getBitmap();
 
-                imagesavetomyphonegallery();
+                File filepath = Environment.getExternalStorageDirectory();
+                File dir = new File(filepath.getAbsolutePath() + "/Perizinan");
+                dir.mkdir();
+                File file = new File(dir, System.currentTimeMillis() + ".jpg");
+                try {
+                    outputStream = new FileOutputStream(file);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                Toast.makeText(getApplicationContext(), "Image Saved"
+                        , Toast.LENGTH_SHORT).show();
+
+                try {
+                    outputStream.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-
         });
-    }
-
-    private void imagesavetomyphonegallery() {
-        ImageView img = (ImageView) findViewById(R.id.buktiizin);
-
-        BitmapDrawable draw = (BitmapDrawable) img.getDrawable();
-        Bitmap bitmap = draw.getBitmap();
-
-        FileOutputStream outStream = null;
-        File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File(sdCard.getAbsolutePath() + "/SaveImages");
-        dir.mkdirs();
-        String fileName = String.format("%d.jpg", System.currentTimeMillis());
-        File outFile = new File(dir, fileName);
-        try {
-            outStream = new FileOutputStream(outFile);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
-        try {
-            Toast.makeText(getApplicationContext(),"Image Saved", Toast.LENGTH_LONG).show();
-            outStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            outStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void getDetailIzin(String id) {

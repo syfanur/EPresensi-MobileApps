@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,6 +38,7 @@ public class HomeFragment extends Fragment {
 
     TextView address;
     LinearLayout mTeguran, mPresensi, mIzin, mMeeting, mLembur, mGaji, mKehadiran;
+    ImageButton Reminder;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -115,6 +118,15 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent home = new Intent(getActivity(), Gaji.class);
+                startActivity(home);
+            }
+        });
+
+        Reminder = v.findViewById(R.id.reminder);
+        Reminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent home = new Intent(getActivity(), Reminder.class);
                 startActivity(home);
             }
         });

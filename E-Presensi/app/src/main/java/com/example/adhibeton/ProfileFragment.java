@@ -15,6 +15,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.paperdb.Paper;
 
 public class ProfileFragment extends Fragment {
 
@@ -53,6 +54,7 @@ public class ProfileFragment extends Fragment {
         eLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Paper.book().destroy();
                 Toast.makeText(getActivity(), "Logout Berhasil", Toast.LENGTH_SHORT).show();
                 Intent home = new Intent(getActivity(), Login.class);
                 startActivity(home);
