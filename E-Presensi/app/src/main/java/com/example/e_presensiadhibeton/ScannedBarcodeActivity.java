@@ -21,10 +21,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.e_presensiadhibeton.model.ModelAbsen;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 
@@ -67,10 +70,19 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         btnDatang = findViewById(R.id.btnDatang);
         btnPulang = findViewById(R.id.btnPulang);
 
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = database.getReference("Absen");
+
         btnDatang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (intentData.length() > 0) {
+                    String id = myRef.push().getKey();
+
+                    ModelAbsen absen = new ModelAbsen(jam, "Datang", intentData, tgl);
+                    myRef.child(id).setValue(absen);
+                    Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+
 //                    startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
 //                            .putExtra("keterangan", intentData)
 //                            .putExtra("waktu", jam)
@@ -87,6 +99,12 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (intentData.length() > 0) {
+                    String id = myRef.push().getKey();
+
+                    ModelAbsen absen = new ModelAbsen(jam, "Pulang", intentData, tgl);
+                    myRef.child(id).setValue(absen);
+                    Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+
 //                    startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
 //                            .putExtra("keterangan", intentData)
 //                            .putExtra("waktu", jam)
@@ -155,6 +173,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                             jam = jf.format(Calendar.getInstance().getTime());
                             tgl = tf.format(Calendar.getInstance().getTime());
                             Toast.makeText(ScannedBarcodeActivity.this, "Barcode scanned!", Toast.LENGTH_SHORT).show();
+                            cameraSource.stop();
                         }
                     });
                 }
