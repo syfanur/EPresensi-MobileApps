@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "649200670938-59ir48p2eib2rdhv3dc1ifv32adavp6u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.adhibeton",
+            "certificate_hash": "6fabe860fa71da3649ff81e160939e468ddc5b72"
+          }
+        },
+        {
           "client_id": "649200670938-5pitt5nn4e8j3kb88dkf4gj5n3p6etcp.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -34,7 +42,6 @@
           ]
         }
       }
-
     },
     {
       "client_info": {
@@ -72,7 +79,6 @@
           ]
         }
       }
-
     }
   ],
   "configuration_version": "1"
