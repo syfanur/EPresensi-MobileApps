@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.SparseArray;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -30,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class ScannedBarcodeActivity extends AppCompatActivity {
 
@@ -40,11 +42,21 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     String intentData = "";
     String jam = "";
     String tgl = "";
+    String status = "";
+    String valid_telat = "9:15 AM";
+    String valid_pulang = "17:00 PM";
+    String valid_datang = "9:00 AM";
 
     @SuppressLint("SimpleDateFormat")
     DateFormat jf = new SimpleDateFormat("h:mm a");
     @SuppressLint("SimpleDateFormat")
     DateFormat tf = new SimpleDateFormat("EEE, d MMM yyyy");
+    Date strJamTelat = jf.parse(valid_telat);
+    Date strJamPulang = jf.parse(valid_pulang);
+    Date strJamDatang = jf.parse(valid_datang);
+
+    public ScannedBarcodeActivity() throws ParseException {
+    }
 
 
     @Override
@@ -71,23 +83,27 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         btnPulang = findViewById(R.id.btnPulang);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef = database.getReference("Absen");
+        final DatabaseReference myRef = database.getReference("Kehadiran");
 
         btnDatang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (intentData.length() > 0) {
-                    String id = myRef.push().getKey();
+                    jam = jf.format(Calendar.getInstance().getTime());
+                    tgl = tf.format(Calendar.getInstance().getTime());
+                    datang();
 
-                    ModelAbsen absen = new ModelAbsen(jam, "Datang", intentData, tgl);
+                    String id = myRef.push().getKey();
+                    ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, intentData);
                     myRef.child(id).setValue(absen);
                     Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
 
 //                    startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
-//                            .putExtra("keterangan", intentData)
-//                            .putExtra("waktu", jam)
 //                            .putExtra("tanggal", tgl)
-//                            .putExtra("status", "Datang"));
+//                            .putExtra("waktu", jam)
+//                            .putExtra("absen", "Datang")
+//                            .putExtra("status", status)
+//                            .putExtra("keterangan", intentData));
                     finish();
                 } else {
                     Toast.makeText(ScannedBarcodeActivity.this, "Barcode tidak terdeteksi", Toast.LENGTH_SHORT).show();
@@ -99,17 +115,21 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (intentData.length() > 0) {
-                    String id = myRef.push().getKey();
+                    jam = jf.format(Calendar.getInstance().getTime());
+                    tgl = tf.format(Calendar.getInstance().getTime());
+                    pulang();
 
-                    ModelAbsen absen = new ModelAbsen(jam, "Pulang", intentData, tgl);
+                    String id = myRef.push().getKey();
+                    ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, intentData);
                     myRef.child(id).setValue(absen);
                     Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
 
 //                    startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
-//                            .putExtra("keterangan", intentData)
-//                            .putExtra("waktu", jam)
 //                            .putExtra("tanggal", tgl)
-//                            .putExtra("status", "Pulang"));
+//                            .putExtra("waktu", jam)
+//                            .putExtra("absen", "Pulang")
+//                            .putExtra("status", status)
+//                            .putExtra("keterangan", intentData));
                     finish();
                 } else {
                     Toast.makeText(ScannedBarcodeActivity.this, "Barcode tidak terdeteksi", Toast.LENGTH_SHORT).show();
@@ -181,6 +201,23 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         });
     }
 
+    protected void datang(){
+        if(new Date().after(strJamTelat) && new Date().before(strJamPulang)){
+            status = "Terlambat";
+        }else if (new Date().after(strJamDatang) && new Date().before(strJamTelat)){
+            status = "Hadir";
+        }else {
+            status = "Tidak Hadir";
+        }
+    }
+
+    protected void pulang(){
+        if (new Date().after(strJamDatang) && new Date().before(strJamPulang)){
+            status = "Didalam Waktu";
+        }else {
+            status = "Diluar Waktu";
+        }
+    }
 
     @Override
     protected void onPause() {
