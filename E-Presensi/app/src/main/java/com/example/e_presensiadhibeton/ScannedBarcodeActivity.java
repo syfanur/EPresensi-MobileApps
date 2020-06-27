@@ -1,15 +1,15 @@
 package com.example.e_presensiadhibeton;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.SparseArray;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 import android.view.MenuItem;
@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -31,32 +32,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.Locale;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class ScannedBarcodeActivity extends AppCompatActivity {
 
     private CameraSource cameraSource;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
     SurfaceView surfaceView;
     Button btnDatang, btnPulang;
-    String intentData = "";
-    String jam = "";
-    String tgl = "";
-    String status = "";
-    String valid_telat = "9:15 AM";
-    String valid_pulang = "17:00 PM";
-    String valid_datang = "9:00 AM";
+    String intentData = "", jam = "", tgl = "", status = "";
 
-    @SuppressLint("SimpleDateFormat")
-    DateFormat jf = new SimpleDateFormat("h:mm a");
-    @SuppressLint("SimpleDateFormat")
-    DateFormat tf = new SimpleDateFormat("EEE, d MMM yyyy");
-    Date strJamTelat = jf.parse(valid_telat);
-    Date strJamPulang = jf.parse(valid_pulang);
-    Date strJamDatang = jf.parse(valid_datang);
-
-    public ScannedBarcodeActivity() throws ParseException {
-    }
+    DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
+    DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
 
 
     @Override
@@ -86,12 +74,21 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         final DatabaseReference myRef = database.getReference("Kehadiran");
 
         btnDatang.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 if (intentData.length() > 0) {
-                    jam = jf.format(Calendar.getInstance().getTime());
-                    tgl = tf.format(Calendar.getInstance().getTime());
-                    datang();
+                    //GetTanggal
+                    LocalDate today = LocalDate.now();
+                    tgl = today.format(formatterdate);
+
+                    //GetJam
+                    LocalTime now = LocalTime.now();
+                    LocalTime current = now.minusHours(2);
+                    jam = current.format(formattertime);
+
+                    checkDatang(jam);
+                    checkDay();
 
                     String id = myRef.push().getKey();
                     ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, intentData);
@@ -112,12 +109,21 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         });
 
         btnPulang.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 if (intentData.length() > 0) {
-                    jam = jf.format(Calendar.getInstance().getTime());
-                    tgl = tf.format(Calendar.getInstance().getTime());
-                    pulang();
+                    //GetTanggal
+                    LocalDate today = LocalDate.now();
+                    tgl = today.format(formatterdate);
+
+                    //GetJam
+                    LocalTime now = LocalTime.now();
+                    LocalTime current = now.minusHours(2);
+                    jam = current.format(formattertime);
+
+                    checkPulang(jam);
+                    checkDay();
 
                     String id = myRef.push().getKey();
                     ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, intentData);
@@ -190,8 +196,6 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             intentData = barcodes.valueAt(0).displayValue;
-                            jam = jf.format(Calendar.getInstance().getTime());
-                            tgl = tf.format(Calendar.getInstance().getTime());
                             Toast.makeText(ScannedBarcodeActivity.this, "Barcode scanned!", Toast.LENGTH_SHORT).show();
                             cameraSource.stop();
                         }
@@ -201,21 +205,61 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         });
     }
 
-    protected void datang(){
-        if(new Date().after(strJamTelat) && new Date().before(strJamPulang)){
-            status = "Terlambat";
-        }else if (new Date().after(strJamDatang) && new Date().before(strJamTelat)){
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    protected void checkDatang(String checkTime){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.US);
+        LocalTime startLocalTime = LocalTime.parse("9:00 AM", formatter);
+        LocalTime endLocalTime = LocalTime.parse("5:00 PM", formatter);
+        LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
+
+        boolean isInBetween = false;
+        if (endLocalTime.isAfter(startLocalTime)) {
+            if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)) {
+                isInBetween = true;
+            }
+        } else if (checkLocalTime.isAfter(startLocalTime) || checkLocalTime.isBefore(endLocalTime)) {
+            isInBetween = true;
+        }
+
+        if (isInBetween) {
             status = "Hadir";
-        }else {
-            status = "Tidak Hadir";
+        } else {
+            status = "Tidak hadir";
         }
     }
 
-    protected void pulang(){
-        if (new Date().after(strJamDatang) && new Date().before(strJamPulang)){
-            status = "Didalam Waktu";
-        }else {
-            status = "Diluar Waktu";
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    protected void checkPulang(String checkTime){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.US);
+        LocalTime startLocalTime = LocalTime.parse("9:00 AM", formatter);
+        LocalTime endLocalTime = LocalTime.parse("5:00 PM", formatter);
+        LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
+
+        boolean isInBetween = false;
+        if (endLocalTime.isAfter(startLocalTime)) {
+            if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)) {
+                isInBetween = true;
+            }
+        } else if (checkLocalTime.isAfter(startLocalTime) || checkLocalTime.isBefore(endLocalTime)) {
+            isInBetween = true;
+        }
+
+        if (isInBetween) {
+            status = "Didalam Jam";
+        } else {
+            status = "Diluar Jam";
+        }
+    }
+
+    protected void checkDay(){
+
+        Calendar c = Calendar.getInstance();
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+
+        if (Calendar.SATURDAY == dayOfWeek) {
+            status = "Libur Kerja";
+        } else if (Calendar.SUNDAY == dayOfWeek) {
+            status = "Libur Kerja";
         }
     }
 
