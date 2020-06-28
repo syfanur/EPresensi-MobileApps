@@ -13,12 +13,14 @@
         >
 
     </com.wonderkiln.camerakit.CameraView>
+
     
     <com.example.adhibeton.helper.GraphicOverlay
         android:layout_width="fill_parent"
         android:layout_height="550dp"
         android:id="@+id/grapic_overlay"
       />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
