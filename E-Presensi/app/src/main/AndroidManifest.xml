@@ -23,16 +23,16 @@
         <activity
             android:name=".PiechartAbsen"
             android:label="Kehadiran">
-
-        </activity>
-        <activity
-            android:name=".ScannedBarcodeActivity"
-            android:label="Absen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ScannedBarcodeActivity"
+            android:label="Absen">
+
         </activity>
     </application>
 
