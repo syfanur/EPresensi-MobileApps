@@ -71,30 +71,57 @@ public class FaceDetect extends AppCompatActivity {
     LayoutInflater inflater;
     View dialogView;
     TextView mStatus, mTanggal, mJam;
-    String status="";
+    String status = "";
 
     DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
     DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
-
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_face_detect);
-        faceDetectButton=findViewById(R.id.btn_detect);
-        graphicOverlay=findViewById(R.id.grapic_overlay);
-        preview=findViewById(R.id.camera_view);
+        faceDetectButton = findViewById(R.id.btn_detect);
+        graphicOverlay = findViewById(R.id.grapic_overlay);
+        preview = findViewById(R.id.camera_view);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("Kehadiran");
 
 
-        alertDialog= new SpotsDialog.Builder()
+        alertDialog = new SpotsDialog.Builder()
                 .setContext(this)
                 .setMessage("Please Wait, Processing...")
                 .setCancelable(false)
                 .build();
+        preview.addCameraKitListener(new CameraKitEventListener() {
+            @Override
+            public void onEvent(CameraKitEvent cameraKitEvent) {
+
+            }
+
+            @Override
+            public void onError(CameraKitError cameraKitError) {
+
+            }
+
+            @Override
+            public void onImage(CameraKitImage cameraKitImage) {
+                alertDialog.show();
+                Bitmap bitmap = cameraKitImage.getBitmap();
+                bitmap = Bitmap.createScaledBitmap(bitmap, preview.getWidth(), preview.getHeight(), false);
+                preview.stop();
+
+                proccessFaceDetection(bitmap);
+
+            }
+
+            @Override
+            public void onVideo(CameraKitVideo cameraKitVideo) {
+
+            }
+        });
+    
 
         faceDetectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,33 +186,33 @@ public class FaceDetect extends AppCompatActivity {
             }
         });
 
-        preview.addCameraKitListener(new CameraKitEventListener() {
-            @Override
-            public void onEvent(CameraKitEvent cameraKitEvent) {
-
-            }
-
-            @Override
-            public void onError(CameraKitError cameraKitError) {
-
-            }
-
-            @Override
-            public void onImage(CameraKitImage cameraKitImage) {
-                alertDialog.show();
-                Bitmap bitmap = cameraKitImage.getBitmap();
-                bitmap= Bitmap.createScaledBitmap(bitmap, preview.getWidth(), preview.getHeight(),false);
-                preview.stop();
-
-                proccessFaceDetection(bitmap);
-
-            }
-
-            @Override
-            public void onVideo(CameraKitVideo cameraKitVideo) {
-
-            }
-        });
+//        preview.addCameraKitListener(new CameraKitEventListener() {
+//            @Override
+//            public void onEvent(CameraKitEvent cameraKitEvent) {
+//
+//            }
+//
+//            @Override
+//            public void onError(CameraKitError cameraKitError) {
+//
+//            }
+//
+//            @Override
+//            public void onImage(CameraKitImage cameraKitImage) {
+//                alertDialog.show();
+//                Bitmap bitmap = cameraKitImage.getBitmap();
+//                bitmap= Bitmap.createScaledBitmap(bitmap, preview.getWidth(), preview.getHeight(),false);
+//                preview.stop();
+//
+//                proccessFaceDetection(bitmap);
+//
+//            }
+//
+//            @Override
+//            public void onVideo(CameraKitVideo cameraKitVideo) {
+//
+//            }
+//        });
     }
 
     private void proccessFaceDetection(Bitmap bitmap) {
