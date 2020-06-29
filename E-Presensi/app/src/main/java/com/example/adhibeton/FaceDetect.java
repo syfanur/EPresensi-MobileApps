@@ -1,6 +1,7 @@
 package com.example.adhibeton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -14,6 +15,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +32,8 @@ import com.example.adhibeton.helper.RectOverlay;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.CameraSource;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
@@ -45,12 +49,18 @@ import com.wonderkiln.camerakit.CameraView;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import dmax.dialog.SpotsDialog;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class FaceDetect extends AppCompatActivity {
 
     private Button faceDetectButton;
@@ -61,11 +71,11 @@ public class FaceDetect extends AppCompatActivity {
     LayoutInflater inflater;
     View dialogView;
     TextView mStatus, mTanggal, mJam;
+    String status="";
 
-    @SuppressLint("SimpleDateFormat")
-    DateFormat jf = new SimpleDateFormat("h:mm a");
-    @SuppressLint("SimpleDateFormat")
-    DateFormat tf = new SimpleDateFormat("EEE, d MMM yyyy");
+    DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
+    DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+
 
 
     @Override
@@ -75,6 +85,9 @@ public class FaceDetect extends AppCompatActivity {
         faceDetectButton=findViewById(R.id.btn_detect);
         graphicOverlay=findViewById(R.id.grapic_overlay);
         preview=findViewById(R.id.camera_view);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = database.getReference("Kehadiran");
 
 
         alertDialog= new SpotsDialog.Builder()
@@ -89,6 +102,60 @@ public class FaceDetect extends AppCompatActivity {
                 preview.start();
                 preview.captureImage();
                 graphicOverlay.clear();
+                dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetect.this);
+                inflater = getLayoutInflater();
+                dialogView = inflater.inflate(R.layout.absen_datang, null);
+                dialog.setView(dialogView);
+                dialog.setCancelable(false);
+                dialog.setTitle("Detail Absen");
+                mStatus=(TextView)dialogView.findViewById(R.id.Status);
+                mJam=(TextView)dialogView.findViewById(R.id.jam);
+                mTanggal=(TextView)dialogView.findViewById(R.id.tanggal);
+                LocalDate today = LocalDate.now();
+                final String tgl = today.format(formatterdate);
+
+                //GetJam
+                LocalTime now = LocalTime.now();
+                LocalTime current = now.minusHours(2);
+                final String jam = current.format(formattertime);
+
+                //GetBulan
+                Month currentMonth = today.getMonth();
+                String bln = String.valueOf(currentMonth);
+
+
+                checkDatang(jam);
+                checkDay();
+
+                String idUser = myRef.push().getKey();
+                assert idUser != null;
+                String idAbsen = myRef.push().getKey();
+                assert idAbsen != null;
+
+
+                final String jenis="Datang";
+                String id = myRef.push().getKey();
+                ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, "tidak ada", "Jalan Ciparay");
+                myRef.child("NPP").child("1202170038").child("AbsenDatang").child(bln).child(idAbsen).setValue(absen);
+
+
+                mStatus.setText(jenis);
+                mJam.setText(jam);
+                mTanggal.setText(tgl);
+
+                dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(FaceDetect.this, HomeScreen.class);
+                        intent.putExtra("status", status);
+                        intent.putExtra("jam",jam );
+                        intent.putExtra("tanggal", tgl);
+                        startActivity(intent);
+
+                    }
+                });
+                dialog.show();
             }
         });
 
@@ -131,36 +198,7 @@ public class FaceDetect extends AppCompatActivity {
                     @Override
                     public void onSuccess(List<FirebaseVisionFace> firebaseVisionFaces) {
                         getFaceResult(firebaseVisionFaces);
-                        dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetect.this);
-                        inflater = getLayoutInflater();
-                        dialogView = inflater.inflate(R.layout.absen_datang, null);
-                        dialog.setView(dialogView);
-                        dialog.setCancelable(false);
-                        dialog.setTitle("Detail Absen");
-                        mStatus=(TextView)dialogView.findViewById(R.id.Status);
-                        mJam=(TextView)dialogView.findViewById(R.id.jam);
-                        mTanggal=(TextView)dialogView.findViewById(R.id.tanggal);
-                        final String jam = jf.format(Calendar.getInstance().getTime());
-                        final String tgl = tf.format(Calendar.getInstance().getTime());
-                        final String status="Datang";
 
-                        mStatus.setText(status);
-                        mJam.setText(jam);
-                        mTanggal.setText(tgl);
-
-                        dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                Intent intent = new Intent(FaceDetect.this, HomeScreen.class);
-                                intent.putExtra("status", status);
-                                intent.putExtra("jam",jam );
-                                intent.putExtra("tanggal", tgl);
-                                startActivity(intent);
-
-                            }
-                        });
-                        dialog.show();
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -182,6 +220,64 @@ public class FaceDetect extends AppCompatActivity {
         }
         alertDialog.dismiss();
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    protected void checkDatang(String checkTime){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.US);
+        LocalTime startLocalTime = LocalTime.parse("9:00 AM", formatter);
+        LocalTime endLocalTime = LocalTime.parse("5:00 PM", formatter);
+        LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
+
+        boolean isInBetween = false;
+        if (endLocalTime.isAfter(startLocalTime)) {
+            if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)) {
+                isInBetween = true;
+            }
+        } else if (checkLocalTime.isAfter(startLocalTime) || checkLocalTime.isBefore(endLocalTime)) {
+            isInBetween = true;
+        }
+
+        if (isInBetween) {
+            status = "Hadir";
+        } else {
+            status = "Tidak hadir";
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    protected void checkPulang(String checkTime){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.US);
+        LocalTime startLocalTime = LocalTime.parse("9:00 AM", formatter);
+        LocalTime endLocalTime = LocalTime.parse("5:00 PM", formatter);
+        LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
+
+        boolean isInBetween = false;
+        if (endLocalTime.isAfter(startLocalTime)) {
+            if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)) {
+                isInBetween = true;
+            }
+        } else if (checkLocalTime.isAfter(startLocalTime) || checkLocalTime.isBefore(endLocalTime)) {
+            isInBetween = true;
+        }
+
+        if (isInBetween) {
+            status = "Didalam Jam";
+        } else {
+            status = "Diluar Jam";
+        }
+    }
+
+    protected void checkDay(){
+
+        Calendar c = Calendar.getInstance();
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+
+        if (Calendar.SATURDAY == dayOfWeek) {
+            status = "Libur Kerja";
+        } else if (Calendar.SUNDAY == dayOfWeek) {
+            status = "Libur Kerja";
+        }
+    }
+
 
     @Override
     protected void onPause() {
