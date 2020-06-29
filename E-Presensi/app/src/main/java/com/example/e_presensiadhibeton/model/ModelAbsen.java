@@ -2,18 +2,19 @@ package com.example.e_presensiadhibeton.model;
 
 public class ModelAbsen {
 
-    public String tanggal, waktu, absen, status, keterangan;
+    public String tanggal, waktu, absen, status, keterangan, lokasi;
 
     public ModelAbsen() {
 
     }
 
-    public ModelAbsen(String tanggal, String waktu, String absen, String status, String keterangan) {
+    public ModelAbsen(String tanggal, String waktu, String absen, String status, String keterangan, String lokasi) {
         this.tanggal = tanggal;
         this.waktu = waktu;
         this.absen = absen;
         this.status = status;
         this.keterangan = keterangan;
+        this.lokasi = lokasi;
     }
 
     public String getTanggal() {
@@ -54,5 +55,13 @@ public class ModelAbsen {
 
     public void setKeterangan(String keterangan) {
         this.keterangan = keterangan;
+    }
+
+    public String getLokasi() {
+        return lokasi;
+    }
+
+    public void setLokasi(String lokasi) {
+        this.lokasi = lokasi;
     }
 }

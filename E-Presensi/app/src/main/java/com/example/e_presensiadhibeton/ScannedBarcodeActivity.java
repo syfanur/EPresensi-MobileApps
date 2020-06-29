@@ -9,6 +9,7 @@ import android.util.SparseArray;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
@@ -26,6 +27,7 @@ import androidx.core.app.ActivityCompat;
 import com.example.e_presensiadhibeton.model.ModelAbsen;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
+import com.google.android.gms.vision.L;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.firebase.database.DatabaseReference;
@@ -42,6 +44,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     SurfaceView surfaceView;
     Button btnDatang, btnPulang;
     String intentData = "", jam = "", tgl = "", status = "";
+    String lokasi = "Jl. Ciparay No 20B Kujangsari, Bandung Kidul, Kota Bandung";
 
     DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
     DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
@@ -87,12 +90,20 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                     LocalTime current = now.minusHours(2);
                     jam = current.format(formattertime);
 
+                    //GetBulan
+                    Month currentMonth = today.getMonth();
+                    String bln = String.valueOf(currentMonth);
+
                     checkDatang(jam);
                     checkDay();
 
-                    String id = myRef.push().getKey();
-                    ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, intentData);
-                    myRef.child(id).setValue(absen);
+                    String idUser = myRef.push().getKey();
+                    assert idUser != null;
+                    String idAbsen = myRef.push().getKey();
+                    assert idAbsen != null;
+
+                    ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, intentData,lokasi);
+                    myRef.child("NPP").child("1202170038").child("AbsenDatang").child(bln).child(idAbsen).setValue(absen);
                     Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
 
 //                    startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
@@ -122,12 +133,21 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                     LocalTime current = now.minusHours(2);
                     jam = current.format(formattertime);
 
+                    //GetBulan
+                    Month currentMonth = today.getMonth();
+                    String bln = String.valueOf(currentMonth);
+
                     checkPulang(jam);
                     checkDay();
 
+                    String idUser = myRef.push().getKey();
+                    assert idUser != null;
+                    String idAbsen = myRef.push().getKey();
+                    assert idAbsen != null;
+
                     String id = myRef.push().getKey();
-                    ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, intentData);
-                    myRef.child(id).setValue(absen);
+                    ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, intentData, lokasi);
+                    myRef.child("NPP").child("1202170038").child("AbsenPulang").child(bln).child(idAbsen).setValue(absen);
                     Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
 
 //                    startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
