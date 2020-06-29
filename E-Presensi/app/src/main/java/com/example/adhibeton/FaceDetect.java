@@ -94,6 +94,12 @@ public class FaceDetect extends AppCompatActivity {
                 .setMessage("Please Wait, Processing...")
                 .setCancelable(false)
                 .build();
+
+        preview.start();
+        preview.captureImage();
+        graphicOverlay.clear();
+
+
         preview.addCameraKitListener(new CameraKitEventListener() {
             @Override
             public void onEvent(CameraKitEvent cameraKitEvent) {
@@ -121,14 +127,14 @@ public class FaceDetect extends AppCompatActivity {
 
             }
         });
-    
+
 
         faceDetectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                preview.start();
-                preview.captureImage();
-                graphicOverlay.clear();
+//                preview.start();
+//                preview.captureImage();
+//                graphicOverlay.clear();
                 dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetect.this);
                 inflater = getLayoutInflater();
                 dialogView = inflater.inflate(R.layout.absen_datang, null);
@@ -143,8 +149,7 @@ public class FaceDetect extends AppCompatActivity {
 
                 //GetJam
                 LocalTime now = LocalTime.now();
-                LocalTime current = now.minusHours(2);
-                final String jam = current.format(formattertime);
+                final String jam = now.format(formattertime);
 
                 //GetBulan
                 Month currentMonth = today.getMonth();
