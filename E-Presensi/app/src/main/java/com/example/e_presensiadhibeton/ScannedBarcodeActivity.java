@@ -43,7 +43,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 201;
     SurfaceView surfaceView;
     Button btnDatang, btnPulang;
-    String intentData = "", jam = "", tgl = "", status = "";
+    String intentData = "", jam = "", tgl = "",tglAbsen = "", status = "";
     String lokasi = "Jl. Ciparay No 20B Kujangsari, Bandung Kidul, Kota Bandung";
 
     DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
@@ -64,7 +64,6 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         {
             finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -95,7 +94,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                     String bln = String.valueOf(currentMonth);
 
                     checkDatang(jam);
-                    checkDay();
+                    checkWeekDay();
 
                     String idUser = myRef.push().getKey();
                     assert idUser != null;
@@ -111,7 +110,8 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 //                            .putExtra("waktu", jam)
 //                            .putExtra("absen", "Datang")
 //                            .putExtra("status", status)
-//                            .putExtra("keterangan", intentData));
+//                            .putExtra("keterangan", intentData)
+//                            .putExtra("lokasi", lokasi));
                     finish();
                 } else {
                     Toast.makeText(ScannedBarcodeActivity.this, "Barcode tidak terdeteksi", Toast.LENGTH_SHORT).show();
@@ -138,7 +138,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                     String bln = String.valueOf(currentMonth);
 
                     checkPulang(jam);
-                    checkDay();
+                    checkWeekDay();
 
                     String idUser = myRef.push().getKey();
                     assert idUser != null;
@@ -155,7 +155,8 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 //                            .putExtra("waktu", jam)
 //                            .putExtra("absen", "Pulang")
 //                            .putExtra("status", status)
-//                            .putExtra("keterangan", intentData));
+//                            .putExtra("keterangan", intentData)
+//                            .putExtra("lokasi", lokasi));
                     finish();
                 } else {
                     Toast.makeText(ScannedBarcodeActivity.this, "Barcode tidak terdeteksi", Toast.LENGTH_SHORT).show();
@@ -165,7 +166,6 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     }
 
     private void initialiseDetectorsAndSources() {
-
         Toast.makeText(getApplicationContext(), "Barcode scanner started", Toast.LENGTH_SHORT).show();
         BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.ALL_FORMATS)
@@ -229,22 +229,26 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     protected void checkDatang(String checkTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.US);
         LocalTime startLocalTime = LocalTime.parse("9:00 AM", formatter);
+        LocalTime lateLocalTime = LocalTime.parse("9:15 AM", formatter);
         LocalTime endLocalTime = LocalTime.parse("5:00 PM", formatter);
         LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
 
-        boolean isInBetween = false;
-        if (endLocalTime.isAfter(startLocalTime)) {
-            if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)) {
-                isInBetween = true;
+        boolean isHadir = false;
+        boolean isTelat = false;
+        if (endLocalTime.isAfter(startLocalTime) || lateLocalTime.isAfter(startLocalTime)) {
+            if (startLocalTime.isBefore(checkLocalTime) && lateLocalTime.isAfter(checkLocalTime)) {
+                isHadir = true;
+            } else if (lateLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)){
+                isTelat = true;
             }
-        } else if (checkLocalTime.isAfter(startLocalTime) || checkLocalTime.isBefore(endLocalTime)) {
-            isInBetween = true;
         }
 
-        if (isInBetween) {
+        if (isHadir) {
             status = "Hadir";
+        } else if (isTelat){
+            status = "Terlambat";
         } else {
-            status = "Tidak hadir";
+            status = "Tidak Hadir";
         }
     }
 
@@ -271,16 +275,21 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         }
     }
 
-    protected void checkDay(){
-
+    protected void checkWeekDay(){
         Calendar c = Calendar.getInstance();
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
 
-        if (Calendar.SATURDAY == dayOfWeek) {
-            status = "Libur Kerja";
-        } else if (Calendar.SUNDAY == dayOfWeek) {
+        if (Calendar.SATURDAY == dayOfWeek || Calendar.SUNDAY == dayOfWeek) {
             status = "Libur Kerja";
         }
+    }
+
+    protected void checkAbsen(){
+        //GetTanggal
+        LocalDate today = LocalDate.now();
+        tglAbsen = today.format(formatterdate);
+
+
     }
 
     @Override
