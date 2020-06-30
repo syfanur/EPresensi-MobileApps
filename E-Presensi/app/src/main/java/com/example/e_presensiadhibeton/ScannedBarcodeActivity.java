@@ -1,6 +1,7 @@
 package com.example.e_presensiadhibeton;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -20,7 +21,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -30,8 +33,11 @@ import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.L;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -43,12 +49,11 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 201;
     SurfaceView surfaceView;
     Button btnDatang, btnPulang;
-    String intentData = "", jam = "", tgl = "",tglAbsen = "", status = "";
+    String intentData = "", jam = "", tgl = "", status = "";
     String lokasi = "Jl. Ciparay No 20B Kujangsari, Bandung Kidul, Kota Bandung";
 
     DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
     DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +77,8 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         btnDatang = findViewById(R.id.btnDatang);
         btnPulang = findViewById(R.id.btnPulang);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference myRef = database.getReference("Kehadiran");
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference myRef = database.getReference("Kehadiran").child("NPP");
 
         btnDatang.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -86,33 +91,58 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 
                     //GetJam
                     LocalTime now = LocalTime.now();
-                    LocalTime current = now.minusHours(2);
-                    jam = current.format(formattertime);
+                    jam = now.format(formattertime);
 
                     //GetBulan
                     Month currentMonth = today.getMonth();
-                    String bln = String.valueOf(currentMonth);
+                    final String bln = String.valueOf(currentMonth);
 
                     checkDatang(jam);
                     checkWeekDay();
 
-                    String idUser = myRef.push().getKey();
-                    assert idUser != null;
-                    String idAbsen = myRef.push().getKey();
-                    assert idAbsen != null;
+                    myRef.child("1202170038").child("AbsenDatang").child(bln).orderByChild("tanggal").equalTo(tgl).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()){
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!isFinishing()){
+                                            new AlertDialog.Builder(ScannedBarcodeActivity.this)
+                                                    .setTitle("Info")
+                                                    .setMessage("Anda sudah melakukan absen datang")
+                                                    .setCancelable(false)
+                                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            finishAndRemoveTask();
+                                                        }
+                                                    }).show();
+                                        }
+                                    }
+                                });
+                            }else {
+                                ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, intentData,lokasi);
+                                myRef.child("1202170038").child("AbsenDatang").child(bln).child(tgl).setValue(absen);
+                                Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
 
-                    ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, intentData,lokasi);
-                    myRef.child("NPP").child("1202170038").child("AbsenDatang").child(bln).child(idAbsen).setValue(absen);
-                    Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+//                                startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
+//                                        .putExtra("tanggal", tgl)
+//                                        .putExtra("waktu", jam)
+//                                        .putExtra("absen", "Datang")
+//                                        .putExtra("status", status)
+//                                        .putExtra("keterangan", intentData)
+//                                        .putExtra("lokasi", lokasi));
+                                finishAndRemoveTask();
+                            }
+                        }
 
-//                    startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
-//                            .putExtra("tanggal", tgl)
-//                            .putExtra("waktu", jam)
-//                            .putExtra("absen", "Datang")
-//                            .putExtra("status", status)
-//                            .putExtra("keterangan", intentData)
-//                            .putExtra("lokasi", lokasi));
-                    finish();
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Toast.makeText(ScannedBarcodeActivity.this, "Gagal terkoneksi ke database", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 } else {
                     Toast.makeText(ScannedBarcodeActivity.this, "Barcode tidak terdeteksi", Toast.LENGTH_SHORT).show();
                 }
@@ -130,34 +160,58 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 
                     //GetJam
                     LocalTime now = LocalTime.now();
-                    LocalTime current = now.minusHours(2);
-                    jam = current.format(formattertime);
+                    jam = now.format(formattertime);
 
                     //GetBulan
                     Month currentMonth = today.getMonth();
-                    String bln = String.valueOf(currentMonth);
+                    final String bln = String.valueOf(currentMonth);
 
                     checkPulang(jam);
                     checkWeekDay();
 
-                    String idUser = myRef.push().getKey();
-                    assert idUser != null;
-                    String idAbsen = myRef.push().getKey();
-                    assert idAbsen != null;
+                    myRef.child("1202170038").child("AbsenPulang").child(bln).orderByChild("tanggal").equalTo(tgl).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()){
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!isFinishing()){
+                                            new AlertDialog.Builder(ScannedBarcodeActivity.this)
+                                                    .setTitle("Info")
+                                                    .setMessage("Anda sudah melakukan absen pulang")
+                                                    .setCancelable(false)
+                                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            finishAndRemoveTask();
+                                                        }
+                                                    }).show();
+                                        }
+                                    }
+                                });
+                            }else {
+                                ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, intentData, lokasi);
+                                myRef.child("1202170038").child("AbsenPulang").child(bln).child(tgl).setValue(absen);
+                                Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
 
-                    String id = myRef.push().getKey();
-                    ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, intentData, lokasi);
-                    myRef.child("NPP").child("1202170038").child("AbsenPulang").child(bln).child(idAbsen).setValue(absen);
-                    Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
+//                                startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
+//                                        .putExtra("tanggal", tgl)
+//                                        .putExtra("waktu", jam)
+//                                        .putExtra("absen", "Pulang")
+//                                        .putExtra("status", status)
+//                                        .putExtra("keterangan", intentData)
+//                                        .putExtra("lokasi", lokasi));
+                                finishAndRemoveTask();
+                            }
+                        }
 
-//                    startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
-//                            .putExtra("tanggal", tgl)
-//                            .putExtra("waktu", jam)
-//                            .putExtra("absen", "Pulang")
-//                            .putExtra("status", status)
-//                            .putExtra("keterangan", intentData)
-//                            .putExtra("lokasi", lokasi));
-                    finish();
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Toast.makeText(ScannedBarcodeActivity.this, "Barcode tidak terdeteksi", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 } else {
                     Toast.makeText(ScannedBarcodeActivity.this, "Barcode tidak terdeteksi", Toast.LENGTH_SHORT).show();
                 }
@@ -282,14 +336,6 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         if (Calendar.SATURDAY == dayOfWeek || Calendar.SUNDAY == dayOfWeek) {
             status = "Libur Kerja";
         }
-    }
-
-    protected void checkAbsen(){
-        //GetTanggal
-        LocalDate today = LocalDate.now();
-        tglAbsen = today.format(formatterdate);
-
-
     }
 
     @Override
