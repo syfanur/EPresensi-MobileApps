@@ -277,8 +277,7 @@ public class buatizin extends AppCompatActivity {
         productMap.put("Bukti", downloadImageUrl);
 
 
-        ProductsRef.child("Karyawan").child(Prevalent.currentOnlineUser.getNpp()).child("Izin")
-    .child(productRandomKey).updateChildren(productMap)
+        ProductsRef.child("Karyawan").child(Prevalent.currentOnlineUser.getNpp()).child(productRandomKey).updateChildren(productMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task)

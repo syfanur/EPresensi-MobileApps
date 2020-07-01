@@ -102,7 +102,7 @@ public class detailizin extends AppCompatActivity {
         DatabaseReference izinRef = FirebaseDatabase.getInstance().getReference().child("Perizinan");
 
         izinRef.child("Karyawan").child(Prevalent.currentOnlineUser.getNpp())
-                .child("Izin").child(id).addValueEventListener(new ValueEventListener() {
+                .child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {

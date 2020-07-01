@@ -53,7 +53,7 @@ public class IzinProses extends Fragment {
         super.onStart();
         options = new FirebaseRecyclerOptions.Builder<Izin>()
                 .setQuery(DataRef.child("Karyawan")
-                        .child(Prevalent.currentOnlineUser.getNpp()).child("Izin"), Izin.class).build();
+                        .child(Prevalent.currentOnlineUser.getNpp()), Izin.class).build();
 
         adapter = new FirebaseRecyclerAdapter<Izin, IzinViewHolder>(options) {
             @Override
