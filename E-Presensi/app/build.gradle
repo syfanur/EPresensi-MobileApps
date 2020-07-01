@@ -61,4 +61,9 @@ dependencies {
     implementation 'com.mikhaellopez:circularimageview:4.2.0'
     implementation 'cyd.awesome.android:awesome-material:1.0'
 //    implementation 'com.android.support:design:26.1.0'
+
+    implementation 'com.google.firebase:firebase-database:16.0.4'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
 }

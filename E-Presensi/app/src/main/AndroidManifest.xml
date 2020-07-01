@@ -36,21 +36,22 @@
         <activity
             android:name=".PiechartAbsen"
             android:label="Kehadiran">
-
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
 
-
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
-
         </activity>
         <activity
             android:name=".ScannedBarcodeActivity"
-            android:label="Absen"></activity>
+            android:label="Absen">
+
+        </activity>
         <activity
             android:name=".EditData"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden">
+
+        </activity>
         <activity android:name=".EditPassword" />
         <activity android:name=".IzinSelesai" />
         <activity android:name=".IzinProses" />
