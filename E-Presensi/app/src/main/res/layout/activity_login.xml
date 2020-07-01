@@ -16,14 +16,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Aplikasi E-Presensi"
-        android:layout_marginTop="58dp"
+        android:layout_marginTop="45dp"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:orientation="vertical"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="140dp"
+       >
 
     <TextView
         android:id="@+id/textView2"
@@ -31,27 +37,30 @@
         android:layout_height="wrap_content"
         android:text="E-Presensi"
         android:textAlignment="center"
+<<<<<<< HEAD
         android:layout_marginTop="175dp"
+=======
+        android:layout_marginTop="50dp"
+>>>>>>> syfa
         android:textColor="@color/black"
         android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/npp"
-        android:layout_width="200dp"
+        android:layout_width="wrap_content"
+        android:paddingLeft="60dp"
+        android:layout_marginLeft="16dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:layout_marginTop="47dp"
-        android:background="@null"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/text"
         android:maxLines="1"
         android:hint="NPP" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="296dp"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:orientation="horizontal">
     <EditText
         android:id="@+id/password"
@@ -64,12 +73,28 @@
         android:hint="Password"
         android:maxLines="1"
         />
+=======
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:orientation="horizontal"
+        android:background="@drawable/pass">
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="60dp"
+            android:background="@null"
+            android:inputType="textPassword"
+            android:hint="Password"
+            android:maxLines="1"
+            />
+>>>>>>> syfa
 
         <cyd.awesome.material.AwesomeText
             android:id="@+id/ImgShowPassword"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginTop="33dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:textColor="@color/merah"
@@ -79,18 +104,43 @@
 
     </LinearLayout>
 
+
+        <com.rey.material.widget.CheckBox
+            android:id="@+id/remember_me_chkb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Material.Drawable.CheckBox"
+            android:text="Remember me"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/colorPrimaryDark"
+            app:cbd_strokeColor="@color/colorPrimaryDark"
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+            android:layout_marginLeft="17dp"
+            />
+
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btn_login"
         android:layout_width="236dp"
         android:layout_height="47dp"
         android:text="LOGIN"
+<<<<<<< HEAD
         android:onClick="MoveToHomepage"
         android:layout_marginTop="45dp"
         android:layout_gravity="center"
         android:layout_marginStart="62dp"
+=======
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+>>>>>>> syfa
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         android:background="@drawable/button_background"
          />
+<<<<<<< HEAD
+=======
+
+    </LinearLayout>
+>>>>>>> syfa
 </LinearLayout>

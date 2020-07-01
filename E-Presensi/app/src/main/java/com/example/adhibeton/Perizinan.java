@@ -75,6 +75,9 @@ public class Perizinan extends AppCompatActivity {
                 Toast.LENGTH_SHORT).show();
     }
 
-
+    public void back(View view) {
+        Intent i = new Intent(Perizinan.this,Homepage.class);
+        startActivity(i);
+    }
 
 }

@@ -149,6 +149,5 @@ public class Homepage extends AppCompatActivity {
         Intent z = new Intent(Homepage.this,DetailKehadiran.class);
         startActivity(z);
     }
-
 }
 

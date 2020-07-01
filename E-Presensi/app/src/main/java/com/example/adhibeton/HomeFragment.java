@@ -43,9 +43,33 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+=======
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.denzcoskun.imageslider.ImageSlider;
+import com.denzcoskun.imageslider.models.SlideModel;
+import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.content.Context.LOCATION_SERVICE;
-
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
@@ -63,6 +87,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
 
     TextView address;
     LinearLayout mTeguran, mPresensi, mIzin, mMeeting, mLembur, mGaji;
+public class HomeFragment extends Fragment {
+
+    LocationManager locationManager;
+    LocationListener locationListener;
+
+    TextView address;
+    LinearLayout mTeguran, mPresensi, mIzin, mMeeting, mLembur, mGaji, mKehadiran;
+    ImageButton Reminder;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -74,6 +106,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         address = v.findViewById(R.id.lokasi);
+
+        TextView nama = v.findViewById(R.id.name_user);
+        TextView posisi = v.findViewById(R.id.posisi);
+        CircularImageView profil = v.findViewById(R.id.profil);
+        nama.setText(Prevalent.currentOnlineUser.getNama());
+        posisi.setText(Prevalent.currentOnlineUser.getPosisi());
+        Picasso.get().load(Prevalent.currentOnlineUser.getProfil()).into(profil);
+
 
         mPresensi=v.findViewById(R.id.presensi);
         mPresensi.setOnClickListener(new View.OnClickListener() {
@@ -98,6 +138,52 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
             @Override
             public void onClick(View v) {
                 Intent home = new Intent(getActivity(), no_meeting.class);
+                startActivity(home);
+            }
+        });
+
+        mTeguran=v.findViewById(R.id.teguran);
+        mTeguran.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent home = new Intent(getActivity(), Teguran.class);
+                startActivity(home);
+            }
+        });
+
+
+        mKehadiran=v.findViewById(R.id.kehadiran);
+        mKehadiran.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent home = new Intent(getActivity(), DetailKehadiran.class);
+                startActivity(home);
+            }
+        });
+
+        mLembur=v.findViewById(R.id.lembur);
+        mLembur.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent home = new Intent(getActivity(),Lembur.class);
+                startActivity(home);
+            }
+        });
+
+        mGaji=v.findViewById(R.id.gaji);
+        mGaji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent home = new Intent(getActivity(), Gaji.class);
+                startActivity(home);
+            }
+        });
+
+        Reminder = v.findViewById(R.id.reminder);
+        Reminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent home = new Intent(getActivity(), Reminder.class);
                 startActivity(home);
             }
         });
@@ -128,6 +214,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
 //                public void onLocationChanged(Location location) {
 //                    double longitude = location.getLongitude();
 //                    double latitude = location.getLatitude();
+        locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
+        boolean isGPS_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        if (isGPS_enabled) {
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    double longitude = location.getLongitude();
+                    double latitude = location.getLatitude();
 //
 //                    try {
 //                        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
@@ -295,4 +390,76 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     }
 }
 
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            };
+        }
+
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        }
+
+        return v;
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if ( grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                address.setText("Getting Location");
+            }
+        }else {
+            address.setText("Access not granted");
+        }
+    }
+
+    public void MoveToAbsen(View view) {
+        Intent i = new Intent(getActivity(), HalamanAbsen.class);
+        startActivity(i);
+    }
+
+    public void MoveToKehadiran(View view) {
+        Intent i = new Intent(getActivity(), HalamanKehadiran.class);
+        startActivity(i);
+    }
+
+    public void MoveToIzin(View view) {
+        Intent i = new Intent(getActivity(), Perizinan.class);
+        startActivity(i);
+    }
+
+    public void MoveToMeeting(View view) {
+        Intent i = new Intent(getActivity(), no_meeting.class);
+        startActivity(i);
+    }
+
+    public void MoveToTeguran(View view) {
+        Intent i = new Intent(getActivity(),Teguran.class);
+        startActivity(i);
+    }
+}
 

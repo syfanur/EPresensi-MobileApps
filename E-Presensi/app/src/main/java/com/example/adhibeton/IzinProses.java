@@ -36,40 +36,52 @@ public class IzinProses extends Fragment {
 
         // Inflate the layout for this fragment.
         ProsesView = inflater.inflate(R.layout.activity_izin_proses, container, false);
-//        DataRef = FirebaseDatabase.getInstance().getReference().child("Perizinan");
-//        recyclerView = ProsesView.findViewById(R.id.recycler_view);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        recyclerView.setHasFixedSize(true);
-//
-//        LoadData();
+        DataRef = FirebaseDatabase.getInstance().getReference().child("Perizinan");
+        recyclerView = ProsesView.findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setHasFixedSize(true);
+
+
+
         return ProsesView;
 
 
     }
 
-//    private void LoadData() {
-//        options = new FirebaseRecyclerOptions.Builder<Izin>().setQuery(DataRef, Izin.class).build();
-//        adapter = new FirebaseRecyclerAdapter<Izin, IzinViewHolder>(options) {
-//            @Override
-//            protected void onBindViewHolder(@NonNull IzinViewHolder holder, final int position, @NonNull final Izin model) {
-//                holder.mjenis.setText("Izin " + model.getJenis());
-////                holder.mtanggal.setText(model.getHari());
-////                holder.mstatus.setText("Rp. " + model.getStatus());
-//                Picasso.get().load(model.getBukti()).into(holder.mposter);
-//
-//            }
-//
-//            @NonNull
-//            @Override
-//            public IzinViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_izin, parent, false);
-//                return new IzinViewHolder(v);
-//            }
-//        };
-//
-//        adapter.startListening();
-//        recyclerView.setAdapter(adapter);
-    }
+    @Override
+    public void onStart(){
+        super.onStart();
+        options = new FirebaseRecyclerOptions.Builder<Izin>()
+                .setQuery(DataRef.child("Karyawan")
+                        .child(Prevalent.currentOnlineUser.getNpp()), Izin.class).build();
 
+        adapter = new FirebaseRecyclerAdapter<Izin, IzinViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull IzinViewHolder holder, final int position, @NonNull final Izin model) {
+                holder.mjenis.setText("Izin " + model.getJenis());
+                holder.mtanggal.setText(model.getHari() + " | " +model.getJam());
+                Picasso.get().load(model.getBukti()).into(holder.mbukti);
 
+                holder.v.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent e = new Intent(getActivity(),detailizin.class);
+                        e.putExtra("pid", model.getId());
+                        startActivity(e);
+                    }
+                });
+
+            }
+
+            @NonNull
+            @Override
+            public IzinViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_izin, parent, false);
+                return new IzinViewHolder(v);
+            }
+        };
+
+        adapter.startListening();
+        recyclerView.setAdapter(adapter);
+    }}
 

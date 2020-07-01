@@ -9,14 +9,25 @@
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:layout_width="105dp"
+<<<<<<< HEAD
         android:layout_height="105dp"
         android:layout_marginTop="90dp"
         android:layout_marginStart="130dp"
+=======
+        android:id="@+id/profil"
+        android:layout_height="105dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="90dp"
+>>>>>>> syfa
         android:src="@drawable/avatar"
         />
 
     <TextView
+<<<<<<< HEAD
         android:id="@+id/textView4"
+=======
+        android:id="@+id/nama"
+>>>>>>> syfa
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -28,7 +39,11 @@
         />
 
     <TextView
+<<<<<<< HEAD
         android:id="@+id/textView5"
+=======
+        android:id="@+id/posisi"
+>>>>>>> syfa
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -39,6 +54,10 @@
         android:textStyle="normal"
         />
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> syfa
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -150,7 +169,11 @@
     </LinearLayout>
 
     <Button
+<<<<<<< HEAD
         android:id="@+id/button"
+=======
+        android:id="@+id/logout"
+>>>>>>> syfa
         android:layout_width="236dp"
         android:layout_height="47dp"
         android:text="LOGOUT"

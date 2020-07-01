@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".no_meeting"
-    android:background="@drawable/nomeeting">
+    android:background="@drawable/meeting">
 
 
     <EditText
@@ -58,5 +58,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3"
         app:layout_constraintVertical_bias="0.092" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="No data"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="normal"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

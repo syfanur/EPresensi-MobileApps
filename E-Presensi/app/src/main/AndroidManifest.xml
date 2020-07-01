@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -52,11 +52,49 @@
             android:windowSoftInputMode="adjustResize|stateHidden">
 
         </activity>
+        <activity android:name=".Reminder">
+
+        </activity>
+        <receiver android:name=".AlertReceiver" />
+
+        <activity android:name=".Gaji" />
+        <activity android:name=".Lembur" />
+        <activity android:name=".HomeScreen">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".Teguran" />
+        <activity
+            android:name=".PiechartAbsen"
+            android:label="Kehadiran">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+
+        </activity>
+        <activity
+            android:name=".ScannedBarcodeActivity"
+            android:label="Absen" />
+        <activity
+            android:name=".EditData"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".EditPassword" />
         <activity android:name=".IzinSelesai" />
         <activity android:name=".IzinProses" />
         <activity android:name=".Perizinan" />
         <activity android:name=".DetailKehadiran">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
@@ -70,14 +108,17 @@
         <activity android:name=".TabAbsen" />
         <activity android:name=".detailizin" />
         <activity android:name=".buatizin" />
-
         <activity android:name=".Profil" >
 
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
+        <activity android:name=".Profil">
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity android:name=".no_meeting" />
         <activity android:name=".Login">
@@ -87,7 +128,12 @@
                             <category android:name="android.intent.category.LAUNCHER" />
                         </intent-filter>
         </activity>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".HalamanKehadiran" />
         <activity android:name=".HalamanSelfie" />
         <activity android:name=".HalamanAbsen" />
@@ -105,6 +151,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
+
+        <receiver android:name=".AlertReceiver" />
     </application>
 
 </manifest>

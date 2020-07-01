@@ -9,13 +9,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.fragment.app.Fragment;
+
+import com.mikhaellopez.circularimageview.CircularImageView;
+import com.squareup.picasso.Picasso;
+import de.hdodenhof.circleimageview.CircleImageView;
+import io.paperdb.Paper;
 
 public class ProfileFragment extends Fragment {
 
-    Button eData, ePassword;
+    Button eData, ePassword, eLogout;
+
 
     public ProfileFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
@@ -23,7 +32,6 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_profile, container, false);
-
         eData=v.findViewById(R.id.editData);
         eData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +48,27 @@ public class ProfileFragment extends Fragment {
                 startActivity(a);
             }
         });
+        return v;
+
+        eLogout=v.findViewById(R.id.logout);
+        eLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Paper.book().destroy();
+                Toast.makeText(getActivity(), "Logout Berhasil", Toast.LENGTH_SHORT).show();
+                Intent home = new Intent(getActivity(), Login.class);
+                startActivity(home);
+            }
+        });
+
+        TextView nama = v.findViewById(R.id.nama);
+        TextView posisi = v.findViewById(R.id.posisi);
+        CircularImageView profil = v.findViewById(R.id.profil);
+
+        nama.setText(Prevalent.currentOnlineUser.getNama());
+        posisi.setText(Prevalent.currentOnlineUser.getPosisi());
+        Picasso.get().load(Prevalent.currentOnlineUser.getProfil()).into(profil);
+
         return v;
     }
 }

@@ -9,6 +9,11 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,8 +49,7 @@ import java.util.Locale;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class AbsenFragment extends Fragment implements OnMapReadyCallback,  GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        LocationListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
     GoogleMap map;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
@@ -221,7 +225,4 @@ public class AbsenFragment extends Fragment implements OnMapReadyCallback,  Goog
                 return;
         }
     }
-
-
-
 }
