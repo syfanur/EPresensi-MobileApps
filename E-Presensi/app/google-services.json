@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "649200670938-f67g25r2ah8063rapkfujrh28lr534qt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.adhibeton",
+            "certificate_hash": "ac78bbb4566b578c9443bdf207eeae813865b47d"
+          }
+        },
+        {
+          "client_id": "649200670938-59ir48p2eib2rdhv3dc1ifv32adavp6u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.adhibeton",
+            "certificate_hash": "6fabe860fa71da3649ff81e160939e468ddc5b72"
+          }
+        },
+        {
           "client_id": "649200670938-5pitt5nn4e8j3kb88dkf4gj5n3p6etcp.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -34,7 +50,6 @@
           ]
         }
       }
-
     },
     {
       "client_info": {
@@ -44,6 +59,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "649200670938-lj9etas4vn4ilv4c980776umt77pfor6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.e_presensiadhibeton",
+            "certificate_hash": "ac78bbb4566b578c9443bdf207eeae813865b47d"
+          }
+        },
         {
           "client_id": "649200670938-5ifnoeglmevnnkl4vmp8j50qpgeicmvr.apps.googleusercontent.com",
           "client_type": 1,
@@ -72,7 +95,6 @@
           ]
         }
       }
-
     }
   ],
   "configuration_version": "1"
