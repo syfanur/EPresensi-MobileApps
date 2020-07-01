@@ -43,7 +43,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-=======
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
