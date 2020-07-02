@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FaceDetect">
+    tools:context=".FaceDetectDatang">
 
     <com.wonderkiln.camerakit.CameraView
         android:id="@+id/camera_view"
         android:layout_width="fill_parent"
-        android:layout_height="550dp"
+        android:layout_height="570dp"
         >
 
     </com.wonderkiln.camerakit.CameraView>
@@ -17,50 +17,26 @@
     
     <com.example.adhibeton.helper.GraphicOverlay
         android:layout_width="fill_parent"
-        android:layout_height="550dp"
+        android:layout_height="570dp"
         android:id="@+id/grapic_overlay"
       />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2"
         android:layout_marginStart="16dp"
-        android:layout_alignParentBottom="true"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="40dp"
         android:layout_marginBottom="16dp">
-
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
         <Button
-            android:layout_width="150dp"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:text="Absen"
             android:id="@+id/btn_detect"
-            android:layout_height="42dp"
-            android:text="Datang"
+            android:layout_alignParentBottom="true"
             android:textColor="#fff"
+            android:textAlignment="center"
             android:background="@drawable/button_absen"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="42dp"
-            android:id="@+id/btn_pulang"
-            android:text="Pulang"
-            android:textColor="#fff"
-            android:background="@drawable/button_absen"/>
-    </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 <!--    <Button-->
 <!--        android:layout_marginStart="16dp"-->
 <!--        android:layout_marginBottom="16dp"-->
