@@ -67,7 +67,6 @@ public class FaceDetect extends AppCompatActivity {
     private GraphicOverlay graphicOverlay;
     AlertDialog alertDialog;
     CameraView preview;
-    CameraView cameraView;
     androidx.appcompat.app.AlertDialog.Builder dialog;
     LayoutInflater inflater;
     View dialogView;
@@ -85,7 +84,6 @@ public class FaceDetect extends AppCompatActivity {
         faceDetectButton = findViewById(R.id.btn_detect);
         graphicOverlay = findViewById(R.id.grapic_overlay);
         preview = findViewById(R.id.camera_view);
-        cameraView= findViewById(R.id.camera_view);
         mButtonPulang = findViewById(R.id.btn_pulang);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -101,12 +99,12 @@ public class FaceDetect extends AppCompatActivity {
         mButtonPulang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cameraView.start();
-                cameraView.captureImage();
+                preview.start();
+               preview.captureImage();
                 graphicOverlay.clear();
             }
         });
-        cameraView.addCameraKitListener(new CameraKitEventListener() {
+        preview.addCameraKitListener(new CameraKitEventListener() {
             @Override
             public void onEvent(CameraKitEvent cameraKitEvent) {
 
@@ -122,7 +120,7 @@ public class FaceDetect extends AppCompatActivity {
                 alertDialog.show();
                 Bitmap bitmap = cameraKitImage.getBitmap();
                 bitmap= Bitmap.createScaledBitmap(bitmap, preview.getWidth(), preview.getHeight(),false);
-                cameraView.stop();
+               preview.stop();
                 proccessFaceDetection(bitmap);
                 dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetect.this);
                 inflater = getLayoutInflater();
@@ -191,6 +189,9 @@ public class FaceDetect extends AppCompatActivity {
                 preview.start();
                 preview.captureImage();
                 graphicOverlay.clear();
+
+
+
             }
         });
 
@@ -213,7 +214,7 @@ public class FaceDetect extends AppCompatActivity {
                 preview.stop();
                 proccessFaceDetection(bitmap);
 
-                 dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetect.this);
+                dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetect.this);
                 inflater = getLayoutInflater();
                 dialogView = inflater.inflate(R.layout.absen_datang, null);
                 dialog.setView(dialogView);
@@ -374,14 +375,14 @@ public class FaceDetect extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         preview.stop();
-        cameraView.stop();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         preview.start();
-        cameraView.stop();
+        
     }
 
 }
