@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     LocationManager locationManager;
   android.location.LocationListener locationListener;
 
-    TextView address;
+    TextView address, mAbsenDatang, mAbsenPulang;
     LinearLayout mTeguran, mPresensi, mIzin, mMeeting, mLembur, mGaji;
 public class HomeFragment extends Fragment {
 
@@ -105,6 +105,16 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
         address = v.findViewById(R.id.lokasi);
+        mAbsenDatang = v.findViewById(R.id.absen_datang);
+        mAbsenPulang = v.findViewById(R.id.absen_pulang);
+
+        String mStatus = getActivity().getIntent().getStringExtra("status");
+        String mTanggal = getActivity().getIntent().getStringExtra("tanggal");
+        String mwaktuDatang = getActivity().getIntent().getStringExtra("jam");
+        String mwaktuPulang = getActivity().getIntent().getStringExtra("jamPulang");
+
+        mAbsenDatang.setText(mwaktuDatang);
+        mAbsenPulang.setText(mwaktuPulang);
 
         TextView nama = v.findViewById(R.id.name_user);
         TextView posisi = v.findViewById(R.id.posisi);
@@ -270,7 +280,7 @@ public class HomeFragment extends Fragment {
         locationRequest.setFastestInterval(1100);
         locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
         {
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, (com.google.android.gms.location.LocationListener) this);
         }

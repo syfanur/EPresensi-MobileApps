@@ -109,6 +109,7 @@
             android:layout_height="42dp"
             android:text="Ambil Selfie"
             android:layout_alignParentBottom="true"
+            android:onClick="MoveToFaceDetect"
             android:textColor="#fff"
             android:textAlignment="center"
             android:background="@drawable/button_absen"/>
