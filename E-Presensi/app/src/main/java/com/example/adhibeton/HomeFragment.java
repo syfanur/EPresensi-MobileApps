@@ -79,9 +79,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
 
         String mStatus = getActivity().getIntent().getStringExtra("status");
         String mTanggal = getActivity().getIntent().getStringExtra("tanggal");
-        String mwaktu = getActivity().getIntent().getStringExtra("jam");
+        String mwaktuDatang = getActivity().getIntent().getStringExtra("jam");
+        String mwaktuPulang = getActivity().getIntent().getStringExtra("jamPulang");
 
-        mAbsenDatang.setText(mwaktu);
+        mAbsenDatang.setText(mwaktuDatang);
+        mAbsenPulang.setText(mwaktuPulang);
 
         mPresensi=v.findViewById(R.id.presensi);
         mPresensi.setOnClickListener(new View.OnClickListener() {

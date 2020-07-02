@@ -63,10 +63,11 @@ import dmax.dialog.SpotsDialog;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class FaceDetect extends AppCompatActivity {
 
-    private Button faceDetectButton;
+    private Button faceDetectButton, mButtonPulang;
     private GraphicOverlay graphicOverlay;
     AlertDialog alertDialog;
     CameraView preview;
+    CameraView cameraView;
     androidx.appcompat.app.AlertDialog.Builder dialog;
     LayoutInflater inflater;
     View dialogView;
@@ -84,6 +85,8 @@ public class FaceDetect extends AppCompatActivity {
         faceDetectButton = findViewById(R.id.btn_detect);
         graphicOverlay = findViewById(R.id.grapic_overlay);
         preview = findViewById(R.id.camera_view);
+        cameraView= findViewById(R.id.camera_view);
+        mButtonPulang = findViewById(R.id.btn_pulang);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference myRef = database.getReference("Kehadiran");
@@ -95,12 +98,15 @@ public class FaceDetect extends AppCompatActivity {
                 .setCancelable(false)
                 .build();
 
-        preview.start();
-        preview.captureImage();
-        graphicOverlay.clear();
-
-
-        preview.addCameraKitListener(new CameraKitEventListener() {
+        mButtonPulang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraView.start();
+                cameraView.captureImage();
+                graphicOverlay.clear();
+            }
+        });
+        cameraView.addCameraKitListener(new CameraKitEventListener() {
             @Override
             public void onEvent(CameraKitEvent cameraKitEvent) {
 
@@ -115,26 +121,9 @@ public class FaceDetect extends AppCompatActivity {
             public void onImage(CameraKitImage cameraKitImage) {
                 alertDialog.show();
                 Bitmap bitmap = cameraKitImage.getBitmap();
-                bitmap = Bitmap.createScaledBitmap(bitmap, preview.getWidth(), preview.getHeight(), false);
-                preview.stop();
-
+                bitmap= Bitmap.createScaledBitmap(bitmap, preview.getWidth(), preview.getHeight(),false);
+                cameraView.stop();
                 proccessFaceDetection(bitmap);
-
-            }
-
-            @Override
-            public void onVideo(CameraKitVideo cameraKitVideo) {
-
-            }
-        });
-
-
-        faceDetectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                preview.start();
-//                preview.captureImage();
-//                graphicOverlay.clear();
                 dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetect.this);
                 inflater = getLayoutInflater();
                 dialogView = inflater.inflate(R.layout.absen_datang, null);
@@ -156,8 +145,8 @@ public class FaceDetect extends AppCompatActivity {
                 String bln = String.valueOf(currentMonth);
 
 
-                checkDatang(jam);
-                checkDay();
+                checkPulang(jam);
+                checkWeekDay();
 
                 String idUser = myRef.push().getKey();
                 assert idUser != null;
@@ -165,10 +154,10 @@ public class FaceDetect extends AppCompatActivity {
                 assert idAbsen != null;
 
 
-                final String jenis="Datang";
+                final String jenis="Pulang";
                 String id = myRef.push().getKey();
-                ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, "tidak ada", "Jalan Ciparay");
-                myRef.child("NPP").child("1202170038").child("AbsenDatang").child(bln).child(idAbsen).setValue(absen);
+                ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, "tidak ada", "Jalan Ciparay");
+                myRef.child("NPP").child("1202170038").child("AbsenPulang").child(bln).child(tgl).setValue(absen);
 
 
                 mStatus.setText(jenis);
@@ -180,8 +169,8 @@ public class FaceDetect extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
 
                         Intent intent = new Intent(FaceDetect.this, HomeScreen.class);
-                        intent.putExtra("status", status);
-                        intent.putExtra("jam",jam );
+                        intent.putExtra("status",  status);
+                        intent.putExtra("jamPulang",jam );
                         intent.putExtra("tanggal", tgl);
                         startActivity(intent);
 
@@ -189,35 +178,102 @@ public class FaceDetect extends AppCompatActivity {
                 });
                 dialog.show();
             }
+
+            @Override
+            public void onVideo(CameraKitVideo cameraKitVideo) {
+
+            }
         });
 
-//        preview.addCameraKitListener(new CameraKitEventListener() {
-//            @Override
-//            public void onEvent(CameraKitEvent cameraKitEvent) {
-//
-//            }
-//
-//            @Override
-//            public void onError(CameraKitError cameraKitError) {
-//
-//            }
-//
-//            @Override
-//            public void onImage(CameraKitImage cameraKitImage) {
-//                alertDialog.show();
-//                Bitmap bitmap = cameraKitImage.getBitmap();
-//                bitmap= Bitmap.createScaledBitmap(bitmap, preview.getWidth(), preview.getHeight(),false);
-//                preview.stop();
-//
-//                proccessFaceDetection(bitmap);
-//
-//            }
-//
-//            @Override
-//            public void onVideo(CameraKitVideo cameraKitVideo) {
-//
-//            }
-//        });
+        faceDetectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preview.start();
+                preview.captureImage();
+                graphicOverlay.clear();
+            }
+        });
+
+        preview.addCameraKitListener(new CameraKitEventListener() {
+            @Override
+            public void onEvent(CameraKitEvent cameraKitEvent) {
+
+            }
+
+            @Override
+            public void onError(CameraKitError cameraKitError) {
+
+            }
+
+            @Override
+            public void onImage(CameraKitImage cameraKitImage) {
+                alertDialog.show();
+                Bitmap bitmap = cameraKitImage.getBitmap();
+                bitmap= Bitmap.createScaledBitmap(bitmap, preview.getWidth(), preview.getHeight(),false);
+                preview.stop();
+                proccessFaceDetection(bitmap);
+
+                 dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetect.this);
+                inflater = getLayoutInflater();
+                dialogView = inflater.inflate(R.layout.absen_datang, null);
+                dialog.setView(dialogView);
+                dialog.setCancelable(false);
+                dialog.setTitle("Detail Absen");
+                mStatus=(TextView)dialogView.findViewById(R.id.Status);
+                mJam=(TextView)dialogView.findViewById(R.id.jam);
+                mTanggal=(TextView)dialogView.findViewById(R.id.tanggal);
+                LocalDate today = LocalDate.now();
+                final String tgl = today.format(formatterdate);
+
+                //GetJam
+                LocalTime now = LocalTime.now();
+                final String jam = now.format(formattertime);
+
+                //GetBulan
+                Month currentMonth = today.getMonth();
+                String bln = String.valueOf(currentMonth);
+
+
+                checkDatang(jam);
+                checkWeekDay();
+
+                String idUser = myRef.push().getKey();
+                assert idUser != null;
+                String idAbsen = myRef.push().getKey();
+                assert idAbsen != null;
+
+
+                final String jenis="Datang";
+                String id = myRef.push().getKey();
+                ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, "tidak ada", "Jalan Ciparay");
+                myRef.child("NPP").child("1202170038").child("AbsenDatang").child(bln).child(tgl).setValue(absen);
+
+
+                mStatus.setText(jenis);
+                mJam.setText(jam);
+                mTanggal.setText(tgl);
+
+                dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        Intent intent = new Intent(FaceDetect.this, HomeScreen.class);
+                        intent.putExtra("status",  status);
+                        intent.putExtra("jam",jam );
+                        intent.putExtra("tanggal", tgl);
+                        startActivity(intent);
+
+                    }
+                });
+                dialog.show();
+
+            }
+
+            @Override
+            public void onVideo(CameraKitVideo cameraKitVideo) {
+
+            }
+        });
     }
 
     private void proccessFaceDetection(Bitmap bitmap) {
@@ -256,24 +312,30 @@ public class FaceDetect extends AppCompatActivity {
     protected void checkDatang(String checkTime){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.US);
         LocalTime startLocalTime = LocalTime.parse("9:00 AM", formatter);
+        LocalTime lateLocalTime = LocalTime.parse("9:15 AM", formatter);
         LocalTime endLocalTime = LocalTime.parse("5:00 PM", formatter);
         LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
 
-        boolean isInBetween = false;
-        if (endLocalTime.isAfter(startLocalTime)) {
-            if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)) {
-                isInBetween = true;
+
+        boolean isHadir = false;
+        boolean isTelat = false;
+        if (endLocalTime.isAfter(startLocalTime) || lateLocalTime.isAfter(startLocalTime)) {
+            if (startLocalTime.isBefore(checkLocalTime) && lateLocalTime.isAfter(checkLocalTime)) {
+                isHadir = true;
+            } else if (lateLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)){
+                isTelat = true;
             }
-        } else if (checkLocalTime.isAfter(startLocalTime) || checkLocalTime.isBefore(endLocalTime)) {
-            isInBetween = true;
         }
 
-        if (isInBetween) {
+        if (isHadir) {
             status = "Hadir";
+        } else if (isTelat){
+            status = "Terlambat";
         } else {
-            status = "Tidak hadir";
+            status = "Tidak Hadir";
         }
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     protected void checkPulang(String checkTime){
@@ -298,14 +360,11 @@ public class FaceDetect extends AppCompatActivity {
         }
     }
 
-    protected void checkDay(){
-
+    protected void checkWeekDay(){
         Calendar c = Calendar.getInstance();
         int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
 
-        if (Calendar.SATURDAY == dayOfWeek) {
-            status = "Libur Kerja";
-        } else if (Calendar.SUNDAY == dayOfWeek) {
+        if (Calendar.SATURDAY == dayOfWeek || Calendar.SUNDAY == dayOfWeek) {
             status = "Libur Kerja";
         }
     }
@@ -315,12 +374,14 @@ public class FaceDetect extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         preview.stop();
+        cameraView.stop();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         preview.start();
+        cameraView.stop();
     }
 
 }

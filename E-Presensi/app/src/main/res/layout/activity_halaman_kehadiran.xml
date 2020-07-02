@@ -1,149 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".HalamanKehadiran">
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_alignParentTop="true"
-        android:layout_height="290dp"
-        android:background="@drawable/retangle">
-    </View>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:orientation="vertical"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="-240dp"
-        android:background="@drawable/shadow"
-        android:elevation="10dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rabu, 03 Juni 2020"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:layout_gravity="center"
-            android:layout_marginTop="8dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lokasi"
-            android:textSize="14sp"
-            android:textColor="#8B8585"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"/>
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/image_location"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/location"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="8dp"/>
-            <TextView
-                android:id="@+id/lokasi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="#000"
-                android:text="Kantor Pusat PT Basic Teknologi"
-                android:layout_toRightOf="@+id/image_location"
-                android:layout_marginTop="8dp"
-                android:layout_marginLeft="8dp"/>
-
-            <TextView
-                android:id="@+id/datang"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="Datang :"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="72dp"/>
-            <ImageView
-                android:id="@+id/jam_1"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/clock"
-                android:layout_toRightOf="@+id/datang"
-                android:layout_marginTop="72dp"
-                android:layout_marginStart="8dp"/>
-            <TextView
-                android:id="@+id/absen_datang"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="00:00"
-                android:textColor="#000"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="72dp"
-                android:layout_toRightOf="@+id/jam_1"/>
-
-
-            <TextView
-                android:id="@+id/pulang"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="Pulang :"
-                android:layout_toRightOf="@+id/absen_datang"
-                android:layout_marginTop="72dp"
-                android:layout_marginStart="42dp"/>
-            <ImageView
-                android:id="@+id/jam_2"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/clock"
-                android:layout_toRightOf="@+id/pulang"
-                android:layout_marginTop="72dp"
-                android:layout_marginStart="8dp"/>
-            <TextView
-                android:id="@+id/absen_pulang"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="00:00"
-                android:textColor="#000"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="72dp"
-                android:layout_toRightOf="@+id/jam_2"/>
-
-
-        </RelativeLayout>
-
-    </LinearLayout>
+        android:layout_height="300dp"
+        android:background="@color/colorPrimary"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        app:tabIndicatorHeight="3dp"
-        app:tabMode="fixed"
-        app:tabPaddingTop="15dp"
-        app:tabPaddingBottom="8dp"
-        app:tabTextColor="#fff"
-        app:tabIndicatorColor="#fff"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="250dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:tabTextColor="@color/white"
+        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorHeight="5dp"/>
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/Vpager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        />
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/tabLayout"/>
 
-</LinearLayout>
+</RelativeLayout>

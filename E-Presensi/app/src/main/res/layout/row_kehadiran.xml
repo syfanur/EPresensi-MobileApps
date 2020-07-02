@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    app:cardBackgroundColor="#fff"
+    app:cardCornerRadius="3dp"
+    app:cardElevation="3dp"
+    app:contentPadding="5dp"
+    app:cardUseCompatPadding="true">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageButton
+            android:id="@+id/calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/calendar"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="32dp"
+            />
+       <TextView
+           android:id="@+id/rTanggal"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_marginStart="8dp"
+           android:text="Mon, 29 Jun 2020"
+           android:layout_below="@+id/calendar"
+           android:layout_marginTop="8dp"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="1dp"
+        android:layout_height="95dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="5dp"
+        android:background="@color/light_grey"
+        android:layout_marginLeft="8dp"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp">
+        <TextView
+            android:id="@+id/rStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tidak Absen"
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"/>
+        <ImageView
+            android:id="@+id/jam_1"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/rStatus"
+            android:background="@drawable/clock"
+           />
+        <TextView
+            android:id="@+id/rAbsen_datang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="00:00 AM"
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/rStatus"
+            android:textColor="#000"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/jam_1"/>
+
+        <ImageView
+            android:id="@+id/jam_2"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="@drawable/clock"
+            android:layout_toRightOf="@+id/rAbsen_datang"
+            android:layout_below="@+id/rStatus"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="8dp"/>
+        <TextView
+            android:id="@+id/rAbsen_pulang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:text="00:00 AM"
+            android:textColor="#000"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_below="@+id/rStatus"
+            android:layout_toRightOf="@+id/jam_2"/>
+        <Button
+            android:id="@+id/btn_detail"
+            android:layout_width="60dp"
+            android:layout_height="28dp"
+            android:text="Detail"
+            android:textSize="12sp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="75dp"
+            android:textColor="#fff"
+            android:textAlignment="center"
+            android:background="@drawable/btn_kehadiran"/>
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>
+</androidx.cardview.widget.CardView>
