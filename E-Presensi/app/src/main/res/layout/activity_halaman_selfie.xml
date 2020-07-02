@@ -100,20 +100,47 @@
                 android:layout_marginLeft="24dp"/>
 
         </LinearLayout>
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp">
-        <Button
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:text="Ambil Selfie"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
             android:layout_alignParentBottom="true"
-            android:onClick="MoveToFaceDetect"
-            android:textColor="#fff"
-            android:textAlignment="center"
-            android:background="@drawable/button_absen"/>
-        </RelativeLayout>
+            android:layout_marginTop="190dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <Button
+                    android:layout_width="150dp"
+                    android:id="@+id/btn_datang"
+                    android:layout_height="42dp"
+                    android:text="Datang"
+                    android:onClick="MoveToFaceDetectDatang"
+                    android:textColor="#fff"
+                    android:background="@drawable/button_absen"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <Button
+                    android:layout_width="150dp"
+                    android:layout_height="42dp"
+                    android:id="@+id/btn_pulang"
+                    android:text="Pulang"
+                    android:onClick="MoveToFaceDetectPulang"
+                    android:textColor="#fff"
+                    android:background="@drawable/button_absen"/>
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
 
