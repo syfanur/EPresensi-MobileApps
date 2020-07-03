@@ -76,13 +76,14 @@
                 android:elevation="10dp">
 
                 <TextView
+                   android:id="@+id/text_date_display"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rabu, 03 Juni 2020"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:layout_gravity="center"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginTop="12dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -91,7 +92,7 @@
                     android:textSize="14sp"
                     android:textColor="#8B8585"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"/>
+                    android:layout_marginTop="4dp"/>
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
@@ -109,7 +110,10 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:textColor="#000"
-                        android:text="Kantor Pusat PT Basic Teknologi"
+                        android:lineSpacingExtra="4dp"
+                        android:maxLines="2"
+                        android:text="Kantor Pusat PT Basic Teknologi
+\nJl. Ciparay No.20, Kujangsari, Kec. Bandung Kidul, Kota Bandung, Jawa Barat 40287"
                         android:layout_toRightOf="@+id/image_location"
                         android:layout_marginTop="8dp"
                         android:layout_marginLeft="8dp"/>
@@ -129,17 +133,18 @@
                         android:background="@drawable/clock"
                         android:layout_toRightOf="@+id/datang"
                         android:layout_marginTop="72dp"
-                        android:layout_marginLeft="8dp"/>
+                        android:layout_marginLeft="4dp"/>
+
                     <TextView
                         android:id="@+id/absen_datang"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="72dp"
+                        android:layout_toRightOf="@+id/jam_1"
                         android:text="00:00"
                         android:textColor="#000"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="72dp"
-                        android:layout_toRightOf="@+id/jam_1"/>
+                        android:textSize="14sp" />
 
 
                     <TextView
@@ -150,7 +155,7 @@
                         android:text="Pulang :"
                         android:layout_toRightOf="@+id/absen_datang"
                         android:layout_marginTop="72dp"
-                        android:layout_marginLeft="42dp"/>
+                        android:layout_marginLeft="20dp"/>
                     <ImageView
                         android:id="@+id/jam_2"
                         android:layout_width="24dp"
@@ -158,7 +163,7 @@
                         android:background="@drawable/clock"
                         android:layout_toRightOf="@+id/pulang"
                         android:layout_marginTop="72dp"
-                        android:layout_marginLeft="8dp"/>
+                        android:layout_marginLeft="4dp"/>
                     <TextView
                         android:id="@+id/absen_pulang"
                         android:layout_width="wrap_content"
@@ -166,7 +171,7 @@
                         android:textSize="14sp"
                         android:text="00:00"
                         android:textColor="#000"
-                        android:layout_marginLeft="16dp"
+                        android:layout_marginLeft="4dp"
                         android:layout_marginTop="72dp"
                         android:layout_toRightOf="@+id/jam_2"/>
 

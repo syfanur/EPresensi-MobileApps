@@ -236,7 +236,7 @@ public class FaceDetectPulang extends AppCompatActivity {
         }
 
         if (isHadir) {
-            status = "Hadir";
+            status = "Tepat Waktu";
         } else if (isTelat) {
             status = "Terlambat";
         } else {

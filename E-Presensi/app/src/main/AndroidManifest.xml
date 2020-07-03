@@ -57,21 +57,21 @@
         <activity
             android:name=".PiechartAbsen"
             android:label="Kehadiran">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
         </activity>
 
         <activity
             android:name=".ScannedBarcodeActivity"
-            android:label="Absen">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+            android:label="Absen"
+            android:theme="@style/AdaActionBar">
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".AbsenFragment"
+            android:label="Absen"
+            android:theme="@style/AdaActionBar">
+
         </activity>
 
         <activity

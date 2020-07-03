@@ -14,10 +14,17 @@ import android.widget.TimePicker;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 public class Reminder extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
     private TextView mTextView;
+    TextView Datang, Pulang;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +45,14 @@ public class Reminder extends AppCompatActivity implements TimePickerDialog.OnTi
                 cancelAlarm();
             }
         });
+
+
+        Datang = (TextView) findViewById(R.id.absen_datang);
+        Pulang = (TextView) findViewById(R.id.absen_pulang);
+
+        datangdisplay(Datang);
+        pulangdisplay(Pulang);
+
     }
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -48,6 +63,67 @@ public class Reminder extends AppCompatActivity implements TimePickerDialog.OnTi
         updateTimeText(c);
         startAlarm(c);
     }
+
+    private void pulangdisplay(TextView pulang) {
+        DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
+                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child("JULY").child("Fri, 3 Jul 2020");
+        UsersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                {
+                    if (dataSnapshot.child("waktu").exists())
+                    {
+
+
+                        String pulang = dataSnapshot.child("waktu").getValue().toString();
+
+                        Pulang.setText(pulang);
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void datangdisplay(TextView datang) {
+
+        DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
+                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child("JULY").child("Fri, 3 Jul 2020");
+        UsersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                {
+                    if (dataSnapshot.child("waktu").exists())
+                    {
+
+
+                        String datang = dataSnapshot.child("waktu").getValue().toString();
+
+                        Datang.setText(datang);
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
     private void updateTimeText(Calendar c) {
         String timeText = "Alarm set for: ";
         timeText += DateFormat.getTimeInstance(DateFormat.SHORT).format(c.getTime());

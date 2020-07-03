@@ -59,8 +59,7 @@ public class PiechartAbsen extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRefTerlambat = database.getReference()
                 .child("Kehadiran")
-                .child("NPP")
-                .child("1202170038")
+                .child(Prevalent.currentOnlineUser.getNpp())
                 .child("AbsenDatang")
                 .child(bln);
         Query queryTerlambat = myRefTerlambat.orderByChild("status").equalTo("Terlambat");
@@ -80,11 +79,10 @@ public class PiechartAbsen extends AppCompatActivity {
 
         DatabaseReference myRefHadir = database.getReference()
                 .child("Kehadiran")
-                .child("NPP")
-                .child("1202170038")
+                .child(Prevalent.currentOnlineUser.getNpp())
                 .child("AbsenDatang")
                 .child(bln);
-        Query queryHadir = myRefHadir.orderByChild("status").equalTo("Hadir");
+        Query queryHadir = myRefHadir.orderByChild("status").equalTo("Tepat Waktu");
         ValueEventListener eventListenerHadir = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -101,8 +99,7 @@ public class PiechartAbsen extends AppCompatActivity {
 
         DatabaseReference myRefTidakHadir = database.getReference()
                 .child("Kehadiran")
-                .child("NPP")
-                .child("1202170038")
+                .child(Prevalent.currentOnlineUser.getNpp())
                 .child("AbsenDatang")
                 .child(bln);
         Query queryTidakHadir = myRefTidakHadir.orderByChild("status").equalTo("Tidak Hadir");
@@ -124,8 +121,7 @@ public class PiechartAbsen extends AppCompatActivity {
         final List<PieEntry> value = new ArrayList<>();
         DatabaseReference myRef = database.getReference()
                 .child("Kehadiran")
-                .child("NPP")
-                .child("1202170038")
+                .child(Prevalent.currentOnlineUser.getNpp())
                 .child("AbsenDatang")
                 .child(bln);
         myRef.addValueEventListener(new ValueEventListener() {
@@ -136,9 +132,17 @@ public class PiechartAbsen extends AppCompatActivity {
                 jmlhHadir = (float)countHadir;
                 jmlhTidakHadir = (float)countTidakHadir;
 
-                value.add(new PieEntry(0+jmlhTerlambat, "Terlambat"));
-                value.add(new PieEntry(0+jmlhHadir, "Hadir"));
-                value.add(new PieEntry(0+jmlhTidakHadir, "Tidak Hadir"));
+                if (jmlhTerlambat != 0){
+                    value.add(new PieEntry(0+jmlhTerlambat, "Terlambat"));
+                }
+
+                if (jmlhHadir != 0){
+                    value.add(new PieEntry(0+jmlhHadir, "Hadir"));
+                }
+
+                if (jmlhTidakHadir != 0){
+                    value.add(new PieEntry(0+jmlhTidakHadir, "Tidak Hadir"));
+                }
 
                 PieDataSet pieDataSet = new PieDataSet(value,"- Status Kehadiran");
                 PieData pieData = new PieData(pieDataSet);

@@ -242,7 +242,7 @@ private boolean getFaceResult(List<FirebaseVisionFace> firebaseVisionFaces) {
         }
 
         if (isHadir) {
-            status = "Hadir";
+            status = "Tepat Waktu";
         } else if (isTelat){
             status = "Terlambat";
         } else {

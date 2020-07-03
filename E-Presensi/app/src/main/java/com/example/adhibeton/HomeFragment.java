@@ -22,11 +22,23 @@ import androidx.fragment.app.Fragment;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.google.firebase.FirebaseError;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -36,9 +48,17 @@ public class HomeFragment extends Fragment {
     LocationManager locationManager;
     LocationListener locationListener;
 
+    private TextView dateTimeDisplay;
+    private Calendar calendar;
+    private SimpleDateFormat dateFormat;
+    private String date;
+    TextView Datang, Pulang;
+
     TextView address;
     LinearLayout mTeguran, mPresensi, mIzin, mMeeting, mLembur, mGaji, mKehadiran;
     ImageButton Reminder;
+    FirebaseDatabase mFirebaseInstance;
+    DatabaseReference mDatabase;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -57,6 +77,18 @@ public class HomeFragment extends Fragment {
         posisi.setText(Prevalent.currentOnlineUser.getPosisi());
         Picasso.get().load(Prevalent.currentOnlineUser.getProfil()).into(profil);
 
+       Datang = (TextView) v.findViewById(R.id.absen_datang);
+       Pulang = (TextView) v.findViewById(R.id.absen_pulang);
+
+       datangdisplay(Datang);
+       pulangdisplay(Pulang);
+
+        dateTimeDisplay = (TextView)v.findViewById(R.id.text_date_display);
+
+        calendar = Calendar.getInstance();
+        dateFormat = new SimpleDateFormat("EEE, dd MMMM yyyy");
+        date = dateFormat.format(calendar.getTime());
+        dateTimeDisplay.setText(date);
 
         mPresensi=v.findViewById(R.id.presensi);
         mPresensi.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +112,7 @@ public class HomeFragment extends Fragment {
         mMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent home = new Intent(getActivity(), no_meeting.class);
+                Intent home = new Intent(getActivity(), PiechartAbsen.class);
                 startActivity(home);
             }
         });
@@ -188,6 +220,65 @@ public class HomeFragment extends Fragment {
 
         return v;
 
+    }
+
+    private void pulangdisplay(TextView pulang) {
+        DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
+                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child("JULY").child("Fri, 3 Jul 2020");
+        UsersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                {
+                    if (dataSnapshot.child("waktu").exists())
+                    {
+
+
+                        String pulang = dataSnapshot.child("waktu").getValue().toString();
+
+                        Pulang.setText(pulang);
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void datangdisplay(TextView datang) {
+
+        DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
+                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child("JULY").child("Fri, 3 Jul 2020");
+        UsersRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                {
+                    if (dataSnapshot.child("waktu").exists())
+                    {
+
+
+                        String datang = dataSnapshot.child("waktu").getValue().toString();
+
+                        Datang.setText(datang);
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

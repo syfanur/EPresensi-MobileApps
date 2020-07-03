@@ -100,7 +100,10 @@ public class AbsenFragment extends Fragment implements OnMapReadyCallback,  Goog
         locationManager =(LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
         return v;
+
     }
+
+
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
