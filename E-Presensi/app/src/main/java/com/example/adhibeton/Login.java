@@ -98,9 +98,6 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public void MoveToHomepage(View view) {
-        Intent i = new Intent(Login.this,HomeScreen.class);
-        startActivity(i);
     private void AllowAccess(final String npp, final String password)
     {
         final DatabaseReference RootRef;
@@ -145,83 +142,85 @@ public class Login extends AppCompatActivity {
         });
     }
 
-        private void LoginUser()
+    private void LoginUser()
+    {
+        String npp = InputNpp.getText().toString();
+        String password = InputPassword.getText().toString();
+
+        if (TextUtils.isEmpty(npp))
         {
-            String npp = InputNpp.getText().toString();
-            String password = InputPassword.getText().toString();
-
-            if (TextUtils.isEmpty(npp))
-            {
-                Toast.makeText(this, "Please write your npp...", Toast.LENGTH_SHORT).show();
-            }
-            else if (TextUtils.isEmpty(password))
-            {
-                Toast.makeText(this, "Please write your password...", Toast.LENGTH_SHORT).show();
-            }
-            else
-            {
-                loadingBar.setTitle("Login Account");
-                loadingBar.setMessage("Please wait, while we are checking the credentials.");
-                loadingBar.setCanceledOnTouchOutside(false);
-                loadingBar.show();
+            Toast.makeText(this, "Please write your npp...", Toast.LENGTH_SHORT).show();
+        }
+        else if (TextUtils.isEmpty(password))
+        {
+            Toast.makeText(this, "Please write your password...", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            loadingBar.setTitle("Login Account");
+            loadingBar.setMessage("Please wait, while we are checking the credentials.");
+            loadingBar.setCanceledOnTouchOutside(false);
+            loadingBar.show();
 
 
-                AllowAccessToAccount(npp, password);
-            }
+            AllowAccessToAccount(npp, password);
+        }
+    }
+
+
+
+    private void AllowAccessToAccount(final String npp, final String password) {
+        if (chkBoxRememberMe.isChecked())
+        {
+            Paper.book().write(Prevalent.UserNppKey, npp);
+            Paper.book().write(Prevalent.UserPasswordKey, password);
         }
 
+        final DatabaseReference RootRef;
+        RootRef = FirebaseDatabase.getInstance().getReference();
 
-
-        private void AllowAccessToAccount(final String npp, final String password) {
-            if (chkBoxRememberMe.isChecked())
+        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
             {
-                Paper.book().write(Prevalent.UserNppKey, npp);
-                Paper.book().write(Prevalent.UserPasswordKey, password);
-            }
-
-            final DatabaseReference RootRef;
-            RootRef = FirebaseDatabase.getInstance().getReference();
-
-            RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                if (dataSnapshot.child(parentDbName).child(npp).exists())
                 {
-                    if (dataSnapshot.child(parentDbName).child(npp).exists())
+                    Karyawan usersData = dataSnapshot.child(parentDbName).child(npp).getValue(Karyawan.class);
+
+                    if (usersData.getNpp().equals(npp))
                     {
-                        Karyawan usersData = dataSnapshot.child(parentDbName).child(npp).getValue(Karyawan.class);
-
-                        if (usersData.getNpp().equals(npp))
+                        if (usersData.getPassword().equals(password))
                         {
-                             if (usersData.getPassword().equals(password))
+                            if (parentDbName.equals("Karyawan"))
                             {
-                                if (parentDbName.equals("Karyawan"))
-                                {
-                                    Toast.makeText(Login.this, "Login Success", Toast.LENGTH_SHORT).show();
-                                    loadingBar.dismiss();
-
-                                    Intent intent = new Intent(Login.this, HomeScreen.class);
-                                    Prevalent.currentOnlineUser = usersData;
-                                    startActivity(intent);
-                                }
-                            }
-                            else
-                            {
+                                Toast.makeText(Login.this, "Login Success", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
-                                Toast.makeText(Login.this, "Password is incorrect.", Toast.LENGTH_SHORT).show();
+
+                                Intent intent = new Intent(Login.this, HomeScreen.class);
+                                Prevalent.currentOnlineUser = usersData;
+                                startActivity(intent);
                             }
                         }
-                    }
-                    else
-                    {
-                        Toast.makeText(Login.this, "Account with this " + npp + " number do not exists.", Toast.LENGTH_SHORT).show();
-                        loadingBar.dismiss();
+                        else
+                        {
+                            loadingBar.dismiss();
+                            Toast.makeText(Login.this, "Password is incorrect.", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                else
+                {
+                    Toast.makeText(Login.this, "Account with this " + npp + " number do not exists.", Toast.LENGTH_SHORT).show();
+                    loadingBar.dismiss();
                 }
-            });
-        }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 }

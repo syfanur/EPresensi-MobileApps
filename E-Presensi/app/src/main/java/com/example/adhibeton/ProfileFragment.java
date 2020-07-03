@@ -2,19 +2,18 @@ package com.example.adhibeton;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
 
@@ -24,7 +23,6 @@ public class ProfileFragment extends Fragment {
 
 
     public ProfileFragment() {
-
     }
 
     @Override
@@ -32,6 +30,9 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v= inflater.inflate(R.layout.fragment_profile, container, false);
+
+
+
         eData=v.findViewById(R.id.editData);
         eData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +49,6 @@ public class ProfileFragment extends Fragment {
                 startActivity(a);
             }
         });
-        return v;
 
         eLogout=v.findViewById(R.id.logout);
         eLogout.setOnClickListener(new View.OnClickListener() {
@@ -70,5 +70,7 @@ public class ProfileFragment extends Fragment {
         Picasso.get().load(Prevalent.currentOnlineUser.getProfil()).into(profil);
 
         return v;
+
+
     }
 }

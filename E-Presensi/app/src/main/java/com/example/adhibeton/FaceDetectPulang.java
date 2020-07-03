@@ -162,7 +162,7 @@ public class FaceDetectPulang extends AppCompatActivity {
                             final String jenis = "Pulang";
                             String id = myRef.push().getKey();
                             ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, "tidak ada", "Jalan Ciparay");
-                            myRef.child("NPP").child("1202170038").child("AbsenPulang").child(bln).child(tgl).setValue(absen);
+                            myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(bln).child(tgl).setValue(absen);
 
                             mStatus.setText(jenis);
                             mJam.setText(jam);

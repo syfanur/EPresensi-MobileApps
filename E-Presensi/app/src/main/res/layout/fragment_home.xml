@@ -25,18 +25,6 @@
                 android:background="@drawable/shadowcurveheader">
             </View>
 
-<<<<<<< HEAD
-            <ImageView
-                android:id="@+id/user"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:src="@drawable/man"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"/>
-            <TextView
-                android:id="@+id/name_user"
-                android:layout_width="wrap_content"
-=======
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:layout_width="70dp"
@@ -49,38 +37,17 @@
             <TextView
                 android:id="@+id/name_user"
                 android:layout_width="210dp"
->>>>>>> syfa
                 android:layout_height="wrap_content"
                 android:text="Andhi kurniawan"
                 android:textSize="16sp"
                 android:textColor="#fff"
                 android:layout_toRightOf="@+id/user"
-<<<<<<< HEAD
-                android:layout_marginLeft="24dp"
-=======
                 android:layout_marginLeft="100dp"
->>>>>>> syfa
                 android:layout_marginTop="40dp"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Developer"
-<<<<<<< HEAD
-                android:textSize="14sp"
-                android:textColor="#fff"
-                android:layout_toRightOf="@+id/user"
-                android:layout_marginLeft="24dp"
-                android:layout_marginTop="64dp"/>
-            <ImageButton
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="@drawable/bell"
-                android:layout_toRightOf="@+id/name_user"
-                android:layout_marginTop="40dp"
-                android:layout_marginLeft="140dp"/>
-
-            <LinearLayout
-=======
                 android:id="@+id/posisi"
                 android:textSize="14sp"
                 android:textColor="#fff"
@@ -99,7 +66,6 @@
 
             <LinearLayout
                 android:id="@+id/kehadiran"
->>>>>>> syfa
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
                 android:orientation="vertical"
@@ -212,15 +178,6 @@
 
 
         </RelativeLayout>
-<<<<<<< HEAD
-        <fragment
-            android:layout_width="1dp"
-            android:layout_height="1dp"
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"/>
-
-=======
->>>>>>> syfa
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -242,13 +199,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-<<<<<<< HEAD
-                android:orientation="vertical">
-=======
                 android:orientation="vertical"
                 android:onClick="MoveToTeguran"
                 >
->>>>>>> syfa
 
                 <ImageView
                     android:layout_width="24dp"
@@ -412,28 +365,7 @@
 
 
         </androidx.cardview.widget.CardView>
-<<<<<<< HEAD
-<!--        <RelativeLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_marginBottom="16dp">-->
 
-<!--            <Button-->
-<!--                android:layout_width="32dp"-->
-<!--                android:layout_height="32dp"-->
-<!--                android:layout_alignParentBottom="true"-->
-<!--                android:layout_centerHorizontal="true"-->
-<!--                android:background="@drawable/button"-->
-<!--                android:onClick="MoveToAbsen"-->
-<!--                android:textColor="#fff"-->
-<!--                android:drawableLeft="@drawable/absen"-->
-<!--                />-->
-
-
-<!--        </RelativeLayout>-->
-=======
-
->>>>>>> syfa
     </LinearLayout>
 
 </ScrollView>

@@ -63,13 +63,13 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     String bln = String.valueOf(currentMonth);
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Kehadiran").child("NPP");
+    DatabaseReference myRef = database.getReference("Kehadiran");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanned_barcode);
-        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         initViews();
     }
 
@@ -102,7 +102,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                     checkDatang(jam);
                     checkWeekDay();
 
-                    myRef.child("1202170038").child("AbsenDatang").child(bln).orderByChild("tanggal").equalTo(tgl).addValueEventListener(new ValueEventListener() {
+                    myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(bln).orderByChild("tanggal").equalTo(tgl).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()){
@@ -128,7 +128,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                             } else {
                                 //Input ke database
                                 ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, intentData,lokasi);
-                                myRef.child("1202170038").child("AbsenDatang").child(bln).child(tgl).setValue(absen);
+                                myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(bln).child(tgl).setValue(absen);
                                 Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
 
                                 startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)

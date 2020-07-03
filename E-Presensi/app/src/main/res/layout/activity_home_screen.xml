@@ -18,12 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:menu="@menu/bottomnavigation"
-<<<<<<< HEAD
-        app:itemTextColor="@color/bottom_navigation"
-        app:itemIconTint="@color/bottom_navigation"
-        android:background="#B00020"/>
-=======
         android:background="?android:attr/windowBackground"/>
->>>>>>> syfa
 
 </RelativeLayout>
