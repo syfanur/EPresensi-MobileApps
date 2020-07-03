@@ -55,8 +55,9 @@ public class FaceDetectDatang extends AppCompatActivity {
     androidx.appcompat.app.AlertDialog.Builder dialog;
     LayoutInflater inflater;
     View dialogView;
-    TextView mStatus, mTanggal, mJam;
+    TextView mStatus, mTanggal, mJam,mLokasi;
     String status = "";
+    String Lokasi_Absen="";
 
     DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
     DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
@@ -75,15 +76,19 @@ public class FaceDetectDatang extends AppCompatActivity {
         preview = findViewById(R.id.camera_view);
         mButtonPulang = findViewById(R.id.btn_pulang);
 
+       Lokasi_Absen= FaceDetectDatang.this.getIntent().getStringExtra("lokasiAbsenDatang");;
+
         dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetectDatang.this);
         inflater = getLayoutInflater();
         dialogView = inflater.inflate(R.layout.absen_datang, null);
         dialog.setView(dialogView);
+        dialog.setIcon(R.drawable.finger);
         dialog.setCancelable(false);
-        dialog.setTitle("Detail Absen Datang");
+        dialog.setTitle("Detail Absen");
         mStatus=(TextView)dialogView.findViewById(R.id.Status);
         mJam=(TextView)dialogView.findViewById(R.id.jam);
         mTanggal=(TextView)dialogView.findViewById(R.id.tanggal);
+        mLokasi=(TextView)dialogView.findViewById(R.id.txt_lokasi);
 
 
         alertDialog = new SpotsDialog.Builder()
@@ -166,13 +171,14 @@ public class FaceDetectDatang extends AppCompatActivity {
 
                             final String jenis="Datang";
                             String id = myRef.push().getKey();
-                            ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, "tidak ada", "Jalan Ciparay");
+                            ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, "tidak ada", Lokasi_Absen);
                             myRef.child("NPP").child("1202170038").child("AbsenDatang").child(bln).child(tgl).setValue(absen);
 
 
                             mStatus.setText(jenis);
                             mJam.setText(jam);
                             mTanggal.setText(tgl);
+                            mLokasi.setText(Lokasi_Absen);
 
                             dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
                                 @Override

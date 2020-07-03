@@ -23,6 +23,7 @@
         android:src="@drawable/undraw_taking_selfie"
         android:layout_gravity="center"/>
     <TextView
+        android:id="@+id/rLokasi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ambil Selfie"
@@ -107,7 +108,7 @@
             android:orientation="horizontal"
             android:weightSum="2"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="190dp"
+            android:layout_marginTop="100dp"
             android:layout_marginBottom="16dp">
 
             <LinearLayout
