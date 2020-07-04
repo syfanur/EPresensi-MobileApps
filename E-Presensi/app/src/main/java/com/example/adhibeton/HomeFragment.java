@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -35,6 +37,10 @@ import com.squareup.picasso.Picasso;
 import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -64,6 +70,7 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,7 +84,10 @@ public class HomeFragment extends Fragment {
         posisi.setText(Prevalent.currentOnlineUser.getPosisi());
         Picasso.get().load(Prevalent.currentOnlineUser.getProfil()).into(profil);
 
-       Datang = (TextView) v.findViewById(R.id.absen_datang);
+
+
+
+        Datang = (TextView) v.findViewById(R.id.absen_datang);
        Pulang = (TextView) v.findViewById(R.id.absen_pulang);
 
        datangdisplay(Datang);
@@ -222,9 +232,23 @@ public class HomeFragment extends Fragment {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void pulangdisplay(TextView pulang) {
+        DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+        //GetBulan
+        LocalDate today = LocalDate.now();
+        Month currentMonth = today.getMonth();
+        String bln = String.valueOf(currentMonth);
+
+        //GetTanggal
+        LocalDate todaay = LocalDate.now();
+        String tgl = todaay.format(formatterdate);
+
+
+
+
         DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child("JULY").child("Fri, 3 Jul 2020");
+                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(bln).child(tgl);
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -251,10 +275,19 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void datangdisplay(TextView datang) {
+        DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+        //GetBulan
+        LocalDate today = LocalDate.now();
+        Month currentMonth = today.getMonth();
+        String bln = String.valueOf(currentMonth);
 
+        //GetTanggal
+        LocalDate todaay = LocalDate.now();
+        String tgl = todaay.format(formatterdate);
         DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child("JULY").child("Fri, 3 Jul 2020");
+                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(bln).child(tgl);
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)

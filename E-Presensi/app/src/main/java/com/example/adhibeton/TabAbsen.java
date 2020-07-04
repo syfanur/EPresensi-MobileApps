@@ -1,9 +1,11 @@
 package com.example.adhibeton;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+
 public class TabAbsen extends Fragment {
 
     TextView Datang, Pulang, StatusDatang, StatusPulang, Tanggal;
@@ -26,6 +32,7 @@ public class TabAbsen extends Fragment {
         // Required empty public constructor
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -43,9 +50,20 @@ public class TabAbsen extends Fragment {
 return v;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void pulangdisplay(TextView pulang, TextView statusPulang) {
+        DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+        //GetBulan
+        LocalDate today = LocalDate.now();
+        Month currentMonth = today.getMonth();
+        String bln = String.valueOf(currentMonth);
+
+        //GetTanggal
+        LocalDate todaay = LocalDate.now();
+        String tgl = todaay.format(formatterdate);
+
         DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child("JULY").child("Fri, 3 Jul 2020");
+                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(bln).child(tgl);
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -73,9 +91,20 @@ return v;
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void datangdisplay(TextView datang, TextView statusDatang, TextView tanggal) {
+
+        DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+        //GetBulan
+        LocalDate today = LocalDate.now();
+        Month currentMonth = today.getMonth();
+        String bln = String.valueOf(currentMonth);
+
+        //GetTanggal
+        LocalDate todaay = LocalDate.now();
+        String tgl = todaay.format(formatterdate);
         DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child("JULY").child("Fri, 3 Jul 2020");
+                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(bln).child(tgl);
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)

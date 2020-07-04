@@ -5,12 +5,14 @@ import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
@@ -21,10 +23,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 public class Reminder extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener {
     private TextView mTextView;
     TextView Datang, Pulang;
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,9 +70,20 @@ public class Reminder extends AppCompatActivity implements TimePickerDialog.OnTi
         startAlarm(c);
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void pulangdisplay(TextView pulang) {
+        DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+        //GetBulan
+        LocalDate today = LocalDate.now();
+        Month currentMonth = today.getMonth();
+        String bln = String.valueOf(currentMonth);
+
+        //GetTanggal
+        LocalDate todaay = LocalDate.now();
+        String tgl = todaay.format(formatterdate);
         DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child("JULY").child("Fri, 3 Jul 2020");
+                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(bln).child(tgl);
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -93,10 +110,20 @@ public class Reminder extends AppCompatActivity implements TimePickerDialog.OnTi
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void datangdisplay(TextView datang) {
+        DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+        //GetBulan
+        LocalDate today = LocalDate.now();
+        Month currentMonth = today.getMonth();
+        String bln = String.valueOf(currentMonth);
+
+        //GetTanggal
+        LocalDate todaay = LocalDate.now();
+        String tgl = todaay.format(formatterdate);
 
         DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child("JULY").child("Fri, 3 Jul 2020");
+                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(bln).child(tgl);
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
