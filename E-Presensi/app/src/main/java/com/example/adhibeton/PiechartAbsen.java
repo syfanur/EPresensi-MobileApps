@@ -48,7 +48,7 @@ public class PiechartAbsen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_piechart_absen);
 
         pieChart = findViewById(R.id.pieChart);
 //        totalKeseluruhan();
@@ -69,7 +69,7 @@ public class PiechartAbsen extends AppCompatActivity {
 
         DatabaseReference myRefTotalSetahun = database.getReference()
                 .child("Kehadiran")
-                .child("1202170038")
+                .child(Prevalent.currentOnlineUser.getNpp())
                 .child("AbsenDatang")
                 .child(thn)
                 .child(bln);
@@ -139,7 +139,7 @@ public class PiechartAbsen extends AppCompatActivity {
 
         DatabaseReference myRefTotalSetahun = database.getReference()
                 .child("Kehadiran")
-                .child("1202170038")
+                .child(Prevalent.currentOnlineUser.getNpp())
                 .child("AbsenDatang")
                 .child(thn);
         myRefTotalSetahun.addValueEventListener(new ValueEventListener() {
@@ -210,7 +210,7 @@ public class PiechartAbsen extends AppCompatActivity {
 
         DatabaseReference myRefTotalKeseluruhan = database.getReference()
                 .child("Kehadiran")
-                .child("1202170038")
+                .child(Prevalent.currentOnlineUser.getNpp())
                 .child("AbsenDatang");
         myRefTotalKeseluruhan.addValueEventListener(new ValueEventListener() {
             @Override
