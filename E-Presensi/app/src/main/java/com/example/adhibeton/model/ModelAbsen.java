@@ -1,4 +1,4 @@
-package com.example.e_presensiadhibeton.model;
+package com.example.adhibeton.model;
 
 public class ModelAbsen {
 

@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.adhibeton.helper.GraphicOverlay;
 import com.example.adhibeton.helper.RectOverlay;
+import com.example.adhibeton.model.ModelAbsen;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -56,12 +57,23 @@ public class FaceDetectPulang extends AppCompatActivity {
     View dialogView;
     TextView mStatus, mTanggal, mJam;
     String status = "";
+    String lokasi = "Jl. Ciparay No 20B Kujangsari, Bandung Kidul, Kota Bandung";
 
     DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
     DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
 
+    //GetBulan
+    LocalDate thismonth = LocalDate.now();
+    Month currentMonth = thismonth.getMonth();
+    String bln = String.valueOf(currentMonth);
+
+    //GetTahun
+    LocalDate thisyear = LocalDate.now();
+    int currentYear = thisyear.getYear();
+    String thn = String.valueOf(currentYear);
+
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    final DatabaseReference myRef = database.getReference("Kehadiran");
+    DatabaseReference myRef = database.getReference("Kehadiran");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,9 +172,9 @@ public class FaceDetectPulang extends AppCompatActivity {
 
 
                             final String jenis = "Pulang";
-                            String id = myRef.push().getKey();
-                            ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, "tidak ada", "Jalan Ciparay");
-                            myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(bln).child(tgl).setValue(absen);
+                            //Input ke database
+                            ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, "Tidak Ada", lokasi);
+                            myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(thn).child(bln).child(tgl).setValue(absen);
 
                             mStatus.setText(jenis);
                             mJam.setText(jam);

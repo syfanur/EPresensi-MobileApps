@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.example.adhibeton.model.ModelAbsen;
 import com.google.firebase.FirebaseError;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -44,27 +45,45 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static android.content.Context.LOCATION_SERVICE;
 
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class HomeFragment extends Fragment {
 
-    LocationManager locationManager;
-    LocationListener locationListener;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
 
-    private TextView dateTimeDisplay;
-    private Calendar calendar;
-    private SimpleDateFormat dateFormat;
-    private String date;
-    TextView Datang, Pulang;
+    private TextView Datang, Pulang;
 
-    TextView address;
-    LinearLayout mTeguran, mPresensi, mIzin, mMeeting, mLembur, mGaji, mKehadiran;
-    ImageButton Reminder;
-    FirebaseDatabase mFirebaseInstance;
-    DatabaseReference mDatabase;
+    private TextView address;
+
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference("Kehadiran");
+
+    private DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
+    private DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+
+    //GetJam
+    private LocalTime now = LocalTime.now();
+    private String jam = now.format(formattertime);
+
+    //GetBulan
+    private LocalDate today = LocalDate.now();
+    private Month currentMonth = today.getMonth();
+    private String bln = String.valueOf(currentMonth);
+
+    //GetTanggal
+    private LocalDate todaay = LocalDate.now();
+    private String tgl = todaay.format(formatterdate);
+
+    //GetTahun
+    private LocalDate thisyear = LocalDate.now();
+    private int currentYear = thisyear.getYear();
+    private String thn = String.valueOf(currentYear);
 
     public HomeFragment() {
         // Required empty public constructor
@@ -76,31 +95,28 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
-        address = v.findViewById(R.id.lokasi);
         TextView nama = v.findViewById(R.id.name_user);
         TextView posisi = v.findViewById(R.id.posisi);
         CircularImageView profil = v.findViewById(R.id.profil);
+        address = v.findViewById(R.id.lokasi);
+        Datang = v.findViewById(R.id.absen_datang);
+        Pulang = v.findViewById(R.id.absen_pulang);
+
         nama.setText(Prevalent.currentOnlineUser.getNama());
         posisi.setText(Prevalent.currentOnlineUser.getPosisi());
         Picasso.get().load(Prevalent.currentOnlineUser.getProfil()).into(profil);
 
+        datangdisplay(Datang);
+        pulangdisplay(Pulang);
 
+        TextView dateTimeDisplay = v.findViewById(R.id.text_date_display);
 
-
-        Datang = (TextView) v.findViewById(R.id.absen_datang);
-       Pulang = (TextView) v.findViewById(R.id.absen_pulang);
-
-       datangdisplay(Datang);
-       pulangdisplay(Pulang);
-
-        dateTimeDisplay = (TextView)v.findViewById(R.id.text_date_display);
-
-        calendar = Calendar.getInstance();
-        dateFormat = new SimpleDateFormat("EEE, dd MMMM yyyy");
-        date = dateFormat.format(calendar.getTime());
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, dd MMMM yyyy");
+        String date = dateFormat.format(calendar.getTime());
         dateTimeDisplay.setText(date);
 
-        mPresensi=v.findViewById(R.id.presensi);
+        LinearLayout mPresensi = v.findViewById(R.id.presensi);
         mPresensi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +125,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        mIzin=v.findViewById(R.id.izin);
+        LinearLayout mIzin = v.findViewById(R.id.izin);
         mIzin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,7 +134,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        mMeeting=v.findViewById(R.id.meeting);
+        LinearLayout mMeeting = v.findViewById(R.id.meeting);
         mMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +143,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        mTeguran=v.findViewById(R.id.teguran);
+        LinearLayout mTeguran = v.findViewById(R.id.teguran);
         mTeguran.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,7 +153,7 @@ public class HomeFragment extends Fragment {
         });
 
 
-        mKehadiran=v.findViewById(R.id.kehadiran);
+        LinearLayout mKehadiran = v.findViewById(R.id.kehadiran);
         mKehadiran.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,7 +162,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        mLembur=v.findViewById(R.id.lembur);
+        LinearLayout mLembur = v.findViewById(R.id.lembur);
         mLembur.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -155,7 +171,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        mGaji=v.findViewById(R.id.gaji);
+        LinearLayout mGaji = v.findViewById(R.id.gaji);
         mGaji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,8 +180,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        Reminder = v.findViewById(R.id.reminder);
-        Reminder.setOnClickListener(new View.OnClickListener() {
+        ImageButton reminder = v.findViewById(R.id.reminder);
+        reminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent home = new Intent(getActivity(), Reminder.class);
@@ -232,23 +248,36 @@ public class HomeFragment extends Fragment {
 
     }
 
+    private void checkKehadiran(String checkTime){
+        Calendar c = Calendar.getInstance();
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
+        String lokasi = "Jl. Ciparay No 20B Kujangsari, Bandung Kidul, Kota Bandung";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("h:mm a", Locale.US);
+        LocalTime startLocalTime = LocalTime.parse("5:00 PM", formatter);
+        LocalTime endLocalTime = LocalTime.parse("11:59 PM", formatter);
+        LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
+
+        if (Calendar.SATURDAY == dayOfWeek || Calendar.SUNDAY == dayOfWeek) {
+            ModelAbsen absenLibur = new ModelAbsen(tgl, jam, "Libur", "Libur Kerja", "Tidak Ada", lokasi);
+            myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(thn).child(bln).child(tgl).setValue(absenLibur);
+            myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(thn).child(bln).child(tgl).setValue(absenLibur);
+        }else{
+            if (endLocalTime.isAfter(startLocalTime)){
+                if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)){
+                    ModelAbsen absenDatang = new ModelAbsen(tgl, jam, "Datang", "Tidak Hadir", "Tidak Ada", lokasi);
+                    myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(thn).child(bln).child(tgl).setValue(absenDatang);
+
+                    ModelAbsen absenPulang = new ModelAbsen(tgl, jam, "Pulang", "Tidak Hadir", "Tidak Ada", lokasi);
+                    myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(thn).child(bln).child(tgl).setValue(absenPulang);
+                }
+            }
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void pulangdisplay(TextView pulang) {
-        DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
-        //GetBulan
-        LocalDate today = LocalDate.now();
-        Month currentMonth = today.getMonth();
-        String bln = String.valueOf(currentMonth);
-
-        //GetTanggal
-        LocalDate todaay = LocalDate.now();
-        String tgl = todaay.format(formatterdate);
-
-
-
-
         DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(bln).child(tgl);
+                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(thn).child(bln).child(tgl);
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -257,13 +286,8 @@ public class HomeFragment extends Fragment {
                 {
                     if (dataSnapshot.child("waktu").exists())
                     {
-
-
                         String pulang = dataSnapshot.child("waktu").getValue().toString();
-
                         Pulang.setText(pulang);
-
-
                     }
                 }
             }
@@ -277,17 +301,8 @@ public class HomeFragment extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void datangdisplay(TextView datang) {
-        DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
-        //GetBulan
-        LocalDate today = LocalDate.now();
-        Month currentMonth = today.getMonth();
-        String bln = String.valueOf(currentMonth);
-
-        //GetTanggal
-        LocalDate todaay = LocalDate.now();
-        String tgl = todaay.format(formatterdate);
         DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(bln).child(tgl);
+                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(thn).child(bln).child(tgl);
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -296,14 +311,11 @@ public class HomeFragment extends Fragment {
                 {
                     if (dataSnapshot.child("waktu").exists())
                     {
-
-
                         String datang = dataSnapshot.child("waktu").getValue().toString();
-
                         Datang.setText(datang);
-
-
                     }
+                }else{
+                    checkKehadiran(jam);
                 }
             }
 
