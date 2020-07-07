@@ -28,7 +28,7 @@ import java.util.List;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class PiechartAbsen extends AppCompatActivity {
     long countTerlambat, countTepatWaktu, countTidakHadir;
-    float jmlhTerlambat, jmlhHadir, jmlhTidakHadir;
+    float jmlhTerlambat, jmlhTepatWaktu, jmlhTidakHadir;
     PieChart pieChart;
 
     //GetBulan
@@ -67,21 +67,20 @@ public class PiechartAbsen extends AppCompatActivity {
 
         pieChart.setDescription(desc);
 
-        DatabaseReference myRefTotalSetahun = database.getReference()
+        DatabaseReference myRefTotalSebulan = database.getReference()
                 .child("Kehadiran")
                 .child(Prevalent.currentOnlineUser.getNpp())
-                .child("AbsenDatang")
                 .child(thn)
                 .child(bln);
-        myRefTotalSetahun.addValueEventListener(new ValueEventListener() {
+        myRefTotalSebulan.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()){
-                    switch (uniqueKey1.child("status").getValue(String.class)){
+                    switch (uniqueKey1.child("statusDatang").getValue(String.class)){
                         case "Terlambat":
                             ++countTerlambat;
                             break;
-                        case "Hadir":
+                        case "Tepat Waktu":
                             ++countTepatWaktu;
                             break;
                         case "Tidak Hadir":
@@ -90,15 +89,15 @@ public class PiechartAbsen extends AppCompatActivity {
                     }
                 }
                 jmlhTerlambat = (float)countTerlambat;
-                jmlhHadir = (float)countTepatWaktu;
+                jmlhTepatWaktu = (float)countTepatWaktu;
                 jmlhTidakHadir = (float)countTidakHadir;
 
                 if (jmlhTerlambat != 0){
                     value.add(new PieEntry(0+jmlhTerlambat, "Terlambat"));
                 }
 
-                if (jmlhHadir != 0){
-                    value.add(new PieEntry(0+jmlhHadir, "Hadir"));
+                if (jmlhTepatWaktu != 0){
+                    value.add(new PieEntry(0+jmlhTepatWaktu, "Tepat Waktu"));
                 }
 
                 if (jmlhTidakHadir != 0){
@@ -115,7 +114,7 @@ public class PiechartAbsen extends AppCompatActivity {
                 pieDataSet.setValueTextSize(14f);
 
                 Log.d("Terlambat", String.valueOf(countTerlambat));
-                Log.d("Hadir", String.valueOf(countTepatWaktu));
+                Log.d("Tepat Waktu", String.valueOf(countTepatWaktu));
                 Log.d("Tidak Hadir", String.valueOf(countTidakHadir));
             }
 
@@ -140,18 +139,17 @@ public class PiechartAbsen extends AppCompatActivity {
         DatabaseReference myRefTotalSetahun = database.getReference()
                 .child("Kehadiran")
                 .child(Prevalent.currentOnlineUser.getNpp())
-                .child("AbsenDatang")
                 .child(thn);
         myRefTotalSetahun.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()){
                     for (DataSnapshot uniqueKey2 : uniqueKey1.getChildren()){
-                        switch (uniqueKey2.child("status").getValue(String.class)){
+                        switch (uniqueKey2.child("statusDatang").getValue(String.class)){
                             case "Terlambat":
                                 ++countTerlambat;
                                 break;
-                            case "Hadir":
+                            case "Tepat Waktu":
                                 ++countTepatWaktu;
                                 break;
                             case "Tidak Hadir":
@@ -161,15 +159,15 @@ public class PiechartAbsen extends AppCompatActivity {
                     }
                 }
                 jmlhTerlambat = (float)countTerlambat;
-                jmlhHadir = (float)countTepatWaktu;
+                jmlhTepatWaktu = (float)countTepatWaktu;
                 jmlhTidakHadir = (float)countTidakHadir;
 
                 if (jmlhTerlambat != 0){
                     value.add(new PieEntry(0+jmlhTerlambat, "Terlambat"));
                 }
 
-                if (jmlhHadir != 0){
-                    value.add(new PieEntry(0+jmlhHadir, "Hadir"));
+                if (jmlhTepatWaktu != 0){
+                    value.add(new PieEntry(0+jmlhTepatWaktu, "Tepat Waktu"));
                 }
 
                 if (jmlhTidakHadir != 0){
@@ -186,7 +184,7 @@ public class PiechartAbsen extends AppCompatActivity {
                 pieDataSet.setValueTextSize(14f);
 
                 Log.d("Terlambat", String.valueOf(countTerlambat));
-                Log.d("Hadir", String.valueOf(countTepatWaktu));
+                Log.d("Tepat Waktu", String.valueOf(countTepatWaktu));
                 Log.d("Tidak Hadir", String.valueOf(countTidakHadir));
             }
 
@@ -210,19 +208,18 @@ public class PiechartAbsen extends AppCompatActivity {
 
         DatabaseReference myRefTotalKeseluruhan = database.getReference()
                 .child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp())
-                .child("AbsenDatang");
+                .child(Prevalent.currentOnlineUser.getNpp());
         myRefTotalKeseluruhan.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()){
                     for (DataSnapshot uniqueKey2 : uniqueKey1.getChildren()){
                         for (DataSnapshot uniqueKey3 : uniqueKey2.getChildren()){
-                            switch (uniqueKey3.child("status").getValue(String.class)){
+                            switch (uniqueKey3.child("statusDatang").getValue(String.class)){
                                 case "Terlambat":
                                     ++countTerlambat;
                                     break;
-                                case "Hadir":
+                                case "Tepat Waktu":
                                     ++countTepatWaktu;
                                     break;
                                 case "Tidak Hadir":
@@ -233,15 +230,15 @@ public class PiechartAbsen extends AppCompatActivity {
                     }
                 }
                 jmlhTerlambat = (float)countTerlambat;
-                jmlhHadir = (float)countTepatWaktu;
+                jmlhTepatWaktu = (float)countTepatWaktu;
                 jmlhTidakHadir = (float)countTidakHadir;
 
                 if (jmlhTerlambat != 0){
                     value.add(new PieEntry(0+jmlhTerlambat, "Terlambat"));
                 }
 
-                if (jmlhHadir != 0){
-                    value.add(new PieEntry(0+jmlhHadir, "Hadir"));
+                if (jmlhTepatWaktu != 0){
+                    value.add(new PieEntry(0+jmlhTepatWaktu, "Tepat Waktu"));
                 }
 
                 if (jmlhTidakHadir != 0){
@@ -258,7 +255,7 @@ public class PiechartAbsen extends AppCompatActivity {
                 pieDataSet.setValueTextSize(14f);
 
                 Log.d("Terlambat", String.valueOf(countTerlambat));
-                Log.d("Hadir", String.valueOf(countTepatWaktu));
+                Log.d("Tepat Waktu", String.valueOf(countTepatWaktu));
                 Log.d("Tidak Hadir", String.valueOf(countTidakHadir));
             }
 
