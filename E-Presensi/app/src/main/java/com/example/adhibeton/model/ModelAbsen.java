@@ -2,17 +2,21 @@ package com.example.adhibeton.model;
 
 public class ModelAbsen {
 
-    public String tanggal, waktu, absen, status, keterangan, lokasi;
+    public String tanggal, waktuDatang, waktuPulang, absenDatang, absenPulang, statusDatang, statusPulang, keterangan, lokasi;
 
     public ModelAbsen() {
 
     }
 
-    public ModelAbsen(String tanggal, String waktu, String absen, String status, String keterangan, String lokasi) {
+    public ModelAbsen(String tanggal, String waktuDatang, String waktuPulang, String absenDatang,
+                        String absenPulang, String statusDatang, String statusPulang, String keterangan, String lokasi) {
         this.tanggal = tanggal;
-        this.waktu = waktu;
-        this.absen = absen;
-        this.status = status;
+        this.waktuDatang = waktuDatang;
+        this.waktuPulang = waktuPulang;
+        this.absenDatang = absenDatang;
+        this.absenPulang = absenPulang;
+        this.statusDatang = statusDatang;
+        this.statusPulang = statusPulang;
         this.keterangan = keterangan;
         this.lokasi = lokasi;
     }
@@ -25,28 +29,52 @@ public class ModelAbsen {
         this.tanggal = tanggal;
     }
 
-    public String getWaktu() {
-        return waktu;
+    public String getWaktuDatang() {
+        return waktuDatang;
     }
 
-    public void setWaktu(String waktu) {
-        this.waktu = waktu;
+    public void setWaktuDatang(String waktuDatang) {
+        this.waktuDatang = waktuDatang;
     }
 
-    public String getAbsen() {
-        return absen;
+    public String getWaktuPulang() {
+        return waktuPulang;
     }
 
-    public void setAbsen(String absen) {
-        this.absen = absen;
+    public void setWaktuPulang(String waktuPulang) {
+        this.waktuPulang = waktuPulang;
     }
 
-    public String getStatus() {
-        return status;
+    public String getAbsenDatang() {
+        return absenDatang;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setAbsenDatang(String absenDatang) {
+        this.absenDatang = absenDatang;
+    }
+
+    public String getAbsenPulang() {
+        return absenPulang;
+    }
+
+    public void setAbsenPulang(String absenPulang) {
+        this.absenPulang = absenPulang;
+    }
+
+    public String getStatusDatang() {
+        return statusDatang;
+    }
+
+    public void setStatusDatang(String statusDatang) {
+        this.statusDatang = statusDatang;
+    }
+
+    public String getStatusPulang() {
+        return statusPulang;
+    }
+
+    public void setStatusPulang(String statusPulang) {
+        this.statusPulang = statusPulang;
     }
 
     public String getKeterangan() {

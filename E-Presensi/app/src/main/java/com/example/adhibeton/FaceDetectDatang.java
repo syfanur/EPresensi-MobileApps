@@ -177,9 +177,9 @@ public class FaceDetectDatang extends AppCompatActivity {
 
 
                             final String jenis= "Datang";
-                            //Input ke database
-                            ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, "Tidak Ada", lokasi);
-                            myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(thn).child(bln).child(tgl).setValue(absen);
+                            //Input Datang ke database
+                            ModelAbsen absen = new ModelAbsen(tgl, jam, "", "Datang", "", status, "", "Tidak Ada", lokasi);
+                            myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl).setValue(absen);
 
 
                             mStatus.setText(jenis);
