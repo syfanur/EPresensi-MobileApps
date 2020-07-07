@@ -48,8 +48,6 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
 
     private CameraSource cameraSource;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
-    boolean datang = false;
-    AlertDialog alertDialog;
     SurfaceView surfaceView;
     Button btnDatang, btnPulang;
     String intentData = "", jam = "", tgl = "", status = "";
@@ -63,8 +61,13 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     Month currentMonth = thismonth.getMonth();
     String bln = String.valueOf(currentMonth);
 
+    //GetTahun
+    LocalDate thisyear = LocalDate.now();
+    int currentYear = thisyear.getYear();
+    String thn = String.valueOf(currentYear);
+
     FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Kehadiran").child("NPP");
+    DatabaseReference myRef = database.getReference("Kehadiran");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,11 +90,21 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         surfaceView = findViewById(R.id.surfaceView);
         btnDatang = findViewById(R.id.btnDatang);
         btnPulang = findViewById(R.id.btnPulang);
-//        alertDialog = new SpotsDialog.Builder()
-//                .setContext(this)
-//                .setMessage("Please Wait, Processing...")
-//                .setCancelable(false)
-//                .build();
+        btnPulang.setEnabled(false);
+        myRef.child("1202170038").child("AbsenDatang").child(thn).child(bln)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.child(tgl).exists()){
+                            btnPulang.setEnabled(true);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
         btnDatang.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -103,51 +116,68 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                         checkDatang(jam);
                         checkWeekDay();
 
-                        myRef.child("1202170038").child("AbsenDatang").child(bln).orderByChild("tanggal").equalTo(tgl).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()){
-                                    runOnUiThread(new Runnable() {
+                        if (status.equals("Belum Hadir")){
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (!isFinishing()){
+                                        new AlertDialog.Builder(ScannedBarcodeActivity.this)
+                                                .setTitle("INFO")
+                                                .setMessage("Anda absen diluar jam kerja")
+                                                .setCancelable(false)
+                                                .setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        onPause();
+                                                        dialog.dismiss();
+                                                        onResume();
+                                                    }
+                                                }).show();
+                                    }
+                                }
+                            });
+                        } else {
+                            myRef.child("1202170038").child("AbsenDatang").child(thn).child(bln).orderByChild("tanggal").equalTo(tgl)
+                                    .addValueEventListener(new ValueEventListener() {
                                         @Override
-                                        public void run() {
-                                            if (!isFinishing()){
-                                                new AlertDialog.Builder(ScannedBarcodeActivity.this)
-                                                        .setTitle("Info")
-                                                        .setMessage("Anda sudah melakukan absen datang")
-                                                        .setCancelable(false)
-                                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                onPause();
-                                                                dialog.dismiss();
-                                                                onResume();
-                                                            }
-                                                        }).show();
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()){
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        if (!isFinishing()){
+                                                            new AlertDialog.Builder(ScannedBarcodeActivity.this)
+                                                                    .setTitle("INFO")
+                                                                    .setMessage("Anda sudah melakukan absen datang")
+                                                                    .setCancelable(false)
+                                                                    .setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                            onPause();
+                                                                            dialog.dismiss();
+                                                                            onResume();
+                                                                        }
+                                                                    }).show();
+                                                        }
+                                                    }
+                                                });
+                                            } else {
+                                                //Input ke database
+                                                ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, intentData, lokasi);
+                                                myRef.child("1202170038").child("AbsenDatang").child(thn).child(bln).child(tgl).setValue(absen);
+                                                Toast.makeText(ScannedBarcodeActivity.this, "Absen Datang Berhasil", Toast.LENGTH_SHORT).show();
+
+//                                                startActivity(new Intent(ScannedBarcodeActivity.this, HasilTestScan.class));
+                                                finish();
                                             }
                                         }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            Toast.makeText(ScannedBarcodeActivity.this, "Gagal terkoneksi ke database", Toast.LENGTH_SHORT).show();
+                                        }
                                     });
-                                } else {
-                                    //Input ke database
-                                    ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, intentData,lokasi);
-                                    myRef.child("1202170038").child("AbsenDatang").child(bln).child(tgl).setValue(absen);
-                                    Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
-
-//                                    startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
-//                                            .putExtra("tanggal", tgl)
-//                                            .putExtra("waktu", jam)
-//                                            .putExtra("absen", "Datang")
-//                                            .putExtra("status", status)
-//                                            .putExtra("keterangan", intentData)
-//                                            .putExtra("lokasi", lokasi));
-                                    finish();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                Toast.makeText(ScannedBarcodeActivity.this, "Gagal terkoneksi ke database", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        }
                     } else {
                         //Validasi QR Code
                         runOnUiThread(new Runnable() {
@@ -155,10 +185,10 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                             public void run() {
                                 if (!isFinishing()){
                                     new AlertDialog.Builder(ScannedBarcodeActivity.this)
-                                            .setTitle("Info")
+                                            .setTitle("INFO")
                                             .setMessage("Barcode yang anda scan tidak valid")
                                             .setCancelable(false)
-                                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            .setPositiveButton("OKE", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     onPause();
@@ -181,71 +211,24 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (intentData.length() > 0) {
-                    myRef.child("1202170038").child("AbsenDatang").child(bln).orderByChild("tanggal").equalTo(tgl).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()){
-                                if (intentData.equals("test@123absenkehadiranpegawai")){
+                    if (intentData.equals("test@123absenkehadiranpegawai")){
 
-                                    checkPulang(jam);
-                                    checkWeekDay();
+                        checkPulang(jam);
+                        checkWeekDay();
 
-                                    myRef.child("1202170038").child("AbsenPulang").child(bln).orderByChild("tanggal").equalTo(tgl).addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            if (dataSnapshot.exists()){
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        if (!isFinishing()){
-                                                            new AlertDialog.Builder(ScannedBarcodeActivity.this)
-                                                                    .setTitle("Info")
-                                                                    .setMessage("Anda sudah melakukan absen pulang")
-                                                                    .setCancelable(false)
-                                                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(DialogInterface dialog, int which) {
-                                                                            onPause();
-                                                                            dialog.dismiss();
-                                                                            onResume();
-                                                                        }
-                                                                    }).show();
-                                                        }
-                                                    }
-                                                });
-                                            } else {
-                                                //Input ke database
-                                                ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, intentData, lokasi);
-                                                myRef.child("1202170038").child("AbsenPulang").child(bln).child(tgl).setValue(absen);
-                                                Toast.makeText(ScannedBarcodeActivity.this, "Data berhasil ditambahkan", Toast.LENGTH_SHORT).show();
-
-//                                    startActivity(new Intent(ScannedBarcodeActivity.this, Homepage.class)
-//                                            .putExtra("tanggal", tgl)
-//                                            .putExtra("waktu", jam)
-//                                            .putExtra("absen", "Pulang")
-//                                            .putExtra("status", status)
-//                                            .putExtra("keterangan", intentData)
-//                                            .putExtra("lokasi", lokasi));
-                                                finish();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                                            Toast.makeText(ScannedBarcodeActivity.this, "Gagal terkoneksi ke database", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                } else {
-                                    //Validasi QR Code
+                        myRef.child("1202170038").child("AbsenPulang").child(thn).child(bln).orderByChild("tanggal").equalTo(tgl).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()){
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
                                             if (!isFinishing()){
                                                 new AlertDialog.Builder(ScannedBarcodeActivity.this)
-                                                        .setTitle("Info")
-                                                        .setMessage("Barcode yang anda scan tidak valid")
+                                                        .setTitle("INFO")
+                                                        .setMessage("Anda sudah melakukan absen pulang")
                                                         .setCancelable(false)
-                                                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                        .setPositiveButton("OKE", new DialogInterface.OnClickListener() {
                                                             @Override
                                                             public void onClick(DialogInterface dialog, int which) {
                                                                 onPause();
@@ -256,36 +239,44 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
-                                }
-                            } else {
-                                //Validasi QR Code
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (!isFinishing()){
-                                            new AlertDialog.Builder(ScannedBarcodeActivity.this)
-                                                    .setTitle("Info")
-                                                    .setMessage("Anda belum melakukan absen datang")
-                                                    .setCancelable(false)
-                                                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            onPause();
-                                                            dialog.dismiss();
-                                                            onResume();
-                                                        }
-                                                    }).show();
-                                        }
-                                    }
-                                });
-                            }
-                        }
+                                } else {
+                                    //Input ke database
+                                    ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, intentData, lokasi);
+                                    myRef.child("1202170038").child("AbsenPulang").child(thn).child(bln).child(tgl).setValue(absen);
+                                    Toast.makeText(ScannedBarcodeActivity.this, "Absen Pulang Berhasil", Toast.LENGTH_SHORT).show();
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Toast.makeText(ScannedBarcodeActivity.this, "Gagal terkoneksi ke database", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+//                                    startActivity(new Intent(ScannedBarcodeActivity.this, HasilTestScan.class));
+                                    finish();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Toast.makeText(ScannedBarcodeActivity.this, "Gagal terkoneksi ke database", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        //Validasi QR Code
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (!isFinishing()){
+                                    new AlertDialog.Builder(ScannedBarcodeActivity.this)
+                                            .setTitle("INFO")
+                                            .setMessage("Barcode yang anda scan tidak valid")
+                                            .setCancelable(false)
+                                            .setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    onPause();
+                                                    dialog.dismiss();
+                                                    onResume();
+                                                }
+                                            }).show();
+                                }
+                            }
+                        });
+                    }
                 } else {
                     Toast.makeText(ScannedBarcodeActivity.this, "Barcode tidak terdeteksi", Toast.LENGTH_SHORT).show();
                 }
@@ -381,11 +372,11 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         }
 
         if (isHadir) {
-            status = "Hadir";
+            status = "Tepat Waktu";
         } else if (isTelat){
             status = "Terlambat";
         } else {
-            status = "Tidak Hadir";
+            status = "Belum Hadir";
         }
     }
 
