@@ -258,17 +258,13 @@ public class HomeFragment extends Fragment {
         LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
 
         if (Calendar.SATURDAY == dayOfWeek || Calendar.SUNDAY == dayOfWeek) {
-            ModelAbsen absenLibur = new ModelAbsen(tgl, jam, "Libur", "Libur Kerja", "Tidak Ada", lokasi);
-            myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(thn).child(bln).child(tgl).setValue(absenLibur);
-            myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(thn).child(bln).child(tgl).setValue(absenLibur);
+            ModelAbsen absen = new ModelAbsen(tgl, jam, jam, "Libur", "Libur", "Libur Kerja", "Libur Kerja", "Tidak Ada", lokasi);
+            myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl).setValue(absen);
         }else{
             if (endLocalTime.isAfter(startLocalTime)){
                 if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)){
-                    ModelAbsen absenDatang = new ModelAbsen(tgl, jam, "Datang", "Tidak Hadir", "Tidak Ada", lokasi);
-                    myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(thn).child(bln).child(tgl).setValue(absenDatang);
-
-                    ModelAbsen absenPulang = new ModelAbsen(tgl, jam, "Pulang", "Tidak Hadir", "Tidak Ada", lokasi);
-                    myRef.child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(thn).child(bln).child(tgl).setValue(absenPulang);
+                    ModelAbsen absen = new ModelAbsen(tgl, jam, jam, "Tidak Hadir", "Tidak Hadir", "Tidak Hadir", "Tidak Hadir", "Tidak Ada", lokasi);
+                    myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl).setValue(absen);
                 }
             }
         }
@@ -277,16 +273,16 @@ public class HomeFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void pulangdisplay(TextView pulang) {
         DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(thn).child(bln).child(tgl);
+                .child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl);
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 if (dataSnapshot.exists())
                 {
-                    if (dataSnapshot.child("waktu").exists())
+                    if (dataSnapshot.child("waktuPulang").exists())
                     {
-                        String pulang = dataSnapshot.child("waktu").getValue().toString();
+                        String pulang = dataSnapshot.child("waktuPulang").getValue().toString();
                         Pulang.setText(pulang);
                     }
                 }
@@ -302,16 +298,16 @@ public class HomeFragment extends Fragment {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void datangdisplay(TextView datang) {
         DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(thn).child(bln).child(tgl);
+                .child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl);
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 if (dataSnapshot.exists())
                 {
-                    if (dataSnapshot.child("waktu").exists())
+                    if (dataSnapshot.child("waktuDatang").exists())
                     {
-                        String datang = dataSnapshot.child("waktu").getValue().toString();
+                        String datang = dataSnapshot.child("waktuDatang").getValue().toString();
                         Datang.setText(datang);
                     }
                 }else{
