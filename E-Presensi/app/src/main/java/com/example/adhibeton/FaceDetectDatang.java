@@ -55,9 +55,10 @@ public class FaceDetectDatang extends AppCompatActivity {
     androidx.appcompat.app.AlertDialog.Builder dialog;
     LayoutInflater inflater;
     View dialogView;
-    TextView mStatus, mTanggal, mJam,mLokasi;
+    TextView mStatus, mTanggal, mJam,mLokasi, rLokasi;
     String status = "";
     String Lokasi_Absen="";
+
 
     DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
     DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
@@ -75,16 +76,16 @@ public class FaceDetectDatang extends AppCompatActivity {
         graphicOverlay = findViewById(R.id.grapic_overlay);
         preview = findViewById(R.id.camera_view);
         mButtonPulang = findViewById(R.id.btn_pulang);
+//        rLokasi=(TextView)findViewById(R.id.aa);
 
-       Lokasi_Absen= FaceDetectDatang.this.getIntent().getStringExtra("lokasiAbsenDatang");;
+            Lokasi_Absen= FaceDetectDatang.this.getIntent().getStringExtra("lokasiAbsenDatang");;
+//       rLokasi.setText(Lok);
 
         dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetectDatang.this);
         inflater = getLayoutInflater();
         dialogView = inflater.inflate(R.layout.absen_datang, null);
         dialog.setView(dialogView);
-        dialog.setIcon(R.drawable.finger);
         dialog.setCancelable(false);
-        dialog.setTitle("Detail Absen");
         mStatus=(TextView)dialogView.findViewById(R.id.Status);
         mJam=(TextView)dialogView.findViewById(R.id.jam);
         mTanggal=(TextView)dialogView.findViewById(R.id.tanggal);
@@ -120,7 +121,7 @@ public class FaceDetectDatang extends AppCompatActivity {
             }
 
             @Override
-            public void onImage(CameraKitImage cameraKitImage) {
+            public void onImage(CameraKitImage cameraKitImage   ) {
                 alertDialog.show();
                 Bitmap bitmap = cameraKitImage.getBitmap();
                 bitmap= Bitmap.createScaledBitmap(bitmap, preview.getWidth(), preview.getHeight(),false);

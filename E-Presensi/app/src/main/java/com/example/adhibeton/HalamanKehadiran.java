@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -39,5 +40,8 @@ public class HalamanKehadiran extends AppCompatActivity {
         });
 
 
+    }
+
+    public void back(View view) {
     }
 }

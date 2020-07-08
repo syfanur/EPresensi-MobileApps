@@ -25,6 +25,15 @@
 <!--        android:text="12/12/2020"-->
 <!--        android:layout_marginStart="16dp"-->
 <!--        android:layout_marginTop="16dp"/>-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Detail Absen"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

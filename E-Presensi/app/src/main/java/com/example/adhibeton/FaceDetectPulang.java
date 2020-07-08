@@ -79,7 +79,6 @@ public class FaceDetectPulang extends AppCompatActivity {
         dialogView = inflater.inflate(R.layout.absen_pulang, null);
         dialog.setView(dialogView);
         dialog.setCancelable(false);
-        dialog.setTitle("Detail Absen Pulang");
         mStatus = (TextView) dialogView.findViewById(R.id.StatusPulang);
         mJam = (TextView) dialogView.findViewById(R.id.jamPulang);
         mTanggal = (TextView) dialogView.findViewById(R.id.tanggalPulang);
