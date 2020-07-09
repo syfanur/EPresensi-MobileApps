@@ -58,6 +58,10 @@ public class ListFragment extends Fragment {
     private Spinner spinnerTahun;
     private List<ModelAbsenKehadiran> listData;
     private AdapterKehadiran adapter;
+    String bulan;
+    String tahun;
+
+    boolean filter=false;
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
@@ -88,7 +92,6 @@ public class ListFragment extends Fragment {
         //GET DATA FROM FIREBASE
         mfirebaseDatabase = FirebaseDatabase.getInstance();
         mRef = mfirebaseDatabase.getReference("Kehadiran");
-        showListData();
 
         //INTENT TO DIALOG FILTER
         btn_filter=(Button)v.findViewById(R.id.btn_filter);
@@ -99,6 +102,11 @@ public class ListFragment extends Fragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     private void showListData(){
@@ -131,14 +139,18 @@ public class ListFragment extends Fragment {
           @Override
           public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
               String id = dataSnapshot.getKey();
-              if(dataSnapshot.child("bulan").exists() && dataSnapshot.child("tahun").exists()){
-                  if(dataSnapshot.child("bulan").getValue(String.class).equals(bulan) && dataSnapshot.child("tahun").getValue(String.class).equals(tahun)){
+              if (dataSnapshot.child("bulan").exists() && dataSnapshot.child("tahun").exists()) {
+                  if (dataSnapshot.child("bulan").getValue(String.class).equals(bulan) && dataSnapshot.child("tahun").getValue(String.class).equals(tahun)) {
                       ModelAbsenKehadiran ma = dataSnapshot.getValue(ModelAbsenKehadiran.class);
                       listData.add(ma);
                   }
-                  adapter=new AdapterKehadiran(getContext(),listData);
-                  mRecyclerView.setAdapter(adapter);
+
+              }else {
+                  showListData();
               }
+
+              adapter=new AdapterKehadiran(getContext(),listData);
+              mRecyclerView.setAdapter(adapter);
           }
 
           @Override
@@ -235,9 +247,10 @@ public class ListFragment extends Fragment {
         dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String bulan = spinnerBulan.getSelectedItem().toString();
-                String tahun = spinnerTahun.getSelectedItem().toString();
+                bulan = spinnerBulan.getSelectedItem().toString();
+                tahun = spinnerTahun.getSelectedItem().toString();
                 FirebaseFilterWaktu(bulan,tahun);
+
 
 
             }
