@@ -1,6 +1,7 @@
 package com.example.adhibeton;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ public class AdapterKehadiran extends RecyclerView.Adapter<AdapterKehadiran.MyVi
         View view;
         LayoutInflater mInflater = LayoutInflater.from(mContext);
         view = mInflater.inflate(R.layout.row_kehadiran,parent,false);
+
         return new MyViewHolder(view);
     }
 
@@ -37,6 +39,12 @@ public class AdapterKehadiran extends RecyclerView.Adapter<AdapterKehadiran.MyVi
     holder.mTanggal.setText(mData.get(position).getTanggal());
     holder.mAbsen_datang.setText(mData.get(position).getWaktuDatang());
     holder.mAbsen_pulang.setText(mData.get(position).getWaktuPulang());
+    holder.mDetail.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mContext.startActivity(new Intent(mContext,DetailKehadiran.class));
+        }
+    });
     }
 
     @Override

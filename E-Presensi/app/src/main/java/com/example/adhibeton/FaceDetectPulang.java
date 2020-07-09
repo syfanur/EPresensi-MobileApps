@@ -21,8 +21,11 @@ import com.example.adhibeton.helper.GraphicOverlay;
 import com.example.adhibeton.helper.RectOverlay;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
@@ -63,6 +66,17 @@ public class FaceDetectPulang extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     final DatabaseReference myRef = database.getReference("Kehadiran");
+
+
+    //GetBulan
+    LocalDate thismonth = LocalDate.now();
+    Month currentMonth = thismonth.getMonth();
+    String bln = String.valueOf(currentMonth);
+
+    //GetTahun
+    LocalDate thisyear = LocalDate.now();
+    int currentYear = thisyear.getYear();
+    String thn = String.valueOf(currentYear);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +155,7 @@ public class FaceDetectPulang extends AppCompatActivity {
                         if (getFaceResult(firebaseVisionFaces)) {
                             getFaceResult(firebaseVisionFaces);
                             Toast.makeText(FaceDetectPulang.this, "Wajah Berhasil Terdeteksi", Toast.LENGTH_SHORT).show();
+                            //GetTanggal
                             LocalDate today = LocalDate.now();
                             final String tgl = today.format(formatterdate);
 
@@ -148,43 +163,69 @@ public class FaceDetectPulang extends AppCompatActivity {
                             LocalTime now = LocalTime.now();
                             final String jam = now.format(formattertime);
 
-                            //GetBulan
-                            Month currentMonth = today.getMonth();
-                            String bln = String.valueOf(currentMonth);
-
 
                             checkPulang(jam);
                             checkWeekDay();
+                            myRef.child("1334").child(thn).child(bln).orderByChild("absenPulang").equalTo("Pulang")
+                                    .addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            if (dataSnapshot.exists()) {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        if (!isFinishing()) {
+                                                            new AlertDialog.Builder(FaceDetectPulang.this)
+                                                                    .setTitle("INFO")
+                                                                    .setMessage("Anda sudah melakukan absen pulang")
+                                                                    .setCancelable(false)
+                                                                    .setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                            onPause();
+                                                                            dialog.dismiss();
+                                                                            onResume();
+                                                                        }
+                                                                    }).show();
+                                                        }
+                                                    }
+                                                });
+                                            } else {
+                                                //Input Pulang ke database
+                                                myRef.child("1334").child(thn).child(bln).child(tgl).child("waktuPulang").setValue(jam);
+                                                myRef.child("1334").child(thn).child(bln).child(tgl).child("absenPulang").setValue("Pulang");
+                                                myRef.child("1334").child(thn).child(bln).child(tgl).child("statusPulang").setValue(status);
 
-                            String idUser = myRef.push().getKey();
-                            assert idUser != null;
-                            String idAbsen = myRef.push().getKey();
-                            assert idAbsen != null;
+                                                mStatus.setText("Pulang");
+                                                mJam.setText(jam);
+                                                mTanggal.setText(tgl);
+                                                mLokasi.setText(Lokasi_Absen);
+
+                                                dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+
+                                                        Intent intent = new Intent(FaceDetectPulang.this, HomeScreen.class);
+                                                        intent.putExtra("status",  status);
+                                                        intent.putExtra("jam",jam );
+                                                        intent.putExtra("tanggal", tgl);
+                                                        startActivity(intent);
+                                                        finish();
+                                                    }
+                                                });
+                                                dialog.show();
+
+                                            }
+                                        }
 
 
-                            final String jenis = "Pulang";
-                            String id = myRef.push().getKey();
-                            ModelAbsen absen = new ModelAbsen(tgl, jam, "Pulang", status, "tidak ada", Lokasi_Absen);
-                            myRef.child("NPP").child("1202170038").child("AbsenPulang").child(bln).child(tgl).setValue(absen);
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            Toast.makeText(FaceDetectPulang.this, "Gagal terkoneksi ke database", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
 
-                            mStatus.setText(jenis);
-                            mJam.setText(jam);
-                            mTanggal.setText(tgl);
-                            mLokasi.setText(Lokasi_Absen);
 
-                            dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    Intent intent = new Intent(FaceDetectPulang.this, HomeScreen.class);
-                                    intent.putExtra("status", status);
-                                    intent.putExtra("jamPulang", jam);
-                                    intent.putExtra("tanggal", tgl);
-                                    startActivity(intent);
-
-                                }
-                            });
-                            dialog.show();
                         } else {
                             Toast.makeText(FaceDetectPulang.this, "Tidak ada wajah yang terdeteksi", Toast.LENGTH_SHORT).show();
                             Intent home = new Intent(FaceDetectPulang.this, HalamanSelfie.class);
@@ -244,7 +285,7 @@ public class FaceDetectPulang extends AppCompatActivity {
         } else if (isTelat) {
             status = "Terlambat";
         } else {
-            status = "Tidak Hadir";
+            status = "Belum Hadir";
         }
     }
 

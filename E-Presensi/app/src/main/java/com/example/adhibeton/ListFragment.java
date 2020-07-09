@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,8 +48,8 @@ public class ListFragment extends Fragment {
     LayoutInflater inflater;
     AlertDialog.Builder dialog;
     View dialogView;
-    FirebaseRecyclerAdapter<ModelKehadiran, HolderView> firebaseRecyclerAdapter;
-    FirebaseRecyclerOptions<ModelKehadiran> options;
+    FirebaseRecyclerAdapter<ModelAbsenKehadiran, AdapterKehadiran.MyViewHolder> firebaseRecyclerAdapter;
+    FirebaseRecyclerOptions<ModelAbsenKehadiran> options;
     Button btn_filter;
     SharedPreferences mSharePreferences;
     private DatePickerDialog datePickerDialog;
@@ -123,32 +125,44 @@ public class ListFragment extends Fragment {
             }
         });
     }
-    private void FirebaseFilterWaktu(String searchText){
+    private void FirebaseFilterWaktu(final String bulan, final String tahun) {
 
-//        Query firebaseSearchQuery = mRef.orderByChild("bulan").startAt(searchText).endAt(searchText + "\uf8ff");
+      mRef.child("1334").child("2020").child("JULY").addChildEventListener(new ChildEventListener() {
+          @Override
+          public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+              String id = dataSnapshot.getKey();
+              if(dataSnapshot.child("bulan").exists() && dataSnapshot.child("tahun").exists()){
+                  if(dataSnapshot.child("bulan").getValue(String.class).equals(bulan) && dataSnapshot.child("tahun").getValue(String.class).equals(tahun)){
+                      ModelAbsenKehadiran ma = dataSnapshot.getValue(ModelAbsenKehadiran.class);
+                      listData.add(ma);
+                  }
+                  adapter=new AdapterKehadiran(getContext(),listData);
+                  mRecyclerView.setAdapter(adapter);
+              }
+          }
 
-     if(searchText!=null) {
-         mRef.child("1334").child("2020").child(searchText).startAt(searchText).endAt(searchText + "\uf8ff").addValueEventListener(new ValueEventListener() {
-             @Override
-             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                 for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()) {
-                     ModelAbsenKehadiran ma = uniqueKey1.getValue(ModelAbsenKehadiran.class);
-                     listData.add(ma);
-                 }
-                 adapter = new AdapterKehadiran(getContext(), listData);
-                 mRecyclerView.setAdapter(adapter);
-             }
+          @Override
+          public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
+          }
 
-             @Override
-             public void onCancelled(@NonNull DatabaseError databaseError) {
+          @Override
+          public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-             }
-         });
-     }else{
-         Toast.makeText(getActivity(), "Gagal", Toast.LENGTH_SHORT).show();
-     }
-    }
+          }
+
+          @Override
+          public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+          }
+
+          @Override
+          public void onCancelled(@NonNull DatabaseError databaseError) {
+
+          }
+      });
+        }
+
 
     private void showFilterDialog() {
         String[] sortOptions = {"Waktu", "Sort by"};
@@ -221,8 +235,9 @@ public class ListFragment extends Fragment {
         dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String searchText = spinnerBulan.getSelectedItem().toString();
-                FirebaseFilterWaktu(searchText);
+                String bulan = spinnerBulan.getSelectedItem().toString();
+                String tahun = spinnerTahun.getSelectedItem().toString();
+                FirebaseFilterWaktu(bulan,tahun);
 
 
             }

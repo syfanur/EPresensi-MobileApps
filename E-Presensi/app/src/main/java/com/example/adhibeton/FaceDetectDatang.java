@@ -21,8 +21,11 @@ import com.example.adhibeton.helper.GraphicOverlay;
 import com.example.adhibeton.helper.RectOverlay;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
@@ -65,6 +68,17 @@ public class FaceDetectDatang extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     final DatabaseReference myRef = database.getReference("Kehadiran");
+
+
+    //GetBulan
+    LocalDate thismonth = LocalDate.now();
+    Month currentMonth = thismonth.getMonth();
+    String bln = String.valueOf(currentMonth);
+
+    //GetTahun
+    LocalDate thisyear = LocalDate.now();
+    int currentYear = thisyear.getYear();
+    String thn = String.valueOf(currentYear);
 
 
 
@@ -149,6 +163,8 @@ public class FaceDetectDatang extends AppCompatActivity {
                         if (getFaceResult(firebaseVisionFaces)){
                             getFaceResult(firebaseVisionFaces);
                             Toast.makeText(FaceDetectDatang.this, "Wajah Berhasil Terdeteksi", Toast.LENGTH_SHORT).show();
+
+                            //GetTanggal
                             LocalDate today = LocalDate.now();
                             final String tgl = today.format(formatterdate);
 
@@ -156,44 +172,93 @@ public class FaceDetectDatang extends AppCompatActivity {
                             LocalTime now = LocalTime.now();
                             final String jam = now.format(formattertime);
 
-                            //GetBulan
-                            Month currentMonth = today.getMonth();
-                            String bln = String.valueOf(currentMonth);
-
 
                             checkDatang(jam);
                             checkWeekDay();
+                            if (status.equals("Belum Hadir")){
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!isFinishing()) {
+                                            new AlertDialog.Builder(FaceDetectDatang.this)
+                                                    .setTitle("INFO")
+                                                    .setMessage("Anda absen diluar jam kerja")
+                                                    .setCancelable(false)
+                                                    .setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            onPause();
+                                                            dialog.dismiss();
+                                                            onResume();
+                                                        }
+                                                    }).show();
+                                        }
+                                    }
+                                });
 
-                            String idUser = myRef.push().getKey();
-                            assert idUser != null;
-                            String idAbsen = myRef.push().getKey();
-                            assert idAbsen != null;
+                            } else {
+                                myRef.child("1334").child(thn).child(bln).orderByChild("absenDatang").equalTo("Datang")
+                                        .addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.exists()){
+                                                    runOnUiThread(new Runnable() {
+                                                        @Override
+                                                        public void run() {
+                                                            if (!isFinishing()){
+                                                                new AlertDialog.Builder(FaceDetectDatang.this)
+                                                                        .setTitle("INFO")
+                                                                        .setMessage("Anda sudah melakukan absen datang")
+                                                                        .setCancelable(false)
+                                                                        .setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                                                            @Override
+                                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                                onPause();
+                                                                                dialog.dismiss();
+                                                                                onResume();
+                                                                            }
+                                                                        }).show();
+                                                            }
+                                                        }
+                                                    });
+                                                } else {
+                                                    //Input Datang ke database
+                                                    final String jenis="Datang";
+                                                    ModelAbsen absen = new ModelAbsen(tgl, jam, "","Datang","", status, "","tidak ada", Lokasi_Absen);
+                                                    myRef.child("1334").child(thn).child(bln).child(tgl).setValue(absen);
 
 
-                            final String jenis="Datang";
-                            String id = myRef.push().getKey();
-                            ModelAbsen absen = new ModelAbsen(tgl, jam, "Datang", status, "tidak ada", Lokasi_Absen);
-                            myRef.child("NPP").child("1202170038").child("AbsenDatang").child(bln).child(tgl).setValue(absen);
+                                                    mStatus.setText(jenis);
+                                                    mJam.setText(jam);
+                                                    mTanggal.setText(tgl);
+                                                    mLokasi.setText(Lokasi_Absen);
+
+                                                    dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+
+                                                            Intent intent = new Intent(FaceDetectDatang.this, HomeScreen.class);
+                                                            intent.putExtra("status",  status);
+                                                            intent.putExtra("jam",jam );
+                                                            intent.putExtra("tanggal", tgl);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    });
+                                                    dialog.show();
+
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                Toast.makeText(FaceDetectDatang.this, "Gagal terkoneksi ke database", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            }
 
 
-                            mStatus.setText(jenis);
-                            mJam.setText(jam);
-                            mTanggal.setText(tgl);
-                            mLokasi.setText(Lokasi_Absen);
 
-                            dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    Intent intent = new Intent(FaceDetectDatang.this, HomeScreen.class);
-                                    intent.putExtra("status",  status);
-                                    intent.putExtra("jam",jam );
-                                    intent.putExtra("tanggal", tgl);
-                                    startActivity(intent);
-
-                                }
-                            });
-                            dialog.show();
                         }else{
                             Toast.makeText(FaceDetectDatang.this, "Tidak ada wajah yang terdeteksi", Toast.LENGTH_SHORT).show();
                             Intent home = new Intent(FaceDetectDatang.this, HalamanSelfie.class);
@@ -253,7 +318,7 @@ private boolean getFaceResult(List<FirebaseVisionFace> firebaseVisionFaces) {
         } else if (isTelat){
             status = "Terlambat";
         } else {
-            status = "Tidak Hadir";
+            status = "Belum Hadir";
         }
     }
 
