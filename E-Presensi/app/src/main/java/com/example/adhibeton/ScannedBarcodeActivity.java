@@ -67,11 +67,13 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Kehadiran");
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanned_barcode);
         this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         initViews();
     }
 
@@ -89,7 +91,12 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
         btnDatang = findViewById(R.id.btnDatang);
         btnPulang = findViewById(R.id.btnPulang);
         btnPulang.setEnabled(false);
-        myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl)
+
+        //GetTanggal
+        LocalDate today = LocalDate.now();
+        tgl = today.format(formatterdate);
+
+        myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl).child("absenDatang")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -135,11 +142,11 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                                 }
                             });
                         } else {
-                            myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).orderByChild("absenDatang").equalTo("Datang")
+                            myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl)
                                     .addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            if (dataSnapshot.exists()){
+                                            if (dataSnapshot.child("absenDatang").exists()){
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
@@ -214,11 +221,11 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                         checkPulang(jam);
                         checkWeekDay();
 
-                        myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).orderByChild("absenPulang").equalTo("Pulang")
+                        myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl)
                                 .addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        if (dataSnapshot.exists()){
+                                        if (dataSnapshot.child("absenPulang").exists()){
                                             runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {

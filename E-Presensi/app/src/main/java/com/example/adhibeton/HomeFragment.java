@@ -138,8 +138,8 @@ public class HomeFragment extends Fragment {
         mMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent home = new Intent(getActivity(), PiechartAbsen.class);
-                startActivity(home);
+//                Intent home = new Intent(getActivity(), PiechartAbsen.class);
+//                startActivity(home);
             }
         });
 

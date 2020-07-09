@@ -108,11 +108,7 @@
             android:orientation="horizontal"
             android:weightSum="2"
             android:layout_alignParentBottom="true"
-<<<<<<< HEAD
-            android:layout_marginTop="70dp"
-=======
             android:layout_marginTop="100dp"
->>>>>>> absen
             android:layout_marginBottom="16dp">
 
             <LinearLayout

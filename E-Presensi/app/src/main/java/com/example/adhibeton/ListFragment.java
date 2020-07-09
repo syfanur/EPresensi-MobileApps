@@ -101,6 +101,8 @@ public class ListFragment extends Fragment {
                 showFilterDialog();
             }
         });
+
+        showListData();
         return v;
     }
 
@@ -110,7 +112,7 @@ public class ListFragment extends Fragment {
     }
 
     private void showListData(){
-        mRef.child("1334").addValueEventListener(new ValueEventListener() {
+        mRef.child(Prevalent.currentOnlineUser.getNpp()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()){
@@ -135,7 +137,7 @@ public class ListFragment extends Fragment {
     }
     private void FirebaseFilterWaktu(final String bulan, final String tahun) {
 
-      mRef.child("1334").child("2020").child("JULY").addChildEventListener(new ChildEventListener() {
+      mRef.child(Prevalent.currentOnlineUser.getNpp()).child("2020").child("JULY").addChildEventListener(new ChildEventListener() {
           @Override
           public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
               String id = dataSnapshot.getKey();
@@ -247,12 +249,10 @@ public class ListFragment extends Fragment {
         dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                listData.clear();
                 bulan = spinnerBulan.getSelectedItem().toString();
                 tahun = spinnerTahun.getSelectedItem().toString();
                 FirebaseFilterWaktu(bulan,tahun);
-
-
-
             }
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

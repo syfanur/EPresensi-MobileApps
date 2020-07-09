@@ -26,7 +26,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FaceDetectPulang"></activity>
+
+        <activity android:name=".Login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".FaceDetectPulang">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
         <activity android:name=".HalamanKehadiran">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
@@ -34,44 +50,61 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
+
         <activity android:name=".FaceRecognition.AbsenWajah">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter> -->
         </activity>
-        <activity android:name=".FaceDetectDatang" />
+
+        <activity android:name=".FaceDetectDatang">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
         <activity android:name=".HomeScreen">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
         <activity
             android:name=".PiechartAbsen"
             android:label="Kehadiran">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
         <activity
             android:name=".ScannedBarcodeActivity"
             android:label="Absen"
             android:theme="@style/AdaActionBar">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
         <activity
             android:name=".AbsenFragment"
             android:label="Absen"
             android:theme="@style/AdaActionBar">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
 
         <activity
@@ -92,15 +125,6 @@
 <!--            </intent-filter>-->
         </activity>
 
-        <receiver android:name=".AlertReceiver" />
-        <activity android:name=".Gaji" />
-        <activity android:name=".Lembur" />
-        <activity android:name=".Teguran" />
-        <activity android:name=".EditPassword" />
-        <activity android:name=".IzinSelesai" />
-        <activity android:name=".IzinProses" />
-        <activity android:name=".Perizinan" />
-
         <activity android:name=".DetailKehadiran">
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
@@ -109,49 +133,21 @@
 <!--            </intent-filter>-->
         </activity>
 
-        <activity android:name=".TabLokasi" />
-        <activity android:name=".TabFoto" />
-        <activity android:name=".TabAbsen" />
-        <activity android:name=".detailizin" />
-        <activity android:name=".buatizin" />
         <activity android:name=".Profil">
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
-        <activity android:name=".no_meeting" />
-<<<<<<< HEAD
-=======
-        <activity android:name=".Login">
 
-<!--             <intent-filter>-->
-<!--             <action android:name="android.intent.action.MAIN" />-->
->>>>>>> absen
+        <activity android:name=".HalamanSelfie">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-        <activity android:name=".Login">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-<<<<<<< HEAD
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-=======
-<!--             <category android:name="android.intent.category.LAUNCHER" />-->
-<!--             </intent-filter>-->
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
-        <activity android:name=".HalamanSelfie" >
-<!--                         <intent-filter>-->
-<!--            <action android:name="android.intent.action.MAIN" />-->
-
-
-<!--            <category android:name="android.intent.category.LAUNCHER" />-->
-<!--        </intent-filter>-->
->>>>>>> absen
-        </activity>
-        <activity android:name=".HalamanAbsen" />
-        <activity android:name=".MainActivity" />
 
         <activity android:name=".Homepage">
 <!--            <intent-filter>-->
@@ -160,6 +156,24 @@
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
         </activity>
+
+        <receiver android:name=".AlertReceiver" />
+        <activity android:name=".Gaji" />
+        <activity android:name=".Lembur" />
+        <activity android:name=".Teguran" />
+        <activity android:name=".EditPassword" />
+        <activity android:name=".IzinSelesai" />
+        <activity android:name=".IzinProses" />
+        <activity android:name=".Perizinan" />
+        <activity android:name=".TabLokasi" />
+        <activity android:name=".TabFoto" />
+        <activity android:name=".TabAbsen" />
+        <activity android:name=".detailizin" />
+        <activity android:name=".buatizin" />
+        <activity android:name=".no_meeting" />
+        <activity android:name=".HalamanAbsen" />
+        <activity android:name=".MainActivity" />
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

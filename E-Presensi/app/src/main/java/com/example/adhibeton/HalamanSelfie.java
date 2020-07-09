@@ -115,6 +115,7 @@ String mLokasi="";
                                 public void onClick(View v) {
 
                                     if (mDatang) {
+                                        System.out.println(mDatang);
                                         Toast.makeText(HalamanSelfie.this, "Anda Sudah Melakukan Absen Datang", Toast.LENGTH_SHORT).show();
 
                                     }else {
