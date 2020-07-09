@@ -160,7 +160,7 @@ public class FaceDetectDatang extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
                     @Override
                     public void onSuccess(List<FirebaseVisionFace> firebaseVisionFaces) {
-                        if (getFaceResult(firebaseVisionFaces)){
+                        if (getFaceResult(firebaseVisionFaces)) {
                             getFaceResult(firebaseVisionFaces);
                             Toast.makeText(FaceDetectDatang.this, "Wajah Berhasil Terdeteksi", Toast.LENGTH_SHORT).show();
 
@@ -175,7 +175,7 @@ public class FaceDetectDatang extends AppCompatActivity {
 
                             checkDatang(jam);
                             checkWeekDay();
-                            if (status.equals("Belum Hadir")){
+                            if (status.equals("Belum Hadir")) {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -197,75 +197,39 @@ public class FaceDetectDatang extends AppCompatActivity {
                                 });
 
                             } else {
-                                myRef.child("1334").child(thn).child(bln).orderByChild("absenDatang").equalTo("Datang")
-                                        .addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                if (dataSnapshot.exists()){
-                                                    runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            if (!isFinishing()){
-                                                                new AlertDialog.Builder(FaceDetectDatang.this)
-                                                                        .setTitle("INFO")
-                                                                        .setMessage("Anda sudah melakukan absen datang")
-                                                                        .setCancelable(false)
-                                                                        .setPositiveButton("OKE", new DialogInterface.OnClickListener() {
-                                                                            @Override
-                                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                                onPause();
-                                                                                dialog.dismiss();
-                                                                                onResume();
-                                                                            }
-                                                                        }).show();
-                                                            }
-                                                        }
-                                                    });
-                                                } else {
-                                                    //Input Datang ke database
-                                                    final String jenis="Datang";
-                                                    ModelAbsen absen = new ModelAbsen(tgl, jam, "","Datang","", status, "","tidak ada", Lokasi_Absen);
-                                                    myRef.child("1334").child(thn).child(bln).child(tgl).setValue(absen);
+                                //Input Datang ke database
+                                final String jenis = "Datang";
+                                ModelAbsen absen = new ModelAbsen(tgl, jam, "", "Datang", "", status, "", "tidak ada", Lokasi_Absen);
+                                myRef.child("1334").child(thn).child(bln).child(tgl).setValue(absen);
 
 
-                                                    mStatus.setText(jenis);
-                                                    mJam.setText(jam);
-                                                    mTanggal.setText(tgl);
-                                                    mLokasi.setText(Lokasi_Absen);
+                                mStatus.setText(jenis);
+                                mJam.setText(jam);
+                                mTanggal.setText(tgl);
+                                mLokasi.setText(Lokasi_Absen);
 
-                                                    dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
+                                dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                                                            Intent intent = new Intent(FaceDetectDatang.this, HomeScreen.class);
-                                                            intent.putExtra("status",  status);
-                                                            intent.putExtra("jam",jam );
-                                                            intent.putExtra("tanggal", tgl);
-                                                            startActivity(intent);
-                                                            finish();
-                                                        }
-                                                    });
-                                                    dialog.show();
+                                        Intent intent = new Intent(FaceDetectDatang.this, HomeScreen.class);
+                                        intent.putExtra("status", status);
+                                        intent.putExtra("jam", jam);
+                                        intent.putExtra("tanggal", tgl);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
+                                dialog.show();
 
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                Toast.makeText(FaceDetectDatang.this, "Gagal terkoneksi ke database", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
                             }
-
-
-
-                        }else{
+                        } else {
                             Toast.makeText(FaceDetectDatang.this, "Tidak ada wajah yang terdeteksi", Toast.LENGTH_SHORT).show();
                             Intent home = new Intent(FaceDetectDatang.this, HalamanSelfie.class);
                             startActivity(home);
                         }
-                    }
 
+                    }
 
                 }).addOnFailureListener(new OnFailureListener() {
             @Override

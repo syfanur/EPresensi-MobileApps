@@ -166,64 +166,30 @@ public class FaceDetectPulang extends AppCompatActivity {
 
                             checkPulang(jam);
                             checkWeekDay();
-                            myRef.child("1334").child(thn).child(bln).orderByChild("absenPulang").equalTo("Pulang")
-                                    .addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            if (dataSnapshot.exists()) {
-                                                runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        if (!isFinishing()) {
-                                                            new AlertDialog.Builder(FaceDetectPulang.this)
-                                                                    .setTitle("INFO")
-                                                                    .setMessage("Anda sudah melakukan absen pulang")
-                                                                    .setCancelable(false)
-                                                                    .setPositiveButton("OKE", new DialogInterface.OnClickListener() {
-                                                                        @Override
-                                                                        public void onClick(DialogInterface dialog, int which) {
-                                                                            onPause();
-                                                                            dialog.dismiss();
-                                                                            onResume();
-                                                                        }
-                                                                    }).show();
-                                                        }
-                                                    }
-                                                });
-                                            } else {
-                                                //Input Pulang ke database
-                                                myRef.child("1334").child(thn).child(bln).child(tgl).child("waktuPulang").setValue(jam);
-                                                myRef.child("1334").child(thn).child(bln).child(tgl).child("absenPulang").setValue("Pulang");
-                                                myRef.child("1334").child(thn).child(bln).child(tgl).child("statusPulang").setValue(status);
 
-                                                mStatus.setText("Pulang");
-                                                mJam.setText(jam);
-                                                mTanggal.setText(tgl);
-                                                mLokasi.setText(Lokasi_Absen);
+                            //Input Pulang ke database
+                            myRef.child("1334").child(thn).child(bln).child(tgl).child("waktuPulang").setValue(jam);
+                            myRef.child("1334").child(thn).child(bln).child(tgl).child("absenPulang").setValue("Pulang");
+                            myRef.child("1334").child(thn).child(bln).child(tgl).child("statusPulang").setValue(status);
 
-                                                dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
+                            mStatus.setText("Pulang");
+                            mJam.setText(jam);
+                            mTanggal.setText(tgl);
+                            mLokasi.setText(Lokasi_Absen);
 
-                                                        Intent intent = new Intent(FaceDetectPulang.this, HomeScreen.class);
-                                                        intent.putExtra("status",  status);
-                                                        intent.putExtra("jam",jam );
-                                                        intent.putExtra("tanggal", tgl);
-                                                        startActivity(intent);
-                                                        finish();
-                                                    }
-                                                });
-                                                dialog.show();
+                            dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
-                                            }
-                                        }
-
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                                            Toast.makeText(FaceDetectPulang.this, "Gagal terkoneksi ke database", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                    Intent intent = new Intent(FaceDetectPulang.this, HomeScreen.class);
+                                    intent.putExtra("status", status);
+                                    intent.putExtra("jam", jam);
+                                    intent.putExtra("tanggal", tgl);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                            dialog.show();
 
 
                         } else {

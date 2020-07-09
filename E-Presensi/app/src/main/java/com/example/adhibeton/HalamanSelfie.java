@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -49,7 +52,8 @@ String mLokasi="";
     int currentYear = thisyear.getYear();
     String thn = String.valueOf(currentYear);
 
-
+    boolean mDatang=false;
+    boolean mPulang=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,44 +71,76 @@ String mLokasi="";
         LocalTime now = LocalTime.now();
        String jam = now.format(formattertime);
 
-        btnPulang.setEnabled(false);
+
         myRef.child("1334").child(thn).child(bln).child(tgl)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
-                            btnPulang.setEnabled(true);
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.child("absenDatang").exists()) {
+                            if(dataSnapshot.child("absenDatang").getValue(String.class).equals("Datang"))
+                            mDatang=true;
+
                         }
-                    }
+                        if (dataSnapshot.child("absenPulang").exists()){
+                            if(dataSnapshot.child("absenPulang").getValue(String.class).equals("Pulang"))
+                                mPulang=true;
+                        }
+                                }
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 });
 
-        btnDatang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent home = new Intent(HalamanSelfie.this, FaceDetectDatang.class);
-                home.putExtra("lokasiAbsenDatang", mLokasi);
-                startActivity(home);
 
-            }
-        });
+                            btnPulang.setEnabled(false);
+                            myRef.child("1334").child(thn).child(bln).child(tgl)
+                                    .addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if (snapshot.exists()) {
+                                                btnPulang.setEnabled(true);
+                                            }
+                                        }
 
-        btnPulang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HalamanSelfie.this, FaceDetectPulang.class);
-                intent.putExtra("lokasiAbsenPulang", mLokasi);
-                startActivity(intent);
-            }
-        });
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+
+                            btnDatang.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    if (mDatang) {
+                                        Toast.makeText(HalamanSelfie.this, "Anda Sudah Melakukan Absen Datang", Toast.LENGTH_SHORT).show();
+
+                                    }else {
+                                        Intent home = new Intent(HalamanSelfie.this, FaceDetectDatang.class);
+                                        home.putExtra("lokasiAbsenDatang", mLokasi);
+                                        startActivity(home);
+                                    }
+                                }
+                            });
 
 
+                            btnPulang.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (mPulang) {
+                                        Toast.makeText(HalamanSelfie.this, "Anda Sudah Melakukan Absen Pulang", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Intent intent = new Intent(HalamanSelfie.this, FaceDetectPulang.class);
+                                        intent.putExtra("lokasiAbsenPulang", mLokasi);
+                                        startActivity(intent);
+                                    }
+                                }
+                            });
 
-    }
+
+                        }
 
 //    public void MoveToFaceDetectDatang(View view) {
 //        Intent home = new Intent(HalamanSelfie.this, FaceDetectDatang.class);
@@ -119,4 +155,6 @@ String mLokasi="";
 //       intent.putExtra("lokasiAbsenPulang", mLokasi);
 //        startActivity(intent);
 //    }
-}
+                    }
+
+
