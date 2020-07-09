@@ -61,6 +61,7 @@ public class AbsenFragment extends Fragment implements OnMapReadyCallback,  Goog
     android.location.LocationListener locationListener;
     TextView address;
     Button mSelfie, mEmbed;
+    String lokasi="";
 
     public AbsenFragment() {
         // Required empty public constructor
@@ -78,6 +79,7 @@ public class AbsenFragment extends Fragment implements OnMapReadyCallback,  Goog
             @Override
             public void onClick(View v) {
                 Intent home = new Intent(getActivity(), HalamanSelfie.class);
+                home.putExtra("lokasiAbsen", lokasi);
                 startActivity(home);
             }
         });
@@ -139,8 +141,8 @@ public class AbsenFragment extends Fragment implements OnMapReadyCallback,  Goog
         try {
             Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
             List<Address> addressesList = geocoder.getFromLocation(latitude, longitude,1);
-
-            address.setText(addressesList.get(0).getAddressLine(0));
+            lokasi=addressesList.get(0).getAddressLine(0);
+            address.setText(lokasi);
         } catch (IOException e) {
             e.printStackTrace();
         }

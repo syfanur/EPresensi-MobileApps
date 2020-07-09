@@ -22,8 +22,11 @@ import com.example.adhibeton.helper.RectOverlay;
 import com.example.adhibeton.model.ModelAbsen;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
@@ -55,9 +58,9 @@ public class FaceDetectPulang extends AppCompatActivity {
     androidx.appcompat.app.AlertDialog.Builder dialog;
     LayoutInflater inflater;
     View dialogView;
-    TextView mStatus, mTanggal, mJam;
+    TextView mStatus, mTanggal, mJam,mLokasi;
     String status = "";
-    String lokasi = "Jl. Ciparay No 20B Kujangsari, Bandung Kidul, Kota Bandung";
+    String Lokasi_Absen="";
 
     DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
     DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
@@ -83,15 +86,17 @@ public class FaceDetectPulang extends AppCompatActivity {
         graphicOverlay = findViewById(R.id.grapic_overlayPulang);
         preview = findViewById(R.id.camera_viewPulang);
 
+        Lokasi_Absen= FaceDetectPulang.this.getIntent().getStringExtra("lokasiAbsenPulang");;
+
         dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetectPulang.this);
         inflater = getLayoutInflater();
         dialogView = inflater.inflate(R.layout.absen_pulang, null);
         dialog.setView(dialogView);
         dialog.setCancelable(false);
-        dialog.setTitle("Detail Absen Pulang");
         mStatus = (TextView) dialogView.findViewById(R.id.StatusPulang);
         mJam = (TextView) dialogView.findViewById(R.id.jamPulang);
         mTanggal = (TextView) dialogView.findViewById(R.id.tanggalPulang);
+        mLokasi=(TextView)dialogView.findViewById(R.id.txt_lokasiPulang);
 
 
         alertDialog = new SpotsDialog.Builder()
@@ -150,6 +155,7 @@ public class FaceDetectPulang extends AppCompatActivity {
                         if (getFaceResult(firebaseVisionFaces)) {
                             getFaceResult(firebaseVisionFaces);
                             Toast.makeText(FaceDetectPulang.this, "Wajah Berhasil Terdeteksi", Toast.LENGTH_SHORT).show();
+                            //GetTanggal
                             LocalDate today = LocalDate.now();
                             final String tgl = today.format(formatterdate);
 
@@ -157,19 +163,9 @@ public class FaceDetectPulang extends AppCompatActivity {
                             LocalTime now = LocalTime.now();
                             final String jam = now.format(formattertime);
 
-                            //GetBulan
-                            Month currentMonth = today.getMonth();
-                            String bln = String.valueOf(currentMonth);
-
 
                             checkPulang(jam);
                             checkWeekDay();
-
-                            String idUser = myRef.push().getKey();
-                            assert idUser != null;
-                            String idAbsen = myRef.push().getKey();
-                            assert idAbsen != null;
-
 
                             final String jenis = "Pulang";
                             //Input Pulang ke database
@@ -178,8 +174,10 @@ public class FaceDetectPulang extends AppCompatActivity {
                             myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl).child("statusPulang").setValue(status);
 
                             mStatus.setText(jenis);
+                            mStatus.setText("Pulang");
                             mJam.setText(jam);
                             mTanggal.setText(tgl);
+                            mLokasi.setText(Lokasi_Absen);
 
                             dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
                                 @Override
@@ -187,13 +185,15 @@ public class FaceDetectPulang extends AppCompatActivity {
 
                                     Intent intent = new Intent(FaceDetectPulang.this, HomeScreen.class);
                                     intent.putExtra("status", status);
-                                    intent.putExtra("jamPulang", jam);
+                                    intent.putExtra("jam", jam);
                                     intent.putExtra("tanggal", tgl);
                                     startActivity(intent);
-
+                                    finish();
                                 }
                             });
                             dialog.show();
+
+
                         } else {
                             Toast.makeText(FaceDetectPulang.this, "Tidak ada wajah yang terdeteksi", Toast.LENGTH_SHORT).show();
                             Intent home = new Intent(FaceDetectPulang.this, HalamanSelfie.class);
@@ -253,7 +253,7 @@ public class FaceDetectPulang extends AppCompatActivity {
         } else if (isTelat) {
             status = "Terlambat";
         } else {
-            status = "Tidak Hadir";
+            status = "Belum Hadir";
         }
     }
 

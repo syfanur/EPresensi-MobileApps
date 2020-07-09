@@ -3,27 +3,92 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Detail Absen"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
 
+    <ImageButton
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/jenis_absen"
+        android:id="@+id/jenis_absen"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        />
 <TextView
     android:id="@+id/Status"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="DATANG"
-   android:layout_marginStart="16dp"
-    android:layout_marginTop="16dp"/>
+   android:layout_marginStart="8dp"
+    android:layout_marginTop="16dp"
+    android:layout_toRightOf="@+id/jenis_absen"/>
+
+    <ImageButton
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/waktu_absen"
+        android:id="@+id/waktu_absen"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/jenis_absen"
+        />
     <TextView
         android:id="@+id/jam"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="00.00"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginStart="8dp"
+        android:layout_toRightOf="@+id/waktu_absen"
+        android:layout_below="@+id/Status"
+        android:layout_marginTop="22dp"/>
     <TextView
         android:id="@+id/tanggal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/jam"
+        android:layout_toRightOf="@+id/tanggal_absen"
         android:text="12/12/2020"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"/>
+
+    <ImageButton
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/tanggal_absen"
+        android:id="@+id/tanggal_absen"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/waktu_absen"
+        />
+    <ImageButton
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/lokasi_absen"
+        android:id="@+id/lokasi_absen"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_below="@+id/tanggal_absen"
+        />
+    <TextView
+        android:id="@+id/txt_lokasi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jalan Ciparay"
+        android:layout_marginStart="8dp"
+        android:layout_toRightOf="@+id/tanggal_absen"
+        android:layout_below="@+id/tanggal"
+        android:layout_marginTop="20dp"/>
+</RelativeLayout>
 
 </LinearLayout>

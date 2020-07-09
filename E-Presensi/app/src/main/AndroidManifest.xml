@@ -122,15 +122,34 @@
             <!-- </intent-filter> -->
         </activity>
         <activity android:name=".no_meeting" />
+<<<<<<< HEAD
+=======
+        <activity android:name=".Login">
+
+<!--             <intent-filter>-->
+<!--             <action android:name="android.intent.action.MAIN" />-->
+>>>>>>> absen
 
         <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
+<<<<<<< HEAD
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+=======
+<!--             <category android:name="android.intent.category.LAUNCHER" />-->
+<!--             </intent-filter>-->
         </activity>
-        <activity android:name=".HalamanSelfie" />
+        <activity android:name=".HalamanSelfie" >
+<!--                         <intent-filter>-->
+<!--            <action android:name="android.intent.action.MAIN" />-->
+
+
+<!--            <category android:name="android.intent.category.LAUNCHER" />-->
+<!--        </intent-filter>-->
+>>>>>>> absen
+        </activity>
         <activity android:name=".HalamanAbsen" />
         <activity android:name=".MainActivity" />
 

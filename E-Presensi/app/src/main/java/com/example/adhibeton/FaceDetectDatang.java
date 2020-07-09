@@ -22,8 +22,11 @@ import com.example.adhibeton.helper.RectOverlay;
 import com.example.adhibeton.model.ModelAbsen;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
@@ -56,9 +59,10 @@ public class FaceDetectDatang extends AppCompatActivity {
     androidx.appcompat.app.AlertDialog.Builder dialog;
     LayoutInflater inflater;
     View dialogView;
-    TextView mStatus, mTanggal, mJam;
+    TextView mStatus, mTanggal, mJam,mLokasi, rLokasi;
     String status = "";
-    String lokasi = "Jl. Ciparay No 20B Kujangsari, Bandung Kidul, Kota Bandung";
+    String Lokasi_Absen="";
+
 
     DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
     DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
@@ -76,8 +80,6 @@ public class FaceDetectDatang extends AppCompatActivity {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef = database.getReference("Kehadiran");
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,16 +88,20 @@ public class FaceDetectDatang extends AppCompatActivity {
         graphicOverlay = findViewById(R.id.grapic_overlay);
         preview = findViewById(R.id.camera_view);
         mButtonPulang = findViewById(R.id.btn_pulang);
+//        rLokasi=(TextView)findViewById(R.id.aa);
+
+            Lokasi_Absen= FaceDetectDatang.this.getIntent().getStringExtra("lokasiAbsenDatang");;
+//       rLokasi.setText(Lok);
 
         dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetectDatang.this);
         inflater = getLayoutInflater();
         dialogView = inflater.inflate(R.layout.absen_datang, null);
         dialog.setView(dialogView);
         dialog.setCancelable(false);
-        dialog.setTitle("Detail Absen Datang");
         mStatus=(TextView)dialogView.findViewById(R.id.Status);
         mJam=(TextView)dialogView.findViewById(R.id.jam);
         mTanggal=(TextView)dialogView.findViewById(R.id.tanggal);
+        mLokasi=(TextView)dialogView.findViewById(R.id.txt_lokasi);
 
 
         alertDialog = new SpotsDialog.Builder()
@@ -127,7 +133,7 @@ public class FaceDetectDatang extends AppCompatActivity {
             }
 
             @Override
-            public void onImage(CameraKitImage cameraKitImage) {
+            public void onImage(CameraKitImage cameraKitImage   ) {
                 alertDialog.show();
                 Bitmap bitmap = cameraKitImage.getBitmap();
                 bitmap= Bitmap.createScaledBitmap(bitmap, preview.getWidth(), preview.getHeight(),false);
@@ -152,9 +158,11 @@ public class FaceDetectDatang extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionFace>>() {
                     @Override
                     public void onSuccess(List<FirebaseVisionFace> firebaseVisionFaces) {
-                        if (getFaceResult(firebaseVisionFaces)){
+                        if (getFaceResult(firebaseVisionFaces)) {
                             getFaceResult(firebaseVisionFaces);
                             Toast.makeText(FaceDetectDatang.this, "Wajah Berhasil Terdeteksi", Toast.LENGTH_SHORT).show();
+
+                            //GetTanggal
                             LocalDate today = LocalDate.now();
                             final String tgl = today.format(formatterdate);
 
@@ -162,50 +170,64 @@ public class FaceDetectDatang extends AppCompatActivity {
                             LocalTime now = LocalTime.now();
                             final String jam = now.format(formattertime);
 
-                            //GetBulan
-                            Month currentMonth = today.getMonth();
-                            String bln = String.valueOf(currentMonth);
-
 
                             checkDatang(jam);
                             checkWeekDay();
+                            if (status.equals("Belum Hadir")) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!isFinishing()) {
+                                            new AlertDialog.Builder(FaceDetectDatang.this)
+                                                    .setTitle("INFO")
+                                                    .setMessage("Anda absen diluar jam kerja")
+                                                    .setCancelable(false)
+                                                    .setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            onPause();
+                                                            dialog.dismiss();
+                                                            onResume();
+                                                        }
+                                                    }).show();
+                                        }
+                                    }
+                                });
 
-                            String idUser = myRef.push().getKey();
-                            assert idUser != null;
-                            String idAbsen = myRef.push().getKey();
-                            assert idAbsen != null;
+                            } else {
+                                //Input Datang ke database
+                                final String jenis = "Datang";
+                                ModelAbsen absen = new ModelAbsen(tgl, jam, "", "Datang", "", status, "", "tidak ada", Lokasi_Absen);
+                                myRef.child("1334").child(thn).child(bln).child(tgl).setValue(absen);
 
 
-                            final String jenis= "Datang";
-                            //Input Datang ke database
-                            ModelAbsen absen = new ModelAbsen(tgl, jam, "", "Datang", "", status, "", "Tidak Ada", lokasi);
-                            myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl).setValue(absen);
+                                mStatus.setText(jenis);
+                                mJam.setText(jam);
+                                mTanggal.setText(tgl);
+                                mLokasi.setText(Lokasi_Absen);
 
+                                dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                            mStatus.setText(jenis);
-                            mJam.setText(jam);
-                            mTanggal.setText(tgl);
+                                        Intent intent = new Intent(FaceDetectDatang.this, HomeScreen.class);
+                                        intent.putExtra("status", status);
+                                        intent.putExtra("jam", jam);
+                                        intent.putExtra("tanggal", tgl);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
+                                dialog.show();
 
-                            dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    Intent intent = new Intent(FaceDetectDatang.this, HomeScreen.class);
-                                    intent.putExtra("status",  status);
-                                    intent.putExtra("jam",jam );
-                                    intent.putExtra("tanggal", tgl);
-                                    startActivity(intent);
-
-                                }
-                            });
-                            dialog.show();
-                        }else{
+                            }
+                        } else {
                             Toast.makeText(FaceDetectDatang.this, "Tidak ada wajah yang terdeteksi", Toast.LENGTH_SHORT).show();
                             Intent home = new Intent(FaceDetectDatang.this, HalamanSelfie.class);
                             startActivity(home);
                         }
-                    }
 
+                    }
 
                 }).addOnFailureListener(new OnFailureListener() {
             @Override

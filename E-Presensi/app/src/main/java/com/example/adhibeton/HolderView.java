@@ -21,7 +21,7 @@ TextView mTanggal, mStatus, mAbsen_datang, mAbsen_pulang;
         mAbsen_datang=mView.findViewById(R.id.rAbsen_datang);
         mAbsen_pulang=mView.findViewById(R.id.rAbsen_pulang);
     }
-    public void setDetails(Context ctx, String absen, String keterangan, String lokasi, String status, String tanggal, String waktu){
+    public void setDetails(Context ctx, String absen, String keterangan, String lokasi, String status, String tanggal, String waktu,String bulan, String tahun){
       TextView  mStatus=mView.findViewById(R.id.rStatus);
       TextView  mTanggal=mView.findViewById(R.id.rTanggal);
       TextView mAbsen_datang=mView.findViewById(R.id.rAbsen_datang);
@@ -30,6 +30,10 @@ TextView mTanggal, mStatus, mAbsen_datang, mAbsen_pulang;
       mStatus.setText(status);
       mTanggal.setText(tanggal);
       mAbsen_datang.setText(waktu);
-      mAbsen_pulang.setText(waktu);
+    }
+    public void setDetailsPulang(Context ctx, String absen, String keterangan, String lokasi, String status, String tanggal, String waktu,String bulan, String tahun) {
+        TextView mAbsen_pulang=mView.findViewById(R.id.rAbsen_pulang);
+
+        mAbsen_pulang.setText(waktu);
     }
 }

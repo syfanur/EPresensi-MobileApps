@@ -23,6 +23,7 @@
         android:src="@drawable/undraw_taking_selfie"
         android:layout_gravity="center"/>
     <TextView
+        android:id="@+id/rLokasi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Ambil Selfie"
@@ -107,7 +108,11 @@
             android:orientation="horizontal"
             android:weightSum="2"
             android:layout_alignParentBottom="true"
+<<<<<<< HEAD
             android:layout_marginTop="70dp"
+=======
+            android:layout_marginTop="100dp"
+>>>>>>> absen
             android:layout_marginBottom="16dp">
 
             <LinearLayout
@@ -121,7 +126,6 @@
                     android:id="@+id/btn_datang"
                     android:layout_height="42dp"
                     android:text="Datang"
-                    android:onClick="MoveToFaceDetectDatang"
                     android:textColor="#fff"
                     android:background="@drawable/button_absen"/>
             </LinearLayout>
@@ -136,7 +140,6 @@
                     android:layout_height="42dp"
                     android:id="@+id/btn_pulang"
                     android:text="Pulang"
-                    android:onClick="MoveToFaceDetectPulang"
                     android:textColor="#fff"
                     android:background="@drawable/button_absen"/>
             </LinearLayout>
