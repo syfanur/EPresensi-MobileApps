@@ -34,11 +34,15 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class ListFragment extends Fragment {
     RecyclerView mRecyclerView;
     FirebaseDatabase mfirebaseDatabase;
@@ -58,10 +62,22 @@ public class ListFragment extends Fragment {
     private Spinner spinnerTahun;
     private List<ModelAbsenKehadiran> listData;
     private AdapterKehadiran adapter;
-    String bulan;
-    String tahun;
+    String bulan="";
+    String tahun="";
 
-    boolean filter=false;
+    DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
+    DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+
+    //GetBulan
+    LocalDate today = LocalDate.now();
+    Month currentMonth = today.getMonth();
+    String bln = String.valueOf(currentMonth);
+
+    //GetTahun
+    LocalDate thisyear = LocalDate.now();
+    int currentYear = thisyear.getYear();
+    String thn = String.valueOf(currentYear);
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
@@ -93,6 +109,9 @@ public class ListFragment extends Fragment {
         mfirebaseDatabase = FirebaseDatabase.getInstance();
         mRef = mfirebaseDatabase.getReference("Kehadiran");
 
+//        showListData();
+        FilterPeriodKehadiranSemuaBulan();
+
         //INTENT TO DIALOG FILTER
         btn_filter=(Button)v.findViewById(R.id.btn_filter);
         btn_filter.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +131,7 @@ public class ListFragment extends Fragment {
     }
 
     private void showListData(){
+        listData.clear();
         mRef.child(Prevalent.currentOnlineUser.getNpp()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -135,49 +155,116 @@ public class ListFragment extends Fragment {
             }
         });
     }
-    private void FirebaseFilterWaktu(final String bulan, final String tahun) {
+//    private void FirebaseFilterWaktu(final String bulan, final String tahun) {
+//
+//      mRef.child("1334").child("2020").child("JULY").addChildEventListener(new ChildEventListener() {
+//          @Override
+//          public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//              String id = dataSnapshot.getKey();
+//              if (dataSnapshot.child("bulan").exists() && dataSnapshot.child("tahun").exists()) {
+//                  if (dataSnapshot.child("bulan").getValue(String.class).equals(bulan) && dataSnapshot.child("tahun").getValue(String.class).equals(tahun)) {
+//                      ModelAbsenKehadiran ma = dataSnapshot.getValue(ModelAbsenKehadiran.class);
+//                      listData.add(ma);
+//                  }
+//
+//              }else {
+//                  showListData();
+//              }
+//
+//              adapter=new AdapterKehadiran(getContext(),listData);
+//              mRecyclerView.setAdapter(adapter);
+//          }
+//
+//          @Override
+//          public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//          }
+//
+//          @Override
+//          public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//
+//          }
+//
+//          @Override
+//          public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//          }
+//
+//          @Override
+//          public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//          }
+//      });
+//        }
+    private void FilterPeriodKehadiranBulan(){
+        mRef.child("1334").child(thn).child(bln).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()){
+                    ModelAbsenKehadiran ma = uniqueKey1.getValue(ModelAbsenKehadiran.class);
+                    listData.add(ma);
+                }
+                adapter=new AdapterKehadiran(getContext(),listData);
+                mRecyclerView.setAdapter(adapter);
+            }
 
-      mRef.child(Prevalent.currentOnlineUser.getNpp()).child("2020").child("JULY").addChildEventListener(new ChildEventListener() {
-          @Override
-          public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-              String id = dataSnapshot.getKey();
-              if (dataSnapshot.child("bulan").exists() && dataSnapshot.child("tahun").exists()) {
-                  if (dataSnapshot.child("bulan").getValue(String.class).equals(bulan) && dataSnapshot.child("tahun").getValue(String.class).equals(tahun)) {
-                      ModelAbsenKehadiran ma = dataSnapshot.getValue(ModelAbsenKehadiran.class);
-                      listData.add(ma);
-                  }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-              }else {
-                  showListData();
-              }
+            }
+        });
+    }
+    private void FilterPeriodKehadiranTahun() {
+        mRef.child("1334").child(thn).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()) {
+                    for (DataSnapshot uniqueKey2 : uniqueKey1.getChildren()) {
+                        ModelAbsenKehadiran ma = uniqueKey2.getValue(ModelAbsenKehadiran.class);
+                        listData.add(ma);
+                    }
+                    adapter = new AdapterKehadiran(getContext(), listData);
+                    mRecyclerView.setAdapter(adapter);
+                }
+            }
 
-              adapter=new AdapterKehadiran(getContext(),listData);
-              mRecyclerView.setAdapter(adapter);
-          }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-          @Override
-          public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+        });
+    }
+    private void FilterPeriodKehadiranSemuaBulan() {
+        mRef.child("1334").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()) {
+                    for (DataSnapshot uniqueKey2 : uniqueKey1.getChildren()) {
+                            for (DataSnapshot uniqueKey3 : uniqueKey2.getChildren()) {
+                                if(uniqueKey3.child("bulan").getValue(String.class).equals(bln)){
+                                    ModelAbsenKehadiran ma = uniqueKey3.getValue(ModelAbsenKehadiran.class);
+                                    listData.add(ma);
+                                }
+                                adapter = new AdapterKehadiran(getContext(), listData);
+                                mRecyclerView.setAdapter(adapter);
+                            }
 
-          }
-
-          @Override
-          public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-          }
-
-          @Override
-          public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-          }
-
-          @Override
-          public void onCancelled(@NonNull DatabaseError databaseError) {
-
-          }
-      });
-        }
+                        }
 
 
+                    }
+
+                }
+
+
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
     private void showFilterDialog() {
         String[] sortOptions = {"Waktu", "Sort by"};
 
@@ -209,6 +296,7 @@ public class ListFragment extends Fragment {
         spinnerBulan= (Spinner)dialogView.findViewById(R.id.spBulan);
         spinnerTahun= (Spinner)dialogView.findViewById(R.id.spTahun);
         List<String> cBulan = new ArrayList<>();
+        cBulan.add("ALL");
         cBulan.add("JANUARY");
         cBulan.add("FEBRUARY");
         cBulan.add("MARCH");
@@ -223,6 +311,7 @@ public class ListFragment extends Fragment {
         cBulan.add("DECEMBER");
 
         List<String> cTahun = new ArrayList<>();
+        cTahun.add("ALL");
         cTahun.add("2020");
         cTahun.add("2019");
         cTahun.add("2018");
@@ -252,8 +341,23 @@ public class ListFragment extends Fragment {
                 listData.clear();
                 bulan = spinnerBulan.getSelectedItem().toString();
                 tahun = spinnerTahun.getSelectedItem().toString();
-                FirebaseFilterWaktu(bulan,tahun);
+                listData.clear();
+
+                if (bulan.equals("ALL")) {
+                    thn = tahun;
+                    FilterPeriodKehadiranTahun();
+                } else if (bln.equals("ALL") && thn.equals("ALL")) {
+                    showListData();
+                }else if(thn.equals("ALL")){
+                    bln=bulan;
+                    FilterPeriodKehadiranSemuaBulan();
+                } else {
+                    thn = tahun;
+                    bln = bulan;
+                   FilterPeriodKehadiranBulan();
+                }
             }
+
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
