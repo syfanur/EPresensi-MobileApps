@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -23,8 +24,10 @@ public class IzinProses extends Fragment {
     RecyclerView recyclerView;
     FirebaseRecyclerOptions<Izin> options;
     FirebaseRecyclerAdapter<Izin, IzinViewHolder> adapter;
-    DatabaseReference DataRef;
+    Query DataRef;
     private View ProsesView;
+
+
 
     public IzinProses() {
         // Required empty public constructor
@@ -36,7 +39,13 @@ public class IzinProses extends Fragment {
 
         // Inflate the layout for this fragment.
         ProsesView = inflater.inflate(R.layout.activity_izin_proses, container, false);
-        DataRef = FirebaseDatabase.getInstance().getReference().child("Perizinan");
+        DataRef = FirebaseDatabase.getInstance().getReference().child("Perizinan").child("Karyawan")
+                .child(Prevalent.currentOnlineUser.getNpp())
+                .orderByChild("Status").equalTo("Diajukan");
+
+
+
+
         recyclerView = ProsesView.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
@@ -48,18 +57,18 @@ public class IzinProses extends Fragment {
 
     }
 
-    @Override
+
+        @Override
     public void onStart(){
         super.onStart();
-        options = new FirebaseRecyclerOptions.Builder<Izin>()
-                .setQuery(DataRef.child("Karyawan")
-                        .child(Prevalent.currentOnlineUser.getNpp()), Izin.class).build();
+        options = new FirebaseRecyclerOptions.Builder<Izin>().setQuery(DataRef, Izin.class).build();
 
         adapter = new FirebaseRecyclerAdapter<Izin, IzinViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull IzinViewHolder holder, final int position, @NonNull final Izin model) {
                 holder.mjenis.setText("Izin " + model.getJenis());
                 holder.mtanggal.setText(model.getHari() + " | " +model.getJam());
+                holder.mstatus.setText(model.getStatus());
                 Picasso.get().load(model.getBukti()).into(holder.mbukti);
 
                 holder.v.setOnClickListener(new View.OnClickListener() {

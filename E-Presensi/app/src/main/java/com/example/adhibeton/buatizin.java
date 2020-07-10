@@ -51,6 +51,7 @@ public class buatizin extends AppCompatActivity {
     private StorageReference ProductImagesRef;
     private DatabaseReference ProductsRef;
     private ProgressDialog loadingBar;
+    private String status = "Diajukan";
 
 
     @Override
@@ -182,6 +183,7 @@ public class buatizin extends AppCompatActivity {
         tm = tvDateResult.getText().toString();
         ta = tvDateResult2.getText().toString();
 
+
         if (ImageUri == null)
         {
             Toast.makeText(this, "Product image is mandatory...", Toast.LENGTH_SHORT).show();
@@ -212,6 +214,7 @@ public class buatizin extends AppCompatActivity {
         saveCurrentTime = currentTime.format(calendar.getTime());
 
         productRandomKey = saveCurrentDate + saveCurrentTime;
+
 
 
         final StorageReference filePath = ProductImagesRef.child(ImageUri.getLastPathSegment() + productRandomKey + ".jpg");
@@ -275,6 +278,7 @@ public class buatizin extends AppCompatActivity {
         productMap.put("Jam", saveCurrentTime);
         productMap.put("Keterangan", ket);
         productMap.put("Bukti", downloadImageUrl);
+        productMap.put("Status", status);
 
 
         ProductsRef.child("Karyawan").child(Prevalent.currentOnlineUser.getNpp()).child(productRandomKey).updateChildren(productMap)
