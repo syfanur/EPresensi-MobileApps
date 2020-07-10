@@ -74,7 +74,7 @@
                 android:layout_gravity="center_vertical"
                 android:textSize="14dp"
                 android:textColor="@color/black"
-                android:text="Tanggal Mulai"
+                android:hint="Tanggal Mulai"
                 />
 
             <Button
@@ -105,7 +105,7 @@
                 android:layout_gravity="center_vertical"
                 android:textSize="14dp"
                 android:textColor="@color/black"
-                android:text="Tanggal Akhir"
+                android:hint="Tanggal Akhir"
                 />
 
             <Button
@@ -134,7 +134,7 @@
                 android:layout_gravity="center_vertical"
                 android:textColor="@color/black"
                 android:textSize="14dp"
-                android:text="Upload Bukti Izin"
+                android:hint="Upload Bukti Izin"
                 />
 
 
@@ -163,7 +163,6 @@
             android:background="@null"
             android:textSize="14dp"
             android:hint="Keterangan"
-            android:textColorHint="@color/black"
             android:textColor="@color/black"
             />
 

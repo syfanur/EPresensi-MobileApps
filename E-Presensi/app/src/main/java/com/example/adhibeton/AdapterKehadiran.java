@@ -34,7 +34,7 @@ public class AdapterKehadiran extends RecyclerView.Adapter<AdapterKehadiran.MyVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterKehadiran.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterKehadiran.MyViewHolder holder, final int position) {
     holder.mStatus.setText(mData.get(position).getStatusDatang());
     holder.mTanggal.setText(mData.get(position).getTanggal());
     holder.mAbsen_datang.setText(mData.get(position).getWaktuDatang());

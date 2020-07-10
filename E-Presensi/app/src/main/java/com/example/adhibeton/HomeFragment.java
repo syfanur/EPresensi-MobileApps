@@ -138,8 +138,8 @@ public class HomeFragment extends Fragment {
         mMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent home = new Intent(getActivity(), PiechartAbsen.class);
-//                startActivity(home);
+                Intent home = new Intent(getActivity(), no_meeting.class);
+                startActivity(home);
             }
         });
 
@@ -195,7 +195,7 @@ public class HomeFragment extends Fragment {
         slideModels.add(new SlideModel("https://ekrutassets.s3.ap-southeast-1.amazonaws.com/blogs/images/000/000/932/original/training-karyawan-EKRUT", "Pelatihan Skill Karyawan"));
         slideModels.add(new SlideModel("https://www.enisa.europa.eu/news/member-states/cyber-security-breaches-survey-2018/@@images/1883790d-a6f2-4ea8-a48c-521737e4c96a.jpeg", "Cyber Security Attack"));
         slideModels.add(new SlideModel("https://www.cigna.co.id/sites/default/files/field/image/Web%20Banner%20Coronavirus_1009%20px%20x%20468%20px.jpg", "Info Pencegahan Corona Virus"));
-        slideModels.add(new SlideModel("https://img.okezone.com/content/2019/08/25/320/2096454/cara-jitu-agar-meeting-lebih-efisien-dan-tak-bertele-tele-st5jasxjgI.jpg", "Metting seluruh karyawan"));
+        slideModels.add(new SlideModel("https://img.okezone.com/content/2019/08/25/320/2096454/cara-jitu-agar-meeting-lebih-efisien-dan-tak-bertele-tele-st5jasxjgI.jpg", "Meeting Seluruh Karyawan"));
         imageSlider.setImageList(slideModels, true);
 
         locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);

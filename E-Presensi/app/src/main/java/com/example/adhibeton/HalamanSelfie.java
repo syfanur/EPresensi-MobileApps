@@ -72,7 +72,7 @@ String mLokasi="";
        String jam = now.format(formattertime);
 
 
-        myRef.child("1334").child(thn).child(bln).child(tgl)
+        myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -95,7 +95,7 @@ String mLokasi="";
 
 
                             btnPulang.setEnabled(false);
-                            myRef.child("1334").child(thn).child(bln).child(tgl)
+                            myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl)
                                     .addValueEventListener(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {

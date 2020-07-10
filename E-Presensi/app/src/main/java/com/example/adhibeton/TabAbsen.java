@@ -47,7 +47,7 @@ public class TabAbsen extends Fragment {
         datangdisplay(Datang, StatusDatang, Tanggal);
         pulangdisplay(Pulang, StatusPulang);
 
-return v;
+        return v;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -62,20 +62,26 @@ return v;
         LocalDate todaay = LocalDate.now();
         String tgl = todaay.format(formatterdate);
 
+        //GetTahun
+        LocalDate thisyear = LocalDate.now();
+        int currentYear = thisyear.getYear();
+        String thn = String.valueOf(currentYear);
+
+
         DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenPulang").child(bln).child(tgl);
+                .child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl);
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 if (dataSnapshot.exists())
                 {
-                    if (dataSnapshot.child("waktu").exists())
+                    if (dataSnapshot.child("waktuPulang").exists())
                     {
 
 
-                        String pulang = dataSnapshot.child("waktu").getValue().toString();
-                        String statusPulang = dataSnapshot.child("status").getValue().toString();
+                        String pulang = dataSnapshot.child("waktuPulang").getValue().toString();
+                        String statusPulang = dataSnapshot.child("statusPulang").getValue().toString();
                         Pulang.setText(pulang);
                         StatusPulang.setText(statusPulang);
 
@@ -100,23 +106,29 @@ return v;
         Month currentMonth = today.getMonth();
         String bln = String.valueOf(currentMonth);
 
+        //GetTahun
+        LocalDate thisyear = LocalDate.now();
+        int currentYear = thisyear.getYear();
+        String thn = String.valueOf(currentYear);
+
+
         //GetTanggal
         LocalDate todaay = LocalDate.now();
         String tgl = todaay.format(formatterdate);
         DatabaseReference UsersRef = FirebaseDatabase.getInstance().getReference().child("Kehadiran")
-                .child(Prevalent.currentOnlineUser.getNpp()).child("AbsenDatang").child(bln).child(tgl);
+                .child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl);
         UsersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
                 if (dataSnapshot.exists())
                 {
-                    if (dataSnapshot.child("waktu").exists())
+                    if (dataSnapshot.child("waktuDatang").exists())
                     {
 
 
-                        String datang = dataSnapshot.child("waktu").getValue().toString();
-                        String statusDatang = dataSnapshot.child("status").getValue().toString();
+                        String datang = dataSnapshot.child("waktuDatang").getValue().toString();
+                        String statusDatang = dataSnapshot.child("statusDatang").getValue().toString();
                         String tanggal = dataSnapshot.child("tanggal").getValue().toString();
                         Datang.setText(datang);
                         StatusDatang.setText(statusDatang);

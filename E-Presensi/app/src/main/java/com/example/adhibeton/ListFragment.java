@@ -317,16 +317,7 @@ public class ListFragment extends Fragment {
 //
 //                }
 //            });
-//
-//
-//                holder.mDetail.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(getActivity(), DetailKehadiran.class);
-//                    startActivity(intent);
-//                }
-//            });
-//            }
+
 //
 //            @NonNull
 //            @Override

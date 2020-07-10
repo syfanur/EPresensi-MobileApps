@@ -38,7 +38,7 @@ public class EditData extends AppCompatActivity {
 
 
     private EditText Pendidikan, Alamat, Goldarah, Agama, Nonpwp, Baju, Celana,
-    Sepatu, Hp, HpKeluarga;
+            Sepatu, Hp, HpKeluarga;
     private Uri imageUri;
     private String myUrl = "";
     private StorageTask uploadTask;
@@ -103,7 +103,7 @@ public class EditData extends AppCompatActivity {
 
 
         Toast.makeText(EditData.this, "Profile Info update successfully.", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(EditData.this, HomeScreen.class));
+        startActivity(new Intent(EditData.this, EditData.class));
         finish();
     }
 

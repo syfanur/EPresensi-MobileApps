@@ -249,8 +249,7 @@
         android:layout_width="200dp"
         android:layout_height="132dp"
         android:src="@drawable/surat"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="36dp">
+        android:layout_marginTop="15dp">
 
     </ImageView>
 </LinearLayout>
