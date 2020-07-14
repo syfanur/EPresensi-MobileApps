@@ -38,6 +38,7 @@ import com.wonderkiln.camerakit.CameraKitImage;
 import com.wonderkiln.camerakit.CameraKitVideo;
 import com.wonderkiln.camerakit.CameraView;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
@@ -151,7 +152,7 @@ public class FaceDetectDatang extends AppCompatActivity {
         });
     }
 
-    private void proccessFaceDetection(Bitmap bitmap) {
+    private void proccessFaceDetection(final Bitmap bitmap) {
         FirebaseVisionImage firebaseVisionImage= FirebaseVisionImage.fromBitmap(bitmap);
         FirebaseVisionFaceDetectorOptions firebaseVisionFaceDetectorOptions= new FirebaseVisionFaceDetectorOptions.Builder().build();
         FirebaseVisionFaceDetector firebaseVisionFaceDetector= FirebaseVision.getInstance()
@@ -212,7 +213,12 @@ public class FaceDetectDatang extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
+                                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                        byte[] bytes = stream.toByteArray();
+
                                         Intent intent = new Intent(FaceDetectDatang.this, HomeScreen.class);
+                                        intent.putExtra("image", bytes);
                                         intent.putExtra("status", status);
                                         intent.putExtra("jam", jam);
                                         intent.putExtra("tanggal", tgl);

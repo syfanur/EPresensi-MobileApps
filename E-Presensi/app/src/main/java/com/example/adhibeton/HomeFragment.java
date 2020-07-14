@@ -3,6 +3,8 @@ package com.example.adhibeton;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -19,6 +21,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +63,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
     private  double latitude, longitude;
     LocationManager locationManager;
   android.location.LocationListener locationListener;
+  ImageView imageView;
 
     TextView address, mAbsenDatang, mAbsenPulang;
     LinearLayout mTeguran, mPresensi, mIzin, mMeeting, mLembur, mGaji;
@@ -76,14 +80,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback, Google
         address = v.findViewById(R.id.lokasi);
         mAbsenDatang = v.findViewById(R.id.absen_datang);
         mAbsenPulang = v.findViewById(R.id.absen_pulang);
+        imageView=v.findViewById(R.id.user);
 
         String mStatus = getActivity().getIntent().getStringExtra("status");
         String mTanggal = getActivity().getIntent().getStringExtra("tanggal");
         String mwaktuDatang = getActivity().getIntent().getStringExtra("jam");
         String mwaktuPulang = getActivity().getIntent().getStringExtra("jamPulang");
+        byte [] bytes = getActivity().getIntent().getByteArrayExtra("image");
+        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
         mAbsenDatang.setText(mwaktuDatang);
         mAbsenPulang.setText(mwaktuPulang);
+        imageView.setImageBitmap(bmp);
 
         mPresensi=v.findViewById(R.id.presensi);
         mPresensi.setOnClickListener(new View.OnClickListener() {
