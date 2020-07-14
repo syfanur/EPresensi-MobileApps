@@ -212,7 +212,7 @@
              <table class="table table-bordered" id="tbl_users_list" width="100%" cellspacing="0">
                <thead>
                  <tr>
-                   
+                   <th>NPP</th>
                    <th>Tanggal Pengajuan</th>
                    <th>Jenis</th>
                    <th>Tanggal Mulai Izin</th>
@@ -228,38 +228,48 @@
              <script>
  
               var tblUsers = document.getElementById('tbl_users_list');
-              var databaseRef = firebase.database().ref('Perizinan/');
+              var databaseRef = firebase.database().ref('Perizinan');
               var rowIndex = 1;
               
-              databaseRef.child('Karyawan').child('1234').once('value', function(snapshot) {
+              databaseRef.child('Karyawan').orderByKey().once('value', function(snapshot) {
                 snapshot.forEach(function(childSnapshot) {
-               var childKey = childSnapshot.key;
-               var childData = childSnapshot.val();
-               
-               var row = tblUsers.insertRow(rowIndex);
-               var cellId = row.insertCell(0);
-               var cellJenis = row.insertCell(1);
-               var cellMulai = row.insertCell(2);
-               var cellAkhir = row.insertCell(3);
-               var cellKet = row.insertCell(4)
-               var cellImage = row.insertCell(5);
-               var cellAction = row.insertCell(6);
+                  // body...
+                  var childKey = childSnapshot.key;
 
-               var DOM_img = document.createElement("img");
-                     DOM_img.src = childData.Bukti;
-                     DOM_img.style.width = "100px";
-                     DOM_img.style.height = "110px";
-                     
+               databaseRef.child('Karyawan').child(childKey).orderByKey().once('value', function(snapshot){
+                snapshot.forEach(function (childSnapshot) {
+                  // body...
+                  var childKey2 = childSnapshot.key;                
+                  var childData = childSnapshot.val();
+                  var row = tblUsers.insertRow(rowIndex);
+                  
+                  var cellId = row.insertCell(0);
+                  var cellTgl = row.insertCell(1);
+                  var cellJenis = row.insertCell(2);
+                  var cellMulai = row.insertCell(3);
+                  var cellAkhir = row.insertCell(4);
+                  var cellKet = row.insertCell(5);
+                  var cellImage = row.insertCell(6);
+                  var cellAction = row.insertCell(7);
 
-               cellId.appendChild(document.createTextNode(childKey));
-               cellJenis.appendChild(document.createTextNode(childData.Jenis));
-               cellMulai.appendChild(document.createTextNode(childData.Start));
-               cellAkhir.appendChild(document.createTextNode(childData.End));
-               cellKet.appendChild(document.createTextNode(childData.Keterangan));
-               cellImage.appendChild(DOM_img);
-               cellAction.innerHTML = '<a class="card-footer-item"  style="color:blue" onClick="delete()" id="delete">Edit</a>'
-               +' ' + '<a class="card-footer-item" style="color:red" onClick="delete()" id="delete">Delete</a>';
-               rowIndex = rowIndex + 1;
+                  var DOM_img = document.createElement("img");
+                       DOM_img.src = childData.Bukti;
+                       DOM_img.style.width = "100px";
+                       DOM_img.style.height = "110px";
+                       
+
+                 cellId.appendChild(document.createTextNode(childKey));
+                 cellTgl.appendChild(document.createTextNode(childKey2));
+                 cellJenis.appendChild(document.createTextNode(childData.Jenis));
+                 cellMulai.appendChild(document.createTextNode(childData.Start));
+                 cellAkhir.appendChild(document.createTextNode(childData.End));
+                 cellKet.appendChild(document.createTextNode(childData.Keterangan));
+                 cellImage.appendChild(DOM_img);
+                 cellAction.innerHTML = '<a class="card-footer-item"  style="color:blue" onClick="delete()" id="delete">Edit</a>'
+                 +' ' + '<a class="card-footer-item" style="color:red" onClick="delete()" id="delete">Delete</a>';
+                 rowIndex = rowIndex + 1;
+                 });
+                 });
                 });
               });
             </script>
