@@ -42,7 +42,13 @@ public class AdapterKehadiran extends RecyclerView.Adapter<AdapterKehadiran.MyVi
     holder.mDetail.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mContext.startActivity(new Intent(mContext,DetailKehadiran.class));
+            Intent e = new Intent (mContext, DetailKehadiran.class);
+            e.putExtra("pid", mData.get(position).getTanggal() );
+            mContext.startActivity(e);
+//            mContext.startActivity(new Intent(mContext,DetailKehadiran.class));
+//            Intent e = new Intent(getActivity(),detailizin.class);
+//            e.putExtra("pid", model.getId());
+//            startActivity(e);
         }
     });
     }

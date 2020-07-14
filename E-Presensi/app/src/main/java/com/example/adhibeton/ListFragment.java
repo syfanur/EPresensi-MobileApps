@@ -110,7 +110,7 @@ public class ListFragment extends Fragment {
         mRef = mfirebaseDatabase.getReference("Kehadiran");
 
 //        showListData();
-        FilterPeriodKehadiranSemuaBulan();
+//        FilterPeriodKehadiranSemuaBulan();
 
         //INTENT TO DIALOG FILTER
         btn_filter=(Button)v.findViewById(R.id.btn_filter);
@@ -197,7 +197,7 @@ public class ListFragment extends Fragment {
 //      });
 //        }
     private void FilterPeriodKehadiranBulan(){
-        mRef.child("1334").child(thn).child(bln).addValueEventListener(new ValueEventListener() {
+        mRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()){
@@ -215,7 +215,7 @@ public class ListFragment extends Fragment {
         });
     }
     private void FilterPeriodKehadiranTahun() {
-        mRef.child("1334").child(thn).addValueEventListener(new ValueEventListener() {
+        mRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()) {
@@ -234,37 +234,37 @@ public class ListFragment extends Fragment {
             }
         });
     }
-    private void FilterPeriodKehadiranSemuaBulan() {
-        mRef.child("1334").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()) {
-                    for (DataSnapshot uniqueKey2 : uniqueKey1.getChildren()) {
-                            for (DataSnapshot uniqueKey3 : uniqueKey2.getChildren()) {
-                                if(uniqueKey3.child("bulan").getValue(String.class).equals(bln)){
-                                    ModelAbsenKehadiran ma = uniqueKey3.getValue(ModelAbsenKehadiran.class);
-                                    listData.add(ma);
-                                }
-                                adapter = new AdapterKehadiran(getContext(), listData);
-                                mRecyclerView.setAdapter(adapter);
-                            }
-
-                        }
-
-
-                    }
-
-                }
-
-
-
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void FilterPeriodKehadiranSemuaBulan() {
+//        mRef.child(Prevalent.currentOnlineUser.getNpp()).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()) {
+//                    for (DataSnapshot uniqueKey2 : uniqueKey1.getChildren()) {
+//                            for (DataSnapshot uniqueKey3 : uniqueKey2.getChildren()) {
+//                                if(uniqueKey3.child("bulan").getValue(String.class).equals(bln)){
+//                                    ModelAbsenKehadiran ma = uniqueKey3.getValue(ModelAbsenKehadiran.class);
+//                                    listData.add(ma);
+//                                }
+//                                adapter = new AdapterKehadiran(getContext(), listData);
+//                                mRecyclerView.setAdapter(adapter);
+//                            }
+//
+//                        }
+//
+//
+//                    }
+//
+//                }
+//
+//
+//
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
     private void showFilterDialog() {
         String[] sortOptions = {"Waktu", "Sort by"};
 
@@ -348,9 +348,9 @@ public class ListFragment extends Fragment {
                     FilterPeriodKehadiranTahun();
                 } else if (bln.equals("ALL") && thn.equals("ALL")) {
                     showListData();
-                }else if(thn.equals("ALL")){
-                    bln=bulan;
-                    FilterPeriodKehadiranSemuaBulan();
+//                }else if(thn.equals("ALL")){
+//                    bln=bulan;
+//                    FilterPeriodKehadiranSemuaBulan();
                 } else {
                     thn = tahun;
                     bln = bulan;
