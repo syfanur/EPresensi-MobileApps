@@ -113,7 +113,7 @@ public class FaceDetectDatang extends AppCompatActivity {
                 .build();
 
 
-        faceDetectButton.setOnClickListener(new View.OnClickListener() {
+        faceDetectButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 preview.start();
