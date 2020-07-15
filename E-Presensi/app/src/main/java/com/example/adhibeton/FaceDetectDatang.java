@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -138,7 +139,7 @@ public class FaceDetectDatang extends AppCompatActivity {
             @Override
             public void onImage(CameraKitImage cameraKitImage   ) {
                 alertDialog.show();
-                Bitmap bitmap = cameraKitImage.getBitmap();
+                Bitmap bitmap = (Bitmap)cameraKitImage.getBitmap();
                 bitmap= Bitmap.createScaledBitmap(bitmap, preview.getWidth(), preview.getHeight(),false);
                 preview.stop();
                 proccessFaceDetection(bitmap);
@@ -199,8 +200,11 @@ public class FaceDetectDatang extends AppCompatActivity {
 
                             } else {
                                 //Input Datang ke database
+                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                String imageEncoded = Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT);
                                 final String jenis = "Datang";
-                                ModelAbsen absen = new ModelAbsen(tgl, jam, "", "Datang", "", status, "", "tidak ada", Lokasi_Absen);
+                                ModelAbsen absen = new ModelAbsen(tgl, jam, "", "Datang", "", status, "", "tidak ada", Lokasi_Absen,imageEncoded);
                                 myRef.child("1334").child(thn).child(bln).child(tgl).setValue(absen);
 
 
@@ -213,12 +217,8 @@ public class FaceDetectDatang extends AppCompatActivity {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
 
-                                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                                        byte[] bytes = stream.toByteArray();
 
                                         Intent intent = new Intent(FaceDetectDatang.this, HomeScreen.class);
-                                        intent.putExtra("image", bytes);
                                         intent.putExtra("status", status);
                                         intent.putExtra("jam", jam);
                                         intent.putExtra("tanggal", tgl);
