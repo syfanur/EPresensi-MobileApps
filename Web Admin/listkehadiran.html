@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>List Data Karyawan</title>
+  <title>List Kehadiran Karyawan</title>
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase.js"></script>
 
@@ -213,7 +213,7 @@
               <table class="table table-bordered" id="tbl_users_list" width="100%" cellspacing="0">
                 <thead>
                   <tr>
-                    
+                    <th>NPP</th>
                     <th>Tanggal</th>
                     <th>Absen Datang</th>
                     <th>Absen Pulang</th>
@@ -228,36 +228,53 @@
               <script>
   
                var tblUsers = document.getElementById('tbl_users_list');
-               var databaseRef = firebase.database().ref('Kehadiran/');
+               var databaseRef = firebase.database().ref('Kehadiran');
                var rowIndex = 1;
                
-               databaseRef.child('1234').child('2020').child('JULY').once('value', function(snapshot) {
+               databaseRef.orderByKey().once('value', function(snapshot) {
                  snapshot.forEach(function(childSnapshot) {
-                var childKey = childSnapshot.key;
+                var npp = childSnapshot.key;
+
+                databaseRef.child(npp).orderByKey().once('value', function(snapshot) {
+                 snapshot.forEach(function(childSnapshot) {
+                var tahun = childSnapshot.key;
+
+                databaseRef.child(npp).child(tahun).orderByKey().once('value', function(snapshot) {
+                 snapshot.forEach(function(childSnapshot) {
+                var bulan = childSnapshot.key;
+
+                databaseRef.child(npp).child(tahun).child(bulan).orderByKey().once('value', function(snapshot) {
+                 snapshot.forEach(function(childSnapshot) {
+                var tanggal = childSnapshot.key;
                 var childData = childSnapshot.val();
                 
                 var row = tblUsers.insertRow(rowIndex);
                 var cellId = row.insertCell(0);
-                var cellJenis = row.insertCell(1);
-                var cellMulai = row.insertCell(2);
-                var cellAkhir = row.insertCell(3);
-                var cellKet = row.insertCell(4)
-                var cellImage = row.insertCell(5);
-                
- 
-               
-                      
- 
-                cellId.appendChild(document.createTextNode(childKey));
-                cellJenis.appendChild(document.createTextNode(childData.waktuDatang));
-                cellMulai.appendChild(document.createTextNode(childData.waktuPulang));
-                cellAkhir.appendChild(document.createTextNode(childData.statusDatang));
-                cellKet.appendChild(document.createTextNode(childData.statusPulang));
-                cellImage.appendChild(document.createTextNode(childData.lokasi));
+                var cellTanggal = row.insertCell(1);
+                var cellDatang = row.insertCell(2);
+                var cellPulang = row.insertCell(3);
+                var cellStatusDatang = row.insertCell(4)
+                var cellStatusPulang = row.insertCell(5);
+                var cellLokasi = row.insertCell(6);
+              
+                    
+                cellId.appendChild(document.createTextNode(npp));
+                cellTanggal.appendChild(document.createTextNode(tanggal));
+                cellDatang.appendChild(document.createTextNode(childData.waktuDatang));
+                cellPulang.appendChild(document.createTextNode(childData.waktuPulang));
+                cellStatusDatang.appendChild(document.createTextNode(childData.statusDatang));
+                cellStatusPulang.appendChild(document.createTextNode(childData.statusPulang));
+                cellLokasi.appendChild(document.createTextNode(childData.lokasi));
                
                     rowIndex = rowIndex + 1;
                  });
                });
+              });
+              });
+            });
+              });
+            });
+              });
              </script>
            
            
