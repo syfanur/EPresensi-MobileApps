@@ -32,6 +32,9 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.wonderkiln.camerakit.CameraKitError;
 import com.wonderkiln.camerakit.CameraKitEvent;
 import com.wonderkiln.camerakit.CameraKitEventListener;
@@ -47,6 +50,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import dmax.dialog.SpotsDialog;
 
@@ -70,6 +74,10 @@ public class FaceDetectDatang extends AppCompatActivity {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     final DatabaseReference myRef = database.getReference("Kehadiran");
+
+    FirebaseStorage storage;
+    StorageReference storageReference;
+
 
 
     //GetBulan
@@ -96,6 +104,9 @@ public class FaceDetectDatang extends AppCompatActivity {
 
             Lokasi_Absen= FaceDetectDatang.this.getIntent().getStringExtra("lokasiAbsenDatang");;
 //       rLokasi.setText(Lok);
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetectDatang.this);
         inflater = getLayoutInflater();
@@ -200,9 +211,28 @@ public class FaceDetectDatang extends AppCompatActivity {
 
                             } else {
                                 //Input Datang ke database
+                                StorageReference ref
+                                        = storageReference
+                                        .child("absen/" + UUID.randomUUID().toString());
                                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                byte[] data = stream.toByteArray();
                                 String imageEncoded = Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT);
+
+                                UploadTask uploadTask = ref.putBytes(data);
+                                uploadTask.addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(FaceDetectDatang.this, "Gagal upload ", Toast.LENGTH_SHORT).show();
+                                    }
+                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        Toast.makeText(FaceDetectDatang.this, "Berhasil upload ", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+
                                 final String jenis = "Datang";
                                 ModelAbsen absen = new ModelAbsen(tgl, jam, "", "Datang", "", status, "", "tidak ada", Lokasi_Absen,imageEncoded);
                                 myRef.child("1334").child(thn).child(bln).child(tgl).setValue(absen);
