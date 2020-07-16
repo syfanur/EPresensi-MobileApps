@@ -6,7 +6,7 @@
     >
 
     <TextView
-        android:id="@+id/tanggal"
+        android:id="@+id/tanggalFoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"

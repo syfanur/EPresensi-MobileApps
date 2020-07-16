@@ -39,16 +39,28 @@ public class AdapterKehadiran extends RecyclerView.Adapter<AdapterKehadiran.MyVi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AdapterKehadiran.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final AdapterKehadiran.MyViewHolder holder, int position) {
     holder.mStatus.setText(mData.get(position).getStatusDatang());
     holder.mTanggal.setText(mData.get(position).getTanggal());
     holder.mAbsen_datang.setText(mData.get(position).getWaktuDatang());
     holder.mAbsen_pulang.setText(mData.get(position).getWaktuPulang());
 
+
+
         holder.mDetail.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mContext.startActivity(new Intent(mContext,DetailKehadiran.class));
+            String rStatus=holder.mStatus.getText().toString();
+            String rTanggal=holder.mTanggal.getText().toString();
+            String rDatang=holder.mAbsen_datang.getText().toString();
+            String rPulang=holder.mAbsen_pulang.getText().toString();
+
+            Intent intent=new Intent(mContext,DetailKehadiran.class);
+            intent.putExtra("status",rStatus);
+            intent.putExtra("tanggal",rTanggal);
+            intent.putExtra("datang",rDatang);
+            intent.putExtra("pulang",rPulang);
+            mContext.startActivity(intent);
         }
     });
     }

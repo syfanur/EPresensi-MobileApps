@@ -343,20 +343,18 @@ public class ListFragment extends Fragment {
 
                 listData.clear();
 
-                if (bulan.equals("ALL")) {
-                    thn = tahun;
-                    FilterPeriodKehadiranTahun();
-                    if (bln.equals("ALL") && thn.equals("ALL")) {
-                        showListData();
-                    if(thn.equals(tahun) && bln.equals(bulan)){
+               if (bulan.equals("ALL")) {
+                   thn = tahun;
+                   FilterPeriodKehadiranTahun();
+               }else if (bulan.equals("ALL") && tahun.equals("ALL")) {
+                    showListData();
+                }else{
                         thn = tahun;
                         bln = bulan;
                         FilterPeriodKehadiranBulan();
                     }
 
                     }
-                }
-            }
 
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
