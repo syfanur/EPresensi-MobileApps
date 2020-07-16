@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.example.adhibeton.helper.GraphicOverlay;
 import com.example.adhibeton.helper.RectOverlay;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +33,9 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.wonderkiln.camerakit.CameraKitError;
 import com.wonderkiln.camerakit.CameraKitEvent;
 import com.wonderkiln.camerakit.CameraKitEventListener;
@@ -38,6 +43,7 @@ import com.wonderkiln.camerakit.CameraKitImage;
 import com.wonderkiln.camerakit.CameraKitVideo;
 import com.wonderkiln.camerakit.CameraView;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
@@ -45,6 +51,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import dmax.dialog.SpotsDialog;
 
@@ -60,6 +67,10 @@ public class FaceDetectPulang extends AppCompatActivity {
     TextView mStatus, mTanggal, mJam,mLokasi;
     String status = "";
     String Lokasi_Absen="";
+    public Uri donwload;
+
+    FirebaseStorage storage;
+    StorageReference storageReference;
 
     DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
     DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
@@ -97,6 +108,10 @@ public class FaceDetectPulang extends AppCompatActivity {
         mJam = (TextView) dialogView.findViewById(R.id.jamPulang);
         mTanggal = (TextView) dialogView.findViewById(R.id.tanggalPulang);
         mLokasi=(TextView)dialogView.findViewById(R.id.txt_lokasiPulang);
+
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
 
         alertDialog = new SpotsDialog.Builder()
@@ -143,7 +158,7 @@ public class FaceDetectPulang extends AppCompatActivity {
         });
     }
 
-    private void proccessFaceDetection(Bitmap bitmap) {
+    private void proccessFaceDetection(final Bitmap bitmap) {
         FirebaseVisionImage firebaseVisionImage = FirebaseVisionImage.fromBitmap(bitmap);
         FirebaseVisionFaceDetectorOptions firebaseVisionFaceDetectorOptions = new FirebaseVisionFaceDetectorOptions.Builder().build();
         FirebaseVisionFaceDetector firebaseVisionFaceDetector = FirebaseVision.getInstance()
@@ -167,10 +182,34 @@ public class FaceDetectPulang extends AppCompatActivity {
                             checkPulang(jam);
                             checkWeekDay();
 
-                            //Input Pulang ke database
-                            myRef.child("1334").child(thn).child(bln).child(tgl).child("waktuPulang").setValue(jam);
-                            myRef.child("1334").child(thn).child(bln).child(tgl).child("absenPulang").setValue("Pulang");
-                            myRef.child("1334").child(thn).child(bln).child(tgl).child("statusPulang").setValue(status);
+                            StorageReference ref
+                                    = storageReference
+                                    .child("absenPulang/" + UUID.randomUUID().toString());
+                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                            byte[] data = stream.toByteArray();
+                            UploadTask uploadTask = ref.putBytes(data);
+                            uploadTask.addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(FaceDetectPulang.this, "Gagal upload ", Toast.LENGTH_SHORT).show();
+                                }
+                            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                                    while (!uriTask.isSuccessful()) ;
+                                    donwload = uriTask.getResult();
+
+                                    //Input Pulang ke database
+                                    myRef.child("1334").child(thn).child(bln).child(tgl).child("waktuPulang").setValue(jam);
+                                    myRef.child("1334").child(thn).child(bln).child(tgl).child("absenPulang").setValue("Pulang");
+                                    myRef.child("1334").child(thn).child(bln).child(tgl).child("statusPulang").setValue(status);
+                                    myRef.child("1334").child(thn).child(bln).child(tgl).child("imagePulang").setValue(donwload.toString());
+
+                                }
+                            });
+
 
                             mStatus.setText("Pulang");
                             mJam.setText(jam);

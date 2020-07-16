@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
@@ -22,6 +23,7 @@ import com.example.adhibeton.helper.GraphicOverlay;
 import com.example.adhibeton.helper.RectOverlay;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +50,7 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -68,6 +71,7 @@ public class FaceDetectDatang extends AppCompatActivity {
     String status = "";
     String Lokasi_Absen="";
 
+    public Uri donwload;
 
     DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
     DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
@@ -213,7 +217,7 @@ public class FaceDetectDatang extends AppCompatActivity {
                                 //Input Datang ke database
                                 StorageReference ref
                                         = storageReference
-                                        .child("absen/" + UUID.randomUUID().toString());
+                                        .child("absenDatang/" + UUID.randomUUID().toString());
                                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                                 byte[] data = stream.toByteArray();
@@ -228,14 +232,30 @@ public class FaceDetectDatang extends AppCompatActivity {
                                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                     @Override
                                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                                        while (!uriTask.isSuccessful()) ;
+                                        donwload = uriTask.getResult();
+                                        HashMap<Object, String> data = new HashMap<>();
+                                        data.put("absenDatang","Datang");
+                                        data.put("absenPulang","");
+                                        data.put("imageDatang",donwload.toString());
+                                        data.put("keterangan","tidak ada");
+                                        data.put("lokasi",Lokasi_Absen);
+                                        data.put("statusDatang",status);
+                                        data.put("statusPulang","");
+                                        data.put("tanggal",tgl);
+                                        data.put("waktuDatang",jam);
+                                        data.put("waktuPulang","");
+                                        data.put("imagePulang","");
+                                        myRef.child("1334").child(thn).child(bln).child(tgl).setValue(data);
                                         Toast.makeText(FaceDetectDatang.this, "Berhasil upload ", Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
 
                                 final String jenis = "Datang";
-                                ModelAbsen absen = new ModelAbsen(tgl, jam, "", "Datang", "", status, "", "tidak ada", Lokasi_Absen,imageEncoded);
-                                myRef.child("1334").child(thn).child(bln).child(tgl).setValue(absen);
+//                                ModelAbsen absen = new ModelAbsen(tgl, jam, "", "Datang", "", status, "", "tidak ada", Lokasi_Absen,imageEncoded);
+//                                myRef.child("1334").child(thn).child(bln).child(tgl).setValue(absen);
 
 
                                 mStatus.setText(jenis);

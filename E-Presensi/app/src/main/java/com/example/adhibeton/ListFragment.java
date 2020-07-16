@@ -343,10 +343,10 @@ public class ListFragment extends Fragment {
 
                 listData.clear();
 
-               if (bulan.equals("ALL")) {
+               if (bulan.equals("ALL"))
                    thn = tahun;
                    FilterPeriodKehadiranTahun();
-               }else if (bulan.equals("ALL") && tahun.equals("ALL")) {
+               if (bulan.equals("ALL") && tahun.equals("ALL")) {
                     showListData();
                 }else{
                         thn = tahun;
