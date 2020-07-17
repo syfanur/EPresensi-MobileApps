@@ -1,13 +1,13 @@
 package com.example.adhibeton;
 
 public class ModelAbsenKehadiran {
-    public String tanggal, waktuDatang, waktuPulang, absenDatang, absenPulang, statusDatang, statusPulang, keterangan, lokasi,tahun,bulan;
+    public String tanggal, waktuDatang, waktuPulang, absenDatang, absenPulang, statusDatang, statusPulang, keterangan, lokasi,tahun,bulan,image;
 
 
     public ModelAbsenKehadiran() {
     }
 
-    public ModelAbsenKehadiran(String tanggal, String waktuDatang, String waktuPulang, String absenDatang, String absenPulang, String statusDatang, String statusPulang, String keterangan, String lokasi, String tahun, String bulan) {
+    public ModelAbsenKehadiran(String tanggal, String waktuDatang, String waktuPulang, String absenDatang, String absenPulang, String statusDatang, String statusPulang, String keterangan, String lokasi, String tahun, String bulan, String image) {
         this.tanggal = tanggal;
         this.waktuDatang = waktuDatang;
         this.waktuPulang = waktuPulang;
@@ -19,6 +19,7 @@ public class ModelAbsenKehadiran {
         this.lokasi = lokasi;
         this.tahun = tahun;
         this.bulan = bulan;
+        this.image = image;
     }
 
     public String getTanggal() {
@@ -107,5 +108,13 @@ public class ModelAbsenKehadiran {
 
     public void setBulan(String bulan) {
         this.bulan = bulan;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

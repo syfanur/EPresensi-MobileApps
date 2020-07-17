@@ -9,8 +9,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +24,7 @@ import com.example.adhibeton.helper.RectOverlay;
 import com.example.adhibeton.model.ModelAbsen;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +35,9 @@ import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.face.FirebaseVisionFace;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetector;
 import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.wonderkiln.camerakit.CameraKitError;
 import com.wonderkiln.camerakit.CameraKitEvent;
 import com.wonderkiln.camerakit.CameraKitEventListener;
@@ -39,13 +45,16 @@ import com.wonderkiln.camerakit.CameraKitImage;
 import com.wonderkiln.camerakit.CameraKitVideo;
 import com.wonderkiln.camerakit.CameraView;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import dmax.dialog.SpotsDialog;
 
@@ -63,9 +72,16 @@ public class FaceDetectDatang extends AppCompatActivity {
     String status = "";
     String Lokasi_Absen="";
 
+    public Uri donwload;
 
     DateTimeFormatter formattertime = DateTimeFormatter.ofPattern("h:mm a");
     DateTimeFormatter formatterdate = DateTimeFormatter.ofPattern("EEE, d MMM yyyy");
+
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    final DatabaseReference myRef = database.getReference("Kehadiran");
+
+    FirebaseStorage storage;
+    StorageReference storageReference;
 
     //GetBulan
     LocalDate thismonth = LocalDate.now();
@@ -76,9 +92,6 @@ public class FaceDetectDatang extends AppCompatActivity {
     LocalDate thisyear = LocalDate.now();
     int currentYear = thisyear.getYear();
     String thn = String.valueOf(currentYear);
-
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("Kehadiran");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +105,9 @@ public class FaceDetectDatang extends AppCompatActivity {
 
             Lokasi_Absen= FaceDetectDatang.this.getIntent().getStringExtra("lokasiAbsenDatang");;
 //       rLokasi.setText(Lok);
+
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         dialog = new androidx.appcompat.app.AlertDialog.Builder(FaceDetectDatang.this);
         inflater = getLayoutInflater();
@@ -111,7 +127,7 @@ public class FaceDetectDatang extends AppCompatActivity {
                 .build();
 
 
-        faceDetectButton.setOnClickListener(new View.OnClickListener() {
+        faceDetectButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 preview.start();
@@ -135,7 +151,7 @@ public class FaceDetectDatang extends AppCompatActivity {
             @Override
             public void onImage(CameraKitImage cameraKitImage   ) {
                 alertDialog.show();
-                Bitmap bitmap = cameraKitImage.getBitmap();
+                Bitmap bitmap = (Bitmap)cameraKitImage.getBitmap();
                 bitmap= Bitmap.createScaledBitmap(bitmap, preview.getWidth(), preview.getHeight(),false);
                 preview.stop();
                 proccessFaceDetection(bitmap);
@@ -149,7 +165,7 @@ public class FaceDetectDatang extends AppCompatActivity {
         });
     }
 
-    private void proccessFaceDetection(Bitmap bitmap) {
+    private void proccessFaceDetection(final Bitmap bitmap) {
         FirebaseVisionImage firebaseVisionImage= FirebaseVisionImage.fromBitmap(bitmap);
         FirebaseVisionFaceDetectorOptions firebaseVisionFaceDetectorOptions= new FirebaseVisionFaceDetectorOptions.Builder().build();
         FirebaseVisionFaceDetector firebaseVisionFaceDetector= FirebaseVision.getInstance()
@@ -196,10 +212,47 @@ public class FaceDetectDatang extends AppCompatActivity {
 
                             } else {
                                 //Input Datang ke database
+                                StorageReference ref
+                                        = storageReference
+                                        .child("absenDatang/" + UUID.randomUUID().toString());
+                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                byte[] data = stream.toByteArray();
+                                String imageEncoded = Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT);
+
+                                UploadTask uploadTask = ref.putBytes(data);
+                                uploadTask.addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(FaceDetectDatang.this, "Gagal upload ", Toast.LENGTH_SHORT).show();
+                                    }
+                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                                        while (!uriTask.isSuccessful()) ;
+                                        donwload = uriTask.getResult();
+                                        HashMap<Object, String> data = new HashMap<>();
+                                        data.put("absenDatang","Datang");
+                                        data.put("absenPulang","");
+                                        data.put("imageDatang",donwload.toString());
+                                        data.put("keterangan","tidak ada");
+                                        data.put("lokasi",Lokasi_Absen);
+                                        data.put("statusDatang",status);
+                                        data.put("statusPulang","");
+                                        data.put("tanggal",tgl);
+                                        data.put("waktuDatang",jam);
+                                        data.put("waktuPulang","");
+                                        data.put("imagePulang","");
+                                        myRef.child("1334").child(thn).child(bln).child(tgl).setValue(data);
+                                        Toast.makeText(FaceDetectDatang.this, "Berhasil upload ", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+
                                 final String jenis = "Datang";
                                 ModelAbsen absen = new ModelAbsen(tgl, jam, "", "Datang", "", status, "", "tidak ada", Lokasi_Absen);
                                 myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl).setValue(absen);
-
 
                                 mStatus.setText(jenis);
                                 mJam.setText(jam);
@@ -209,6 +262,7 @@ public class FaceDetectDatang extends AppCompatActivity {
                                 dialog.setPositiveButton("OKE", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
+
 
                                         Intent intent = new Intent(FaceDetectDatang.this, HomeScreen.class);
                                         intent.putExtra("status", status);

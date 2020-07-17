@@ -3,6 +3,10 @@ package com.example.adhibeton;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -11,8 +15,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -25,6 +29,10 @@ import androidx.fragment.app.Fragment;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.adhibeton.model.ModelAbsen;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.FirebaseError;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -71,6 +79,16 @@ public class HomeFragment extends Fragment {
     private LocalTime now = LocalTime.now();
     private String jam = now.format(formattertime);
 
+    GoogleMap map;
+//    private GoogleApiClient googleApiClient;
+    private GoogleApiClient googleApiClient;
+    private LocationRequest locationRequest;
+    private Marker currentUserLocationMarker;
+    private static final int Request_User_Location_Code=99;
+    private Location lastLocation;
+    private  double latitude, longitude;
+    ImageView imageView;
+
     //GetBulan
     private LocalDate today = LocalDate.now();
     private Month currentMonth = today.getMonth();
@@ -101,6 +119,7 @@ public class HomeFragment extends Fragment {
         address = v.findViewById(R.id.lokasi);
         Datang = v.findViewById(R.id.absen_datang);
         Pulang = v.findViewById(R.id.absen_pulang);
+        imageView=v.findViewById(R.id.user);
 
         nama.setText(Prevalent.currentOnlineUser.getNama());
         posisi.setText(Prevalent.currentOnlineUser.getPosisi());
@@ -108,6 +127,7 @@ public class HomeFragment extends Fragment {
 
         datangdisplay(Datang);
         pulangdisplay(Pulang);
+
 
         TextView dateTimeDisplay = v.findViewById(R.id.text_date_display);
 

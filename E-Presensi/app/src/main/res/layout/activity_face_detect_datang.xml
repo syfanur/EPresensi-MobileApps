@@ -10,6 +10,7 @@
         android:id="@+id/camera_view"
         android:layout_width="fill_parent"
         android:layout_height="570dp"
+        app:ckFacing="front"
         >
 
     </com.wonderkiln.camerakit.CameraView>

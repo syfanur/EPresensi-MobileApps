@@ -109,7 +109,7 @@ public class ListFragment extends Fragment {
         mfirebaseDatabase = FirebaseDatabase.getInstance();
         mRef = mfirebaseDatabase.getReference("Kehadiran");
 
-//        showListData();
+        showListData();
 //        FilterPeriodKehadiranSemuaBulan();
 
         //INTENT TO DIALOG FILTER
@@ -235,7 +235,7 @@ public class ListFragment extends Fragment {
         });
     }
 //    private void FilterPeriodKehadiranSemuaBulan() {
-//        mRef.child(Prevalent.currentOnlineUser.getNpp()).addValueEventListener(new ValueEventListener() {
+//        mRef.child("1334").addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //                for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()) {
@@ -253,12 +253,8 @@ public class ListFragment extends Fragment {
 //
 //
 //                    }
-//
+
 //                }
-//
-//
-//
-//
 //            @Override
 //            public void onCancelled(@NonNull DatabaseError databaseError) {
 //
@@ -343,21 +339,18 @@ public class ListFragment extends Fragment {
                 tahun = spinnerTahun.getSelectedItem().toString();
                 listData.clear();
 
-                if (bulan.equals("ALL")) {
-                    thn = tahun;
-                    FilterPeriodKehadiranTahun();
-                } else if (bln.equals("ALL") && thn.equals("ALL")) {
+               if (bulan.equals("ALL"))
+                   thn = tahun;
+                   FilterPeriodKehadiranTahun();
+               if (bulan.equals("ALL") && tahun.equals("ALL")) {
                     showListData();
-//                }else if(thn.equals("ALL")){
-//                    bln=bulan;
-//                    FilterPeriodKehadiranSemuaBulan();
-                } else {
-                    thn = tahun;
-                    bln = bulan;
-                   FilterPeriodKehadiranBulan();
-                }
-            }
+                }else{
+                        thn = tahun;
+                        bln = bulan;
+                        FilterPeriodKehadiranBulan();
+                    }
 
+                    }
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
