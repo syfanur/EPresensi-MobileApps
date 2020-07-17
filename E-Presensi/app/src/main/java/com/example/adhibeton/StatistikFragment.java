@@ -1,7 +1,6 @@
 package com.example.adhibeton;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,12 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Description;
@@ -34,17 +33,21 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class StatistikFragment extends Fragment {
+
     private long countTerlambat, countTepatWaktu, countTidakHadir;
     private float jmlhTerlambat, jmlhTepatWaktu, jmlhTidakHadir;
-
     private Spinner spinnerBulan;
     private Spinner spinnerTahun;
     private PieChart pieChart;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private final List<PieEntry> value = new ArrayList<>();
+    private final List<String> valueBulan = new ArrayList<>();
+    private final List<String> valueTahun = new ArrayList<>();
     String bulan = "", tahun = "";
+
 
     //GetBulan
     LocalDate today = LocalDate.now();
@@ -56,14 +59,21 @@ public class StatistikFragment extends Fragment {
     int currentYear = thisyear.getYear();
     String thn = String.valueOf(currentYear);
 
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private final List<PieEntry> value = new ArrayList<>();
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.activity_piechart_absen, viewGroup, false);
 
         pieChart = root.findViewById(R.id.pieChart);
+        pieChart.setUsePercentValues(true);
+        pieChart.setEntryLabelTextSize(14f);
+
+        Description desc = new Description();
+        desc.setText("Persentase Kehadiran");
+        desc.setPosition(480, 500);
+        desc.setTextSize(14f);
+
+        pieChart.setDescription(desc);
+
         Button btn_filter = root.findViewById(R.id.btn_filter);
         btn_filter.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +82,10 @@ public class StatistikFragment extends Fragment {
             }
         });
 
+        bulanAda();
+        tahunAda();
         totalKeseluruhan();
+
         return root;
     }
 
@@ -114,19 +127,21 @@ public class StatistikFragment extends Fragment {
                 bulan = spinnerBulan.getSelectedItem().toString();
                 tahun = spinnerTahun.getSelectedItem().toString();
 
-                countTepatWaktu = 0; countTerlambat = 0; countTidakHadir = 0;
-                value.clear();
-
-                if (bulan.equals("ALL")) {
+                if (bulan.equals("ALL") && tahun.equals("ALL")) {
+                    totalKeseluruhan();
+                } else if (bulan.equals("ALL")) {
                     thn = tahun;
                     totalSetahun();
-                } else if (bln.equals("ALL") && thn.equals("ALL")) {
-                    restartActivity();
                 } else {
-                    thn = tahun;
-                    bln = bulan;
-                    totalSebulan();
+                    if (valueBulan.contains(bulan) && valueTahun.contains(tahun)){
+                        thn = tahun;
+                        bln = bulan;
+                        totalSebulan();
+                    } else {
+                        Toast.makeText(getActivity(), "Data tidak ada", Toast.LENGTH_SHORT).show();
+                    }
                 }
+
             }
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -137,25 +152,10 @@ public class StatistikFragment extends Fragment {
         });
         dialog.show();
     }
-    public void restartActivity(){
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        if (Build.VERSION.SDK_INT >= 26) {
-            ft.setReorderingAllowed(false);
-        }
-        ft.detach(this).attach(this).commit();
-    }
 
     private void totalSebulan() {
-        pieChart.setUsePercentValues(true);
-        pieChart.setEntryLabelTextSize(14f);
-
-        Description desc = new Description();
-        desc.setText("Persentase Kehadiran");
-        desc.setPosition(480, 500);
-        desc.setTextSize(14f);
-
-        pieChart.setDescription(desc);
-
+        countTepatWaktu = 0; countTerlambat = 0; countTidakHadir = 0;
+        value.clear();
         DatabaseReference myRefTotalSebulan = database.getReference()
                 .child("Kehadiran")
                 .child(Prevalent.currentOnlineUser.getNpp())
@@ -195,7 +195,6 @@ public class StatistikFragment extends Fragment {
 
                 PieDataSet pieDataSet = new PieDataSet(value, "- Status Kehadiran");
                 PieData pieData = new PieData(pieDataSet);
-
                 pieChart.setData(pieData);
                 pieChart.animateXY(1200, 1200);
 
@@ -215,16 +214,8 @@ public class StatistikFragment extends Fragment {
     }
 
     private void totalSetahun() {
-        pieChart.setUsePercentValues(true);
-        pieChart.setEntryLabelTextSize(14f);
-
-        Description desc = new Description();
-        desc.setText("Persentase Kehadiran");
-        desc.setPosition(480, 500);
-        desc.setTextSize(14f);
-
-        pieChart.setDescription(desc);
-
+        countTepatWaktu = 0; countTerlambat = 0; countTidakHadir = 0;
+        value.clear();
         DatabaseReference myRefTotalSetahun = database.getReference()
                 .child("Kehadiran")
                 .child(Prevalent.currentOnlineUser.getNpp())
@@ -265,7 +256,6 @@ public class StatistikFragment extends Fragment {
 
                 PieDataSet pieDataSet = new PieDataSet(value, "- Status Kehadiran");
                 PieData pieData = new PieData(pieDataSet);
-
                 pieChart.setData(pieData);
                 pieChart.animateXY(1200, 1200);
 
@@ -285,16 +275,8 @@ public class StatistikFragment extends Fragment {
     }
 
     private void totalKeseluruhan() {
-        pieChart.setUsePercentValues(true);
-        pieChart.setEntryLabelTextSize(14f);
-
-        Description desc = new Description();
-        desc.setText("Persentase Kehadiran");
-        desc.setPosition(480, 500);
-        desc.setTextSize(14f);
-
-        pieChart.setDescription(desc);
-
+        countTepatWaktu = 0; countTerlambat = 0; countTidakHadir = 0;
+        value.clear();
         DatabaseReference myRefTotalKeseluruhan = database.getReference()
                 .child("Kehadiran")
                 .child(Prevalent.currentOnlineUser.getNpp());
@@ -336,7 +318,6 @@ public class StatistikFragment extends Fragment {
 
                 PieDataSet pieDataSet = new PieDataSet(value, "- Status Kehadiran");
                 PieData pieData = new PieData(pieDataSet);
-
                 pieChart.setData(pieData);
                 pieChart.animateXY(1200, 1200);
 
@@ -346,6 +327,47 @@ public class StatistikFragment extends Fragment {
                 Log.d("Terlambat", String.valueOf(countTerlambat));
                 Log.d("Tepat Waktu", String.valueOf(countTepatWaktu));
                 Log.d("Tidak Hadir", String.valueOf(countTidakHadir));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void bulanAda(){
+        DatabaseReference myRefBulanAda = database.getReference()
+                .child("Kehadiran")
+                .child(Prevalent.currentOnlineUser.getNpp())
+                .child(thn);
+        myRefBulanAda.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dsBln : dataSnapshot.getChildren()){
+                    String keyBln = dsBln.getKey();
+                    valueBulan.add(keyBln);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void tahunAda(){
+        DatabaseReference myRefTahunAda = database.getReference()
+                .child("Kehadiran")
+                .child(Prevalent.currentOnlineUser.getNpp());
+        myRefTahunAda.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dsThn : dataSnapshot.getChildren()){
+                    String keyThn = dsThn.getKey();
+                    valueTahun.add(keyThn);
+                }
             }
 
             @Override
