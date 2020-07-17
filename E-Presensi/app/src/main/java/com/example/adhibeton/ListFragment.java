@@ -196,6 +196,7 @@ public class ListFragment extends Fragment {
 //        }
 
     private void FilterPeriodKehadiranBulan(){
+        listData.clear();
         mRef.child("1334").child(thn).child(bln).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -343,19 +344,21 @@ public class ListFragment extends Fragment {
 
                 listData.clear();
 
-               if (bulan.equals("ALL"))
-                   thn = tahun;
-                   FilterPeriodKehadiranTahun();
-               if (bulan.equals("ALL") && tahun.equals("ALL")) {
+                if (bulan.equals("ALL"))
+                    thn = tahun;
+                FilterPeriodKehadiranTahun();
+                if (bulan.equals("ALL") && tahun.equals("ALL")) {
                     showListData();
-                }else{
+                    if (thn == tahun && bln == bulan) {
+
                         thn = tahun;
                         bln = bulan;
                         FilterPeriodKehadiranBulan();
-                    }
+                    }else {
 
                     }
-
+                }
+            }
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
