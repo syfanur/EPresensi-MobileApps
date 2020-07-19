@@ -17,23 +17,8 @@
 <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
 <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-analytics.js"></script>
-
-<script>
-  // Your web app's Firebase configuration
-  var firebaseConfig = {
-    apiKey: "AIzaSyC017-7jws4cZBxi_XqsRtvHRYwvXwy5sQ",
-    authDomain: "adhibeton-epresensi.firebaseapp.com",
-    databaseURL: "https://adhibeton-epresensi.firebaseio.com",
-    projectId: "adhibeton-epresensi",
-    storageBucket: "adhibeton-epresensi.appspot.com",
-    messagingSenderId: "649200670938",
-    appId: "1:649200670938:web:4d3a84f00e72a4fd542de3",
-    measurementId: "G-DYX7QV0F92"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-
-</script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="js/perizinan.js"></script>
 
   <!-- Custom fonts for this template-->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -199,7 +184,65 @@
           
         <!-- Begin Page Content -->
         <div class="container-fluid">
-          
+          <div class="modal" id="myModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Edit Data</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form id="myForm">
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="npp">NPP</label>
+                        <input type="text" class="form-control" id="inputNpp" placeholder="Readonly input here…" readonly>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="tanggal">Tanggal</label>
+                        <input type="text" class="form-control" id="inputTanggal" placeholder="Enter here" readonly>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="jenis">Jenis</label>
+                        <select class="form-control" id="inputJenis">
+                          <option>Sakit</option>
+                          <option>Dinas Luar Kota</option>
+                          <option>Menikah</option>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="image">Image</label>
+                        <input type="text" class="form-control" id="inputImage" placeholder="Enter here" required>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="form-group col-md-6">
+                        <label for="mulai">Mulai</label>
+                        <input type="text" class="form-control" id="inputMulai" placeholder="Enter here" required>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="akhir">Akhir</label>
+                        <input type="text" class="form-control" id="inputAkhir" placeholder="Enter here" required>
+                      </div>
+                    </div>
+                      <div class="form-group">
+                        <label for="keterangan">Keterangan</label>
+                        <textarea class="form-control" id="inputKeterangan" rows="3" required></textarea>
+                      </div>
+                  
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" id="saveForm" class="btn btn-primary">Save changes</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
          
       
        <!-- DataTales Example -->
@@ -265,8 +308,8 @@
                  cellAkhir.appendChild(document.createTextNode(childData.End));
                  cellKet.appendChild(document.createTextNode(childData.Keterangan));
                  cellImage.appendChild(DOM_img);
-                 cellAction.innerHTML = '<a class="card-footer-item"  style="color:blue" onClick="delete()" id="delete">Edit</a>'
-                 +' ' + '<a class="card-footer-item" style="color:red" onClick="delete()" id="delete">Delete</a>';
+                 cellAction.innerHTML = '<button class="btn btn-danger" onClick="deleteData(\''+childKey+'\',\''+childKey2+'\')" id="deleteBtn">Delete</button>'
+                                  +' ' + '<button class="btn btn-primary" onClick="editData(\''+childKey+'\',\''+childKey2+'\')" id="editBtn">Edit</button>';
                  rowIndex = rowIndex + 1;
                  });
                  });
@@ -337,5 +380,4 @@
   <script src="js/sb-admin-2.min.js"></script>
 
 </body>
-
 </html>
