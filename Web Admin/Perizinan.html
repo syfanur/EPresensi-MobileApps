@@ -228,11 +228,20 @@
                         <label for="akhir">Akhir</label>
                         <input type="text" class="form-control" id="inputAkhir" placeholder="Enter here" required>
                       </div>
+                      <div class="form-row"></div>
+                      <div class="form-group col-md-6">
+                        <label for="jenis">Jenis</label>
+                        <select class="form-control" id="inputStatus">
+                          <option>Diajukan</option>
+                          <option>Disetujui</option>
+                        </select>
+                      </div>
                     </div>
                       <div class="form-group">
                         <label for="keterangan">Keterangan</label>
                         <textarea class="form-control" id="inputKeterangan" rows="3" required></textarea>
                       </div>
+                     
                   
                 </div>
                 <div class="modal-footer">
@@ -248,7 +257,7 @@
        <!-- DataTales Example -->
        <div class="card shadow mb-4">
          <div class="card-header py-3">
-           <h6 class="m-0 font-weight-bold text-primary">List Perizinan</h6>
+           <h6 class="m-0 font-weight-bold">List Perizinan</h6>
          </div>
          <div class="card-body">
            <div class="table-responsive">
@@ -260,7 +269,7 @@
                    <th>Jenis</th>
                    <th>Tanggal Mulai Izin</th>
                    <th>Tanggal Akhir Izin</th>
-                   <th>Keterangan</th>
+                   <th>Status</th>
                    <th>Bukti Izin</th>
                    <th>Action</th>
                  </tr>
@@ -306,10 +315,10 @@
                  cellJenis.appendChild(document.createTextNode(childData.Jenis));
                  cellMulai.appendChild(document.createTextNode(childData.Start));
                  cellAkhir.appendChild(document.createTextNode(childData.End));
-                 cellKet.appendChild(document.createTextNode(childData.Keterangan));
+                 cellKet.appendChild(document.createTextNode(childData.Status));
                  cellImage.appendChild(DOM_img);
-                 cellAction.innerHTML = '<button class="btn btn-danger" onClick="deleteData(\''+childKey+'\',\''+childKey2+'\')" id="deleteBtn">Delete</button>'
-                                  +' ' + '<button class="btn btn-primary" onClick="editData(\''+childKey+'\',\''+childKey2+'\')" id="editBtn">Edit</button>';
+                 cellAction.innerHTML = 
+                                  '<button class="btn btn-info" onClick="editData(\''+childKey+'\',\''+childKey2+'\')" id="editBtn">Edit</button>' +' ' +  '<button class="btn btn-primary" onClick="deleteData(\''+childKey+'\',\''+childKey2+'\')" id="deleteBtn">Delete</button>';
                  rowIndex = rowIndex + 1;
                  });
                  });

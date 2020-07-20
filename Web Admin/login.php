@@ -9,7 +9,7 @@
   <!--Main Stylesheet -->
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body >
 
 <div class="container"><!-- container begin -->
        <form action="" class="form-login" method="post"><!-- form-login begin -->

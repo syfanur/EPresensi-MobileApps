@@ -190,8 +190,9 @@ function card(npp, password, nama, posisi, ipendidikan, ialamat, igoldar
                  <td id="data-hp" hidden>${ihp}</td>
                  <td id="data-hpkeluarga" hidden>${ihpkeluarga}</td>
                  <td>
-                 <a class="card-footer-item" href="#preview" id="edit">Edit</a>
-      <a class="card-footer-item" style="color:red" id="delete">Delete</a>
+                 <a class="btn btn-info" href="#preview" style="color:white" id="edit">Edit</a>
+                <a style="color:white"> tess </a>
+      <a class="btn btn-primary" style="color:white" id="delete">Delete</a>
      </td>
                </tr>
                </tbody>

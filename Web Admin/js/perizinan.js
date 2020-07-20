@@ -25,6 +25,7 @@
         document.getElementById('inputImage').value = snapshot.child('Bukti').val();
         document.getElementById('inputMulai').value = snapshot.child('Start').val();
         document.getElementById('inputAkhir').value = snapshot.child('End').val();
+        document.getElementById('inputStatus').value = snapshot.child('Status').val();
         document.getElementById('inputKeterangan').value = snapshot.child('Keterangan').val();
         // snapshot.forEach(function(data) {
         // console.log(data.key);

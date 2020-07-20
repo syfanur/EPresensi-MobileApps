@@ -183,7 +183,7 @@
             <div class="card shadow mb-4">
               <!-- Card Header - Dropdown -->
               <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Tambah Pengumuman Baru</h6>
+                <h6 class="m-0 font-weight-bold">Tambah Pengumuman Baru</h6>
                 
               </div>
               <!-- Card Body -->
@@ -215,6 +215,7 @@
 
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
           <script src="https://www.gstatic.com/firebasejs/7.15.4/firebase.js"></script>
+          <script type="text/javascript" src="js/berita.js"></script>
           <script>
               var firebaseConfig = {
       apiKey: "AIzaSyC017-7jws4cZBxi_XqsRtvHRYwvXwy5sQ",
@@ -305,7 +306,7 @@
             <div class="card shadow mb-4">
               <!-- Card Header - Dropdown -->
               <div class="card-header py-3 d-flex flex-row align-items-cenRevenue Sourcester justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Daftar Pengumuman</h6>
+                <h6 class="m-0 font-weight-bold">Daftar Pengumuman</h6>
                 <div class="dropdown no-arrow">
                   
                 </div>
@@ -362,7 +363,7 @@
                      cellId.appendChild(document.createTextNode((i++)));
                      cellDeskripsi.appendChild(document.createTextNode(childData.nama));
                      cellImage.appendChild(DOM_img);
-                     cellAction.innerHTML = '<center><a class="card-footer-item" style="color:red" onClick="delete()" id="delete">Delete</a></center>';
+                     cellAction.innerHTML = '<button class="btn btn-primary" onClick="deleteData(\''+childKey+'\')" id="deleteBtn">Delete</button>';
                     
                      rowIndex = rowIndex + 1;
                       });
