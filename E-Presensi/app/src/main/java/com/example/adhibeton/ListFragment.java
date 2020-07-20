@@ -78,6 +78,9 @@ public class ListFragment extends Fragment {
     int currentYear = thisyear.getYear();
     String thn = String.valueOf(currentYear);
 
+    private final List<String> valueBulan = new ArrayList<>();
+    private final List<String> valueTahun = new ArrayList<>();
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle savedInstanceState) {
@@ -98,19 +101,18 @@ public class ListFragment extends Fragment {
             mLayoutManager= new LinearLayoutManager(getContext());
             mLayoutManager.setReverseLayout(true);
             mLayoutManager.setStackFromEnd(true);
+            mRecyclerView.setLayoutManager(mLayoutManager);
         }
         else if(mSorting.equals("oldest")){
             mLayoutManager= new LinearLayoutManager(getContext());
             mLayoutManager.setReverseLayout(false);
             mLayoutManager.setStackFromEnd(false);
+            mRecyclerView.setLayoutManager(mLayoutManager);
         }
 
         //GET DATA FROM FIREBASE
         mfirebaseDatabase = FirebaseDatabase.getInstance();
         mRef = mfirebaseDatabase.getReference("Kehadiran");
-
-        showListData();
-//        FilterPeriodKehadiranSemuaBulan();
 
         //INTENT TO DIALOG FILTER
         btn_filter=(Button)v.findViewById(R.id.btn_filter);
@@ -121,6 +123,8 @@ public class ListFragment extends Fragment {
             }
         });
 
+        bulanAda();
+        tahunAda();
         showListData();
         return v;
     }
@@ -216,6 +220,7 @@ public class ListFragment extends Fragment {
         });
     }
     private void FilterPeriodKehadiranTahun() {
+        listData.clear();
         mRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -340,18 +345,19 @@ public class ListFragment extends Fragment {
                 tahun = spinnerTahun.getSelectedItem().toString();
                 listData.clear();
 
-                if (bulan.equals("ALL"))
-                    thn = tahun;
-                FilterPeriodKehadiranTahun();
+
                 if (bulan.equals("ALL") && tahun.equals("ALL")) {
                     showListData();
-                    if (thn == tahun && bln == bulan) {
-
+                } else if (bulan.equals("ALL")) {
+                    thn = tahun;
+                   FilterPeriodKehadiranTahun();
+                } else {
+                    if (valueBulan.contains(bulan) && valueTahun.contains(tahun)) {
                         thn = tahun;
                         bln = bulan;
                         FilterPeriodKehadiranBulan();
-                    }else {
-
+                    } else {
+                        Toast.makeText(getActivity(), "Data tidak ada", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -363,6 +369,47 @@ public class ListFragment extends Fragment {
             }
         });
         dialog.show();
+    }
+
+    private void bulanAda(){
+        DatabaseReference myRefBulanAda = mfirebaseDatabase.getReference()
+                .child("Kehadiran")
+                .child(Prevalent.currentOnlineUser.getNpp())
+                .child(thn);
+        myRefBulanAda.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dsBln : dataSnapshot.getChildren()){
+                    String keyBln = dsBln.getKey();
+                    valueBulan.add(keyBln);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void tahunAda(){
+        DatabaseReference myRefTahunAda = mfirebaseDatabase.getReference()
+                .child("Kehadiran")
+                .child(Prevalent.currentOnlineUser.getNpp());
+        myRefTahunAda.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dsThn : dataSnapshot.getChildren()){
+                    String keyThn = dsThn.getKey();
+                    valueTahun.add(keyThn);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void showSortDialog() {
