@@ -28,9 +28,9 @@ public class TabAbsen extends Fragment {
         // Inflate the layout for this fragment.
       View v= inflater.inflate(R.layout.activity_tab_absen, container, false);
         mTanggal = v.findViewById(R.id.tanggal);
-        mStatus = v.findViewById(R.id.status);
-        mDatang=v.findViewById(R.id.jam);
-        mPulang=v.findViewById(R.id.jamPulang);
+        mStatus = v.findViewById(R.id.statusdatang);
+        mDatang=v.findViewById(R.id.absen_datang);
+        mPulang=v.findViewById(R.id.absen_pulang);
 
         String rStatus = getActivity().getIntent().getStringExtra("status");
         String rTanggal = getActivity().getIntent().getStringExtra("tanggal");
