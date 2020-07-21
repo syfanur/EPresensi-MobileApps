@@ -53,6 +53,13 @@
             android:text="Tidak Absen"
             android:layout_marginTop="5dp"
             android:textStyle="bold"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rStatusPulang"
+            android:text="pulang"
+            android:textColor="@color/white"
+            android:layout_toRightOf="@+id/rStatus"/>
         <ImageView
             android:id="@+id/jam_1"
             android:layout_width="24dp"
@@ -105,6 +112,24 @@
             android:textColor="#fff"
             android:textAlignment="center"
             android:background="@drawable/btn_kehadiran"/>
+
+<!--        <ImageView-->
+<!--            android:id="@+id/ImageDatang"-->
+<!--            android:layout_width="24dp"-->
+<!--            android:layout_height="24dp"-->
+<!--            android:background="@drawable/clock"-->
+<!--            android:layout_below="@+id/rStatus"-->
+<!--            android:layout_marginTop="52dp"-->
+<!--            android:layout_marginLeft="8dp"/>-->
+<!--        <ImageView-->
+<!--            android:id="@+id/ImagePulang"-->
+<!--            android:layout_width="24dp"-->
+<!--            android:layout_height="24dp"-->
+<!--            android:background="@drawable/clock"-->
+<!--            android:layout_toRightOf="@+id/ImageDatang"-->
+<!--            android:layout_below="@+id/rStatus"-->
+<!--            android:layout_marginTop="52dp"-->
+<!--            android:layout_marginLeft="8dp"/>-->
 
 
     </RelativeLayout>

@@ -1,13 +1,13 @@
 package com.example.adhibeton;
 
 public class ModelAbsenKehadiran {
-    public String tanggal, waktuDatang, waktuPulang, absenDatang, absenPulang, statusDatang, statusPulang, keterangan, lokasi,tahun,bulan,image;
+    public String tanggal, waktuDatang, waktuPulang, absenDatang, absenPulang, statusDatang, statusPulang, keterangan, lokasi,imageDatang,imagePulang;
 
 
     public ModelAbsenKehadiran() {
     }
 
-    public ModelAbsenKehadiran(String tanggal, String waktuDatang, String waktuPulang, String absenDatang, String absenPulang, String statusDatang, String statusPulang, String keterangan, String lokasi, String tahun, String bulan, String image) {
+    public ModelAbsenKehadiran(String tanggal, String waktuDatang, String waktuPulang, String absenDatang, String absenPulang, String statusDatang, String statusPulang, String keterangan, String lokasi, String imageDatang, String imagePulang) {
         this.tanggal = tanggal;
         this.waktuDatang = waktuDatang;
         this.waktuPulang = waktuPulang;
@@ -17,9 +17,8 @@ public class ModelAbsenKehadiran {
         this.statusPulang = statusPulang;
         this.keterangan = keterangan;
         this.lokasi = lokasi;
-        this.tahun = tahun;
-        this.bulan = bulan;
-        this.image = image;
+        this.imageDatang = imageDatang;
+        this.imagePulang = imagePulang;
     }
 
     public String getTanggal() {
@@ -94,27 +93,19 @@ public class ModelAbsenKehadiran {
         this.lokasi = lokasi;
     }
 
-    public String getTahun() {
-        return tahun;
+    public String getImageDatang() {
+        return imageDatang;
     }
 
-    public void setTahun(String tahun) {
-        this.tahun = tahun;
+    public void setImageDatang(String imageDatang) {
+        this.imageDatang = imageDatang;
     }
 
-    public String getBulan() {
-        return bulan;
+    public String getImagePulang() {
+        return imagePulang;
     }
 
-    public void setBulan(String bulan) {
-        this.bulan = bulan;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
+    public void setImagePulang(String imagePulang) {
+        this.imagePulang = imagePulang;
     }
 }

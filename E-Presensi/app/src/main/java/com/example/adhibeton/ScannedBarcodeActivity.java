@@ -168,7 +168,7 @@ public class ScannedBarcodeActivity extends AppCompatActivity {
                                                 });
                                             } else {
                                                 //Input Datang ke database
-                                                ModelAbsen absen = new ModelAbsen(tgl, jam, "", "Datang", "", status, "", intentData, lokasi);
+                                                ModelAbsen absen = new ModelAbsen(tgl, jam, "", "Datang", "", status, "", intentData, lokasi,"","");
                                                 myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl).setValue(absen);
                                                 Toast.makeText(ScannedBarcodeActivity.this, "Absen Datang Berhasil", Toast.LENGTH_SHORT).show();
 

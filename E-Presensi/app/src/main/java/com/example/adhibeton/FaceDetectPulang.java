@@ -212,7 +212,6 @@ public class FaceDetectPulang extends AppCompatActivity {
                             });
 
                             mStatus.setText(jenis);
-                            mStatus.setText("Pulang");
                             mJam.setText(jam);
                             mTanggal.setText(tgl);
                             mLokasi.setText(Lokasi_Absen);

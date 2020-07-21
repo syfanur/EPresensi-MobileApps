@@ -142,7 +142,29 @@ public class ListFragment extends Fragment {
                 for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()){
                     for (DataSnapshot uniqueKey2 : uniqueKey1.getChildren()){
                         for (DataSnapshot uniqueKey3 : uniqueKey2.getChildren()){
-                            ModelAbsenKehadiran ma = uniqueKey3.getValue(ModelAbsenKehadiran.class);
+                            String tanggal = uniqueKey3.child("tanggal").getValue().toString();
+                            String waktuDatang = uniqueKey3.child("waktuDatang").getValue().toString();
+                            String waktuPulang = uniqueKey3.child("waktuPulang").getValue().toString();
+                            String absenDatang = uniqueKey3.child("absenDatang").getValue().toString();
+                            String absenPulang = uniqueKey3.child("absenPulang").getValue().toString();
+                            String statusDatang = uniqueKey3.child("statusDatang").getValue().toString();
+                            String statusPulang = uniqueKey3.child("statusPulang").getValue().toString();
+//                            String keterangan = uniqueKey3.child("keterangan").getValue().toString();
+//                            String lokasi = uniqueKey3.child("lokasi").getValue().toString();
+                            String imageDatang = uniqueKey3.child("imageDatang").getValue().toString();
+                            String imagePulang = uniqueKey3.child("imagePulang").getValue().toString();
+                            if(imageDatang.equals("")){
+                                imageDatang="R.drawable.undraw_taking_selfie";
+                            }else if(imagePulang.equals("")){
+                                imagePulang="R.drawable.undraw_taking_selfie";
+                            }else if(waktuPulang.equals("")){
+                                waktuPulang="00:00";
+                            }else if(absenPulang.equals("")){
+                                absenPulang="belum absen";
+                            }else if(statusPulang.equals("")){
+                                statusPulang="belum absen";
+                            }
+                            ModelAbsenKehadiran ma =new ModelAbsenKehadiran(tanggal, waktuDatang, waktuPulang, absenDatang,absenPulang,statusDatang, statusPulang, "", "", imageDatang,imagePulang);
                             listData.add(ma);
                         }
                         adapter=new AdapterKehadiran(getContext(),listData);
@@ -205,8 +227,30 @@ public class ListFragment extends Fragment {
         mRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()){
-                    ModelAbsenKehadiran ma = uniqueKey1.getValue(ModelAbsenKehadiran.class);
+                for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()) {
+                    String tanggal = uniqueKey1.child("tanggal").getValue().toString();
+                    String waktuDatang = uniqueKey1.child("waktuDatang").getValue().toString();
+                    String waktuPulang = uniqueKey1.child("waktuPulang").getValue().toString();
+                    String absenDatang = uniqueKey1.child("absenDatang").getValue().toString();
+                    String absenPulang = uniqueKey1.child("absenPulang").getValue().toString();
+                    String statusDatang = uniqueKey1.child("statusDatang").getValue().toString();
+                    String statusPulang = uniqueKey1.child("statusPulang").getValue().toString();
+//                    String keterangan = uniqueKey1.child("keterangan").getValue().toString();
+//                    String lokasi = uniqueKey1.child("lokasi").getValue().toString();
+                    String imageDatang = uniqueKey1.child("imageDatang").getValue().toString();
+                    String imagePulang = uniqueKey1.child("imagePulang").getValue().toString();
+                    if (imageDatang.equals("")) {
+                        imageDatang = "R.drawable.undraw_taking_selfie";
+                    } else if (imagePulang.equals("")) {
+                        imagePulang = "R.drawable.undraw_taking_selfie";
+                    }else if(waktuPulang.equals("")){
+                        waktuPulang="00:00";
+                    }else if(absenPulang.equals("")){
+                        absenPulang="belum absen";
+                    }else if(statusPulang.equals("")){
+                        statusPulang="belum absen";
+                    }
+                    ModelAbsenKehadiran ma = new ModelAbsenKehadiran(tanggal, waktuDatang, waktuPulang, absenDatang, absenPulang, statusDatang, statusPulang, "","", imageDatang, imagePulang);
                     listData.add(ma);
                 }
                 adapter=new AdapterKehadiran(getContext(),listData);
@@ -226,7 +270,29 @@ public class ListFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot uniqueKey1 : dataSnapshot.getChildren()) {
                     for (DataSnapshot uniqueKey2 : uniqueKey1.getChildren()) {
-                        ModelAbsenKehadiran ma = uniqueKey2.getValue(ModelAbsenKehadiran.class);
+                        String tanggal = uniqueKey2.child("tanggal").getValue().toString();
+                        String waktuDatang = uniqueKey2.child("waktuDatang").getValue().toString();
+                        String waktuPulang = uniqueKey2.child("waktuPulang").getValue().toString();
+                        String absenDatang = uniqueKey2.child("absenDatang").getValue().toString();
+                        String absenPulang = uniqueKey2.child("absenPulang").getValue().toString();
+                        String statusDatang = uniqueKey2.child("statusDatang").getValue().toString();
+                        String statusPulang = uniqueKey2.child("statusPulang").getValue().toString();
+//                        String keterangan = uniqueKey2.child("keterangan").getValue().toString();
+//                        String lokasi = uniqueKey2.child("lokasi").getValue().toString();
+                        String imageDatang = uniqueKey2.child("imageDatang").getValue().toString();
+                        String imagePulang = uniqueKey2.child("imagePulang").getValue().toString();
+                        if(imageDatang.equals("")){
+                            imageDatang="R.drawable.undraw_taking_selfie";
+                        }else if(imagePulang.equals("")){
+                            imagePulang="R.drawable.undraw_taking_selfie";
+                        }else if(waktuPulang.equals("")){
+                            waktuPulang="00:00";
+                        }else if(absenPulang.equals("")){
+                            absenPulang="belum absen";
+                        }else if(statusPulang.equals("")){
+                            statusPulang="belum absen";
+                        }
+                        ModelAbsenKehadiran ma =new ModelAbsenKehadiran(tanggal, waktuDatang, waktuPulang, absenDatang,absenPulang,statusDatang, statusPulang, "","", imageDatang,imagePulang);
                         listData.add(ma);
                     }
                     adapter = new AdapterKehadiran(getContext(), listData);

@@ -278,12 +278,12 @@ public class HomeFragment extends Fragment {
         LocalTime checkLocalTime = LocalTime.parse(checkTime, formatter);
 
         if (Calendar.SATURDAY == dayOfWeek || Calendar.SUNDAY == dayOfWeek) {
-            ModelAbsen absen = new ModelAbsen(tgl, jam, jam, "Libur", "Libur", "Libur Kerja", "Libur Kerja", "Tidak Ada", lokasi);
+            ModelAbsen absen = new ModelAbsen(tgl, jam, jam, "Libur", "Libur", "Libur Kerja", "Libur Kerja", "Tidak Ada", lokasi,"","");
             myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl).setValue(absen);
         }else{
             if (endLocalTime.isAfter(startLocalTime)){
                 if (startLocalTime.isBefore(checkLocalTime) && endLocalTime.isAfter(checkLocalTime)){
-                    ModelAbsen absen = new ModelAbsen(tgl, jam, jam, "Tidak Hadir", "Tidak Hadir", "Tidak Hadir", "Tidak Hadir", "Tidak Ada", lokasi);
+                    ModelAbsen absen = new ModelAbsen(tgl, jam, jam, "Tidak Hadir", "Tidak Hadir", "Tidak Hadir", "Tidak Hadir", "Tidak Ada", lokasi,"","");
                     myRef.child(Prevalent.currentOnlineUser.getNpp()).child(thn).child(bln).child(tgl).setValue(absen);
                 }
             }
